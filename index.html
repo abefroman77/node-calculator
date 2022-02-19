@@ -42,24 +42,78 @@
   </header>
 
   <div class="tab-row">
-      <button id="strongTab" class="tab pointer" onclick="showHideCard(this.id)">Strong</button>
-      <button id="thorTab" class="tab pointer" onclick="showHideCard(this.id)">Thor</button>
-      <button id="pxt2Tab" class="tab pointer" onclick="showHideCard(this.id)">Project X</button>
+      <button id="summaryTab" class="tab pointer tab-dark" onclick="showHideCard(this.id)">Summary</button>
+      <button id="strongTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strong</button>
+      <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
+      <button id="pxt2Tab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
   </div>
   
   <div class="card-container">
-    <div id="strongCard" class="card" style="display:block;">
-      <h1 class="strong-name coin-name">STRONG Nodes</h1>
-      <h2>Coin Price: <span class="coin-price strong-price"></span></h2>
+
+    <div id="summaryCard" class="card" style="display:block;">
+      <h1 class="summary-name coin-name">Summary</h1>
     </div>
+
+    <div id="strongCard" class="card" style="display:none;">
+      <h1 class="strong-name coin-name">STRONG Nodes</h1>
+      <h2>Coin Price: <span class="coin-price strong-price">Getting price...</span></h2>
+      <ul>
+        <li class="coin-stats stat-heading">Coin Stats</li>
+        <li>Symbol: <span class="symbol"></span></li>
+        <li>Network: <span class="network"></span></li>
+        <li>Platforms: <span class="platforms"></span></li>
+      </ul>
+      <ul>
+        <li class="stat-heading">Price Stats:</li>
+        <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+        <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+        <li>24-Hour High: <span class="high-24h"></span></li>
+        <li>24-Hour Low: <span class="low-24h"></span></li>
+        <li>Total Volume: <span class="total-volume"></span></li>
+        <li>Market Cap: <span class="market-cap"></span></li>
+      </ul>
+    </div>
+
     <div id="thorCard" class="card" style="display:none;">
       <h1 class="thor-name coin-name">THOR Nodes</h1>
-      <h2>Coin Price: <span class="coin-price thor-price"></span></h2>
+      <h2>Coin Price: <span class="coin-price thor-price">Getting price...</span></h2>
+      <ul>
+        <li class="coin-stats stat-heading">Coin Stats</li>
+        <li>Symbol: <span class="symbol"></span></li>
+        <li>Network: <span class="network"></span></li>
+        <li>Platforms: <span class="platforms"></span></li>
+      </ul>
+      <ul>
+        <li class="stat-heading">Price Stats:</li>
+        <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+        <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+        <li>24-Hour High: <span class="high-24h"></span></li>
+        <li>24-Hour Low: <span class="low-24h"></span></li>
+        <li>Total Volume: <span class="total-volume"></span></li>
+        <li>Market Cap: <span class="market-cap"></span></li>
+      </ul>
     </div>
+
     <div id="pxt2Card" class="card" style="display:none;">
       <h1 class="pxt2-name coin-name">Project X Nodes</h1>
-      <h2>Coin Price: <span class="coin-price pxt2-price"></span></h2>
+      <h2>Coin Price: <span class="coin-price pxt2-price">Getting price...</span></h2>
+      <ul>
+        <li class="coin-stats stat-heading">Coin Stats</li>
+        <li>Symbol: <span class="symbol"></span></li>
+        <li>Network: <span class="network"></span></li>
+        <li>Platforms: <span class="platforms"></span></li>
+      </ul>
+      <ul>
+        <li class="stat-heading">Price Stats:</li>
+        <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+        <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+        <li>24-Hour High: <span class="high-24h"></span></li>
+        <li>24-Hour Low: <span class="low-24h"></span></li>
+        <li>Total Volume: <span class="total-volume"></span></li>
+        <li>Market Cap: <span class="market-cap"></span></li>
+      </ul>
     </div>
+
   </div>
 
 

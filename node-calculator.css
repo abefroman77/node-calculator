@@ -104,10 +104,17 @@ body {
 .tab {
 	justify-content: flex-start;
 	width: 100px;
-	background-color: rgb(199, 192, 240);
 	padding: 10px;
 	text-align: center;
 	border: none;
+}
+
+.tab-light {
+	background-color: rgb(199, 192, 240);
+}
+
+.tab-dark {
+	background-color: rgb(137, 132, 163);
 }
 
 
@@ -121,13 +128,20 @@ body {
 }
 
 .card {
-	height: 100px;
 	background-color: rgb(86, 91, 160);
 	border: 5px solid rgb(43, 43, 95);
 	flex: 1;
 	margin: 10px;
 	text-align: center;
 	display: none;
+}
+
+.card ul {
+	text-align: left;
+}
+
+.stat-heading {
+	font-weight: 700;
 }
 
 

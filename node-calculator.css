@@ -92,6 +92,25 @@ body {
 	font-size: 1.3rem;
 }
 
+/*TAB ROW STYLING---------------------------------------------------------*/
+
+.tab-row {
+	display: flex;
+	padding: 0px 10px;
+	background-color: bisque;
+	gap: 2px;
+}
+
+.tab {
+	justify-content: flex-start;
+	width: 100px;
+	background-color: rgb(199, 192, 240);
+	padding: 10px;
+	text-align: center;
+	border: none;
+}
+
+
 
 /*CARD STYLING---------------------------------------------------------*/
 
@@ -108,6 +127,7 @@ body {
 	flex: 1;
 	margin: 10px;
 	text-align: center;
+	display: none;
 }
 
 

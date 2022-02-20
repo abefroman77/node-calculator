@@ -46,6 +46,7 @@
       <button id="strongTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strong</button>
       <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
       <button id="pxt2Tab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
+      <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Add Card</button>
   </div>
   
   <div class="card-container">
@@ -61,7 +62,7 @@
         <li class="coin-stats stat-heading">Coin Stats</li>
         <li>Symbol: <span class="symbol"></span></li>
         <li>Network: <span class="network"></span></li>
-        <li>Platforms: <span class="platforms"></span></li>
+        <li>Contract: <span class="platforms"></span></li>
       </ul>
       <ul>
         <li class="stat-heading">Price Stats:</li>
@@ -72,6 +73,376 @@
         <li>Total Volume: <span class="total-volume"></span></li>
         <li>Market Cap: <span class="market-cap"></span></li>
       </ul>
+        
+        <!-- <table class="tftable" border="1">
+        <tr><th>Date</th><th>Nodes</th><th>Daily Rewards Balance</th><th>Daily Rewards</th><th>Cash</th><th>Cumulative Gross Cash</th><th>Cashout?</th></tr>
+        <tr class="02-19-2022"><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+        </table> -->
+        
+        
     </div>
 
     <div id="thorCard" class="card" style="display:none;">
@@ -81,7 +452,7 @@
         <li class="coin-stats stat-heading">Coin Stats</li>
         <li>Symbol: <span class="symbol"></span></li>
         <li>Network: <span class="network"></span></li>
-        <li>Platforms: <span class="platforms"></span></li>
+        <li>Contract: <span class="platforms"></span></li>
       </ul>
       <ul>
         <li class="stat-heading">Price Stats:</li>
@@ -101,7 +472,7 @@
         <li class="coin-stats stat-heading">Coin Stats</li>
         <li>Symbol: <span class="symbol"></span></li>
         <li>Network: <span class="network"></span></li>
-        <li>Platforms: <span class="platforms"></span></li>
+        <li>Contract: <span class="platforms"></span></li>
       </ul>
       <ul>
         <li class="stat-heading">Price Stats:</li>

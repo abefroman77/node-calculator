@@ -77,6 +77,7 @@ for(let i=0; i<Object.keys(coinData).length; i++){
 
 let nodeData = {
     strong: {
+        name: "strong",
         level1:{
             name:"Strong",
             cost:10,
@@ -123,6 +124,7 @@ let nodeData = {
         }
     },
     thor: {
+        name: "thor",
         level1:{
             name:"Heimdall",
             cost:1.25,
@@ -169,6 +171,7 @@ let nodeData = {
         }
     },
     pxt2: {
+        name: "pxt2",
         level1:{
             name:"PXT2",
             cost:10,
@@ -225,11 +228,17 @@ function populateCardData(elem,obj){
             return str;
         }
     }
-    
+    let url = "";
     elem.querySelector(".coin-price").textContent = "$" + obj["prices"]["currentPrice"];
     elem.querySelector(".symbol").textContent = obj["symbol"];
     elem.querySelector(".network").textContent = obj["network"];
-    elem.querySelector(".platforms").textContent = Object.keys(obj["platforms"])[0] + " : " + Object.values(obj["platforms"])[0];
+    if(Object.keys(obj["platforms"])[0] == "ethereum"){
+        url = "http://etherscan.io/address/";
+    } else if(Object.keys(obj["platforms"])[0] == "avalanche"){
+        url = "http://snowtrace.io/address/";
+    }
+    elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + Object.values(obj["platforms"])[0] + "</a>";
+    // elem.querySelector(".platforms").textContent = Object.keys(obj["platforms"])[0] + " : " + Object.values(obj["platforms"])[0];
     elem.querySelector(".ath").textContent = addZero("$" + obj["prices"]["ath"]);
     elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
     elem.querySelector(".atl").textContent = addZero("$" + obj["prices"]["atl"]);
@@ -301,3 +310,89 @@ function showHideCard(id){
         }
     }
 }
+
+function addDay(date){
+    var next = new Date(date.valueOf());
+    next.setDate(next.getDate() + 24*60*60);
+    return next;
+}
+
+function createTable(elem,obj){
+    let table = document.createElement("table");
+    let tHead = document.createElement("thead");
+
+    let num = 1;
+    let date = new Date('2022-01-01T12:00:00');
+
+    table.classList.add(obj["name"] + "-table");
+
+    // Create header row
+    
+    table.innerHTML += "<tr class='header-row calc-table'>";
+    table.innerHTML += "<th>Date</th>";
+    table.innerHTML +- "<th>" + obj["level1"]["name"] + "Nodes</th>";
+    if(obj["level2"]["name"] != ""){
+        num += 1;
+        table.innerHTML += "<th>" + obj["level2"]["name"] + "Nodes</th>";
+    };
+    if(obj["level3"]["name"] != ""){
+        num += 1;
+        table.innerHTML += "<th>" + obj["level3"]["name"] + "Nodes</th>";
+    };
+    if(obj["level4"]["name"] != ""){
+        num += 1;
+        table.innerHTML += "<th>" + obj["level4"]["name"] + "Nodes</th>";
+    };
+    table.innerHTML += "<th>Daily Rewards Balance</th><th>Daily Rewards</th><th>Cash</th><th>Cumulative Gross Cash</th><th>Cashout?</th></tr>";
+    table.innerHTML += "<tr>";
+
+    // Create a row for each day of the year
+    for(let i = 0; i < 365; i++){
+        let dateStr = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
+        let dateClassStr = (date.getMonth() + 1).toString() + "-" + date.getDate().toString() + "-" + date.getFullYear().toString();
+        
+        let row = "<tr class='_" + dateClassStr + ">"
+        row += "<td class='date-cell'>" + dateStr + "</td>";
+        for(let j=0; j < num; j++){
+            row += "<td class=" + obj["level" + (j+1)]["name"] + "></td>";
+        }
+        
+        // Daily Rewards Balance cell
+        row += "<td class='drb-cell'></td>";
+
+        // Daily Rewards cell
+        row += "<td class='dr-cell'></td>";
+        // Cash cell
+        row += "<td class='cash-cell'></td>";
+
+        // Cumulative Gross Cash cell
+        row += "<td class='cum-cash-cell'></td>";
+
+        // Cashout? cell (checkbox)
+        row += "<td class='cashout-cell'></td>";
+        
+        
+        row += "</tr>";
+        table.innerHTML += row;
+
+
+        let tomorrow = addDay(date);
+        // if date.getMonth() < tomorrow.getMonth(), create subTotal row
+
+        if(date.getMonth() < tomorrow.getMonth()){
+            let totalRow = "";
+            totalRow += "<tr class='" + date.toLocaleString('default', { month: 'long' }).toLowerCase() + " total-row'>";
+            totalRow += "<td>" + date.toLocaleString('default', { month: 'long' }) + " Total</td>";
+            totalRow += "<td></td><td></td><td></td><td></td><td class='month-cash-total'></td><td></td>";
+            table.innerHTML += totalRow;
+        }
+
+
+        date = addDay(date);
+    };
+    
+    elem.appendChild(table);
+
+}
+
+createTable(document.getElementById("strongCard"), nodeData["strong"]);

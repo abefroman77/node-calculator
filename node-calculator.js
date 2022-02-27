@@ -313,13 +313,16 @@ function showHideCard(id){
 
 function addDay(date){
     var next = new Date(date.valueOf());
-    next.setDate(next.getDate() + 24*60*60);
+    next.setDate(next.getDate() + 1);
     return next;
 }
 
 function createTable(elem,obj){
+    let div = document.createElement("div");
+    div.className = "table-div";
     let table = document.createElement("table");
     let tHead = document.createElement("thead");
+    let body = document.createElement("tbody");
 
     let num = 1;
     let date = new Date('2022-01-01T12:00:00');
@@ -327,53 +330,58 @@ function createTable(elem,obj){
     table.classList.add(obj["name"] + "-table");
 
     // Create header row
-    
-    table.innerHTML += "<tr class='header-row calc-table'>";
-    table.innerHTML += "<th>Date</th>";
-    table.innerHTML +- "<th>" + obj["level1"]["name"] + "Nodes</th>";
+    let tHeadRow = "";
+    tHeadRow += "<tr class='header-row calc-table'>";
+    tHeadRow += "<th>Date</th>";
+    tHeadRow += "<th>" + obj["level1"]["name"] + " Nodes</th>";
     if(obj["level2"]["name"] != ""){
         num += 1;
-        table.innerHTML += "<th>" + obj["level2"]["name"] + "Nodes</th>";
+        tHeadRow += "<th>" + obj["level2"]["name"] + " Nodes</th>";
+
     };
     if(obj["level3"]["name"] != ""){
         num += 1;
-        table.innerHTML += "<th>" + obj["level3"]["name"] + "Nodes</th>";
+        tHeadRow += "<th>" + obj["level3"]["name"] + " Nodes</th>";
+
     };
     if(obj["level4"]["name"] != ""){
         num += 1;
-        table.innerHTML += "<th>" + obj["level4"]["name"] + "Nodes</th>";
+        tHeadRow += "<th>" + obj["level4"]["name"] + " Nodes</th>";
+
     };
-    table.innerHTML += "<th>Daily Rewards Balance</th><th>Daily Rewards</th><th>Cash</th><th>Cumulative Gross Cash</th><th>Cashout?</th></tr>";
-    table.innerHTML += "<tr>";
+    tHeadRow += "<th>Daily Rewards Balance</th><th>Daily Rewards</th><th>Cash</th><th>Cumulative Gross Cash</th><th>Cashout?</th></tr>";
+    tHead.innerHTML = tHeadRow;
+    table.appendChild(tHead);
 
     // Create a row for each day of the year
     for(let i = 0; i < 365; i++){
+        let row = document.createElement("tr");
+        
         let dateStr = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
         let dateClassStr = (date.getMonth() + 1).toString() + "-" + date.getDate().toString() + "-" + date.getFullYear().toString();
-        
-        let row = "<tr class='_" + dateClassStr + ">"
-        row += "<td class='date-cell'>" + dateStr + "</td>";
+        row.className = "_" + dateClassStr;
+
+        let rowStr = "<td class='date-cell'>" + dateStr + "</td>";
         for(let j=0; j < num; j++){
-            row += "<td class=" + obj["level" + (j+1)]["name"] + "></td>";
+            rowStr += "<td class=" + obj["level" + (j+1)]["name"] + "></td>";
         }
         
         // Daily Rewards Balance cell
-        row += "<td class='drb-cell'></td>";
+        rowStr += "<td class='drb-cell'></td>";
 
         // Daily Rewards cell
-        row += "<td class='dr-cell'></td>";
+        rowStr += "<td class='dr-cell'></td>";
         // Cash cell
-        row += "<td class='cash-cell'></td>";
+        rowStr += "<td class='cash-cell'></td>";
 
         // Cumulative Gross Cash cell
-        row += "<td class='cum-cash-cell'></td>";
+        rowStr += "<td class='cum-cash-cell'></td>";
 
         // Cashout? cell (checkbox)
-        row += "<td class='cashout-cell'></td>";
-        
-        
-        row += "</tr>";
-        table.innerHTML += row;
+        rowStr += "<td class='cashout-cell'></td>";
+
+        row.innerHTML += rowStr;
+        body.appendChild(row);
 
 
         let tomorrow = addDay(date);
@@ -383,16 +391,19 @@ function createTable(elem,obj){
             let totalRow = "";
             totalRow += "<tr class='" + date.toLocaleString('default', { month: 'long' }).toLowerCase() + " total-row'>";
             totalRow += "<td>" + date.toLocaleString('default', { month: 'long' }) + " Total</td>";
-            totalRow += "<td></td><td></td><td></td><td></td><td class='month-cash-total'></td><td></td>";
-            table.innerHTML += totalRow;
+            totalRow += "<td></td><td></td><td></td><td></td><td class='month-cash-total'>$100</td><td></td>";
+            body.innerHTML += totalRow;
         }
 
 
         date = addDay(date);
     };
     
-    elem.appendChild(table);
-
+    table.appendChild(body);
+    div.appendChild(table);
+    elem.appendChild(div);
 }
 
 createTable(document.getElementById("strongCard"), nodeData["strong"]);
+createTable(document.getElementById("thorCard"), nodeData["thor"]);
+createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);

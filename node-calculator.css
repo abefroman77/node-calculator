@@ -144,14 +144,18 @@ body {
 }
 
 /*TABLE STYLING---------------------------------------------------------*/
+/* .table-div {
+	text-align: center;
+} */
 
 .calc-table {
 	font-size:12px;
 	color:#333333;
-	width:100%;
+	/* width:100%; */
 	border-width: 1px;
 	border-color: #729ea5;
 	border-collapse: collapse;
+	margin: 0 auto;
 }
         
 .calc-table th {
@@ -165,16 +169,17 @@ body {
 	font-weight: 700;
 }
         
-.calc-table tr {
+tbody > tr {
 	background-color:#d4e3e5;
 }
         
-.calc-table td {
+tbody > td {
 	font-size:12px;
 	border-width: 1px;
 	padding: 8px;
 	border-style: solid;
 	border-color: #729ea5;
+	width: 200px;
 }
 
 

@@ -8,6 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="wot-verification" content="830fe423aacc65499296"/>
+  <script src="https://kit.fontawesome.com/fe4cbe535a.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw"
@@ -42,11 +43,11 @@
   </header>
 
   <div class="tab-row">
-      <button id="summaryTab" class="tab pointer tab-dark" onclick="showHideCard(this.id)">Summary</button>
+      <button id="summaryTab" class="tab pointer tab-dark" onclick="showHideCard(this.id)"><i class="fa-solid fa-table"></i></button>
       <button id="strongTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strong</button>
       <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
       <button id="pxt2Tab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
-      <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Add Card</button>
+      <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-plus"></i></button>
   </div>
   
   <div class="card-container">
@@ -125,6 +126,7 @@
   	
   </footer>
   <script type="text/javascript" src="node-calculator.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
 </body>
 
 </html>

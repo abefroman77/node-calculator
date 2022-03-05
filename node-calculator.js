@@ -121,7 +121,8 @@ let nodeData = {
             sellTax:0,
             qty:0,
             monthlyFee:0
-        }
+        },
+        tableData: []
     },
     thor: {
         name: "thor",
@@ -168,7 +169,8 @@ let nodeData = {
             sellTax:0,
             qty:1,
             monthlyFee:80
-        }
+        },
+        tableData: []
     },
     pxt2: {
         name: "pxt2",
@@ -215,7 +217,8 @@ let nodeData = {
             sellTax:0,
             qty:0,
             monthlyFee:0
-        }
+        },
+        tableData: []
     }
 }
 function addZero(str){
@@ -433,101 +436,5 @@ createTable(document.getElementById("strongCard"), nodeData["strong"]);
 createTable(document.getElementById("thorCard"), nodeData["thor"]);
 createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);
 
-for(let l = 1; l < 5; l++) {
-    let cells = document.querySelectorAll(".lev" + l);
-    let checks = document.querySelectorAll("input[type='checkbox']");
-    let drbs = document.querySelectorAll(".drb-cell");
-    for (let k = 0; k < cells.length; k++) {
-        cells[k].addEventListener('input', (e) => {
-            console.log(e);
-            // Validate input - only allow numbers & decimal
-            
-            
 
-
-            updateRow(e.target.parentNode);
-        });
-        if (l == 1) {
-            checks[k].addEventListener('input', (e) => {
-                console.log(e);
-                updateRow(e.target.parentNode.parentNode);
-            });
-            drbs[k].addEventListener('input', (e) => {
-                console.log(e);
-                updateRow(e.target.parentNode);
-            });
-        }
-    };
-}
-
-function updateRow(rowElem){
-    // Get relative nodeData
-    let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
-    let prevElem, prevDrb, prevDr, prevOk;
-    if (!typeof rowElem.prevElementSibling === undefined) {
-        prevElem = rowElem.prevElementSibling;
-        prevDrb = parseInt(prevElem.querySelectorAll(".drb-cell").innerText);
-        prevDr = parseInt(prevElem.querySelectorAll(".dr-cell").innerText);
-        prevOk = true;
-    };
-    let nodeCount, cashout;
-    if (rowElem.querySelector(".cashout-cell .cashout") != null) {
-        cashout = rowElem.querySelector(".cashout-cell .cashout").checked;
-    }
-     
-
-    // Set Node Counts
-    if (prevOk) {    
-        if (!cashout){
-            if (prevDr + prevDrb > coinObj["level1"]["cost"]){
-                rowElem.querySelector(".lev1").innerText = parseInt(prevElem.querySelector(".lev1").innerText) + ~~((prevDrb + prevDr)/coinObj["level1"]["cost"]);
-            } else {
-                rowElem.querySelector(".lev1").innerText = prevElem.querySelector(".lev1").innerText;
-            }
-        } else {
-            rowElem.querySelector(".lev1").innerText = prevElem.querySelector(".lev1").innerText;
-        }
-        nodeCount = parseInt(rowElem.querySelector(".lev1").innerText);
-    }
-
-    // Set Daily Rewards
-    let dr = 0;
-    // for (let i = 1; i < 5; i++) {
-        // if (coinObj["level" + i]["name"] != ""){
-            if (nodeCount > 0) {
-                dr += nodeCount * coinObj["level1"]["rewardRate"];
-            }
-        // }
-    // }
-    let drCell = rowElem.querySelector(".dr-cell");
-    drCell.innerText = dr.toFixed(5);
-
-    // Set Daily Rewards Balance
-    let drb = 0;
-    let drbCell = rowElem.querySelector(".drb-cell");
-    if (prevOk) {
-        if (cashout) {
-            if (prevDr + prevDrb > coinObj["level1"]["cost"]){
-                drb = 0;
-            } else {
-                drb = prevDr + prevDrb;
-            }
-        } else {
-            if (prevDr + prevDrb > coinObj["level1"]["cost"]){
-                drb = prevDrb + prevDr - coinObj["level1"]["cost"];
-            } else {
-                drb = prevDr + prevDrb;
-            }
-        }
-    } else {
-        drb = 0;
-    }
-    drbCell.innerText = drb;
-    
-
-
-
-    if (typeof rowElem.nextElementSibling !== undefined) {
-        updateRow(rowElem.nextElementSibling);
-    };
-}
+// KNOCKOUT SECTION

@@ -86,9 +86,10 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:0,
-            qty:4,
             monthlyFee:14.95,
-            compounding: true
+            compounding: true,
+            startingDay: 63,
+            startingRewards: 0
         },
         level2:{
             name:"",
@@ -98,9 +99,10 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:0,
-            qty:0,
             monthlyFee:0,
-            compounding: false
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
         },
         level3:{
             name:"",
@@ -110,9 +112,10 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:0,
-            qty:0,
             monthlyFee:0,
-            compounding: false
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
         },
         level4:{
             name:"",
@@ -122,12 +125,13 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:0,
-            qty:0,
             monthlyFee:0,
-            compounding: false
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
         },
         tableData:[],
-        startingNodes: [1,0,0,0]
+        startingNodes: [4,0,0,0]
     },
     thor: {
         name: "thor",
@@ -139,9 +143,10 @@ let nodeData = {
             claimTax:1,
             compoundTax:0,
             sellTax:0,
-            qty:7,
             monthlyFee:5,
-            compounding: false
+            compounding: false,
+            startingDay: 32,
+            startingRewards: 0
         },
         level2:{
             name:"Freya",
@@ -151,9 +156,10 @@ let nodeData = {
             claimTax:5,
             compoundTax:0,
             sellTax:0,
-            qty:1,
             monthlyFee:10,
-            compounding: false
+            compounding: false,
+            startingDay: 47,
+            startingRewards: 0
         },
         level3:{
             name:"Thor",
@@ -163,9 +169,10 @@ let nodeData = {
             claimTax:8,
             compoundTax:0,
             sellTax:0,
-            qty:2,
             monthlyFee:20,
-            compounding: true
+            compounding: true,
+            startingDay: 43,
+            startingRewards: 0
         },
         level4:{
             name:"Odin",
@@ -175,12 +182,13 @@ let nodeData = {
             claimTax:10,
             compoundTax:0,
             sellTax:0,
-            qty:1,
             monthlyFee:80,
-            compounding: false
+            compounding: false,
+            startingDay: 43,
+            startingRewards: 0
         },
         tableData: [],
-        startingNodes: [1,1,1,1]
+        startingNodes: [7,1,4,1]
     },
     pxt2: {
         name: "pxt2",
@@ -192,9 +200,10 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:18,
-            qty:3,
             monthlyFee:0,
-            compounding: true
+            compounding: true,
+            startingDay: 60,
+            startingRewards: 0
         },
         level2:{
             name:"",
@@ -204,9 +213,10 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:0,
-            qty:0,
             monthlyFee:0,
-            compounding: false
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
         },
         level3:{
             name:"",
@@ -216,9 +226,10 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:0,
-            qty:0,
             monthlyFee:0,
-            compounding: false
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
         },
         level4:{
             name:"",
@@ -228,12 +239,13 @@ let nodeData = {
             claimTax:0,
             compoundTax:0,
             sellTax:0,
-            qty:0,
             monthlyFee:0,
-            compounding: false
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
         },
         tableData: [],
-        startingNodes: [1,0,0,0]
+        startingNodes: [16,0,0,0]
     }
 }
 function addZero(str){
@@ -246,10 +258,24 @@ function addZero(str){
     }
 }
 
+function addDay(date){
+    var next = new Date(date.valueOf());
+    next.setDate(next.getDate() + 1);
+    return next;
+}
+
+function dayOfYearIndex(date){
+    return (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000 - 1;
+}
+
+function doyToDate(doy, year) {
+    return new Date(year, 0, doy);
+}
+
 function populateCardData(elem,obj){
 
     let url = "";
-    elem.querySelector(".coin-price").textContent = "$" + obj["prices"]["currentPrice"];
+    elem.querySelector(".coin-price").textContent = addZero("$" + obj["prices"]["currentPrice"]);
     elem.querySelector(".symbol").textContent = obj["symbol"];
     elem.querySelector(".network").textContent = obj["network"];
     if(Object.keys(obj["platforms"])[0] == "ethereum"){
@@ -269,13 +295,13 @@ function populateCardData(elem,obj){
 }
 
 function updateCoinData(elem,obj){
-    let count=0;
+    let count = 0;
     setInterval(function(){
         let url = coinGeckoURL + obj["id"];
         fetch(url).then(function(response) {
             return response.json();
         }).then(function(data) {
-            if(count==0){
+            if(count == 0){
                 console.log(data);
                 count++;
             }
@@ -330,17 +356,14 @@ function showHideCard(id){
     }
 }
 
-function addDay(date){
-    var next = new Date(date.valueOf());
-    next.setDate(next.getDate() + 1);
-    return next;
-}
-
 function fillTableData(obj) {
-    let arr = obj["tableData"];
+    obj["tableData"]["days"] = [];
+    let days = obj["tableData"]["days"];
+    obj["tableData"]["months"] = [];
+    let months = obj["tableData"]["months"];
     let date = new Date('2022-01-01T12:00:00');
     let startingNodes = obj["startingNodes"];
-    let prevObj = {
+    let prevDaysObj = {
         index: 0,
         date: "",
         node1: 0,
@@ -355,7 +378,7 @@ function fillTableData(obj) {
     };
 
         for (let j = 0; j < 365; j++) {
-            let objPush = {
+            let daysObjPush = {
                 index: 0,
                 date: "",
                 node1: 0,
@@ -369,15 +392,15 @@ function fillTableData(obj) {
                 cashout: false
             };
 
-            objPush["index"] = j;
-            objPush["date"] = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
+            daysObjPush["index"] = j;
+            daysObjPush["date"] = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
             
             if (j==0) {
                 for (let k = 0; k < 4; k++) {
-                    objPush["node" + (k + 1)] = startingNodes[k];
+                    daysObjPush["node" + (k + 1)] = startingNodes[k];
                 }
             } else {
-                prevObj = arr[(j-1)];
+                prevDaysObj = days[(j-1)];
             }
             let dr = 0;
             let drb = 0;
@@ -388,30 +411,93 @@ function fillTableData(obj) {
                     let cost = obj["level" + i]["cost"];
                     let comp = obj["level" + i]["compounding"];
 
-                    // objPush["node" + i], objPush["drb"]
+                    // daysObjPush["node" + i], daysObjPush["drb"]
                     if (j > 0) {    
                         if (comp) {    
-                            if (prevObj["drb"] + prevObj["dr"] >= cost) {
-                                objPush["node" + i] = prevObj["node" + i] + ~~((prevObj["drb"] + prevObj["dr"]) / cost);
-                                drb = prevObj["drb"] + prevObj["dr"] - ((objPush["node" + i] - prevObj["node" + i]) * cost);
+                            if (prevDaysObj["drb"] + prevDaysObj["dr"] >= cost) {
+                                daysObjPush["node" + i] = prevDaysObj["node" + i] + ~~((prevDaysObj["drb"] + prevDaysObj["dr"]) / cost);
+                                drb = prevDaysObj["drb"] + prevDaysObj["dr"] - ((daysObjPush["node" + i] - prevDaysObj["node" + i]) * cost);
                             } else {
-                                objPush["node" + i] = prevObj["node" + i];
-                                drb = prevObj["drb"] + prevObj["dr"];
+                                daysObjPush["node" + i] = prevDaysObj["node" + i];
+                                drb = prevDaysObj["drb"] + prevDaysObj["dr"];
                             }
                         }
                         else {
-                            objPush["node" + i] = prevObj["node" + i];
-                            objPush["drb"] = prevObj["drb"] + prevObj["dr"];
+                            daysObjPush["node" + i] = prevDaysObj["node" + i];
+                            daysObjPush["drb"] = prevDaysObj["drb"] + prevDaysObj["dr"];
                         }
                     }
 
-                    objPush["dr"] += objPush["node" + i] * rew;
+                    daysObjPush["dr"] += daysObjPush["node" + i] * rew;
                 }
             }
-            objPush["drb"] = drb;
-            arr.push(objPush);
+            daysObjPush["drb"] = drb;
+            days.push(daysObjPush);
             date = addDay(date);   
         }
+    console.log(obj);
+}
+
+function updateTableData(rowElem) {
+    let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
+    let days = coinObj["tableData"]["days"];
+    let rowIndex, daysRemaining;
+    
+    if (rowElem.classList[1] == "day-row") {
+        rowIndex = parseInt(rowElem.classList[2].slice(1));
+        if (rowElem.querySelector("input[type='checkbox']").checked) {
+            days[rowIndex]["cashout"] = true;
+        } else{
+            days[rowIndex]["cashout"] = false;
+        }
+
+        daysRemaining = dayOfYearIndex(new Date("2022-12-31")) - dayOfYearIndex(new Date(rowElem.classList[0].slice(1))) + 1;
+
+    }
+
+    let months = coinObj["tableData"]["months"];
+
+    for (let j = 364-daysRemaining; j <= daysRemaining; j++) {
+        
+        if (j==0) {
+            for (let k = 0; k < 4; k++) {
+                days[j]["node" + (k + 1)] = startingNodes[k];
+            }
+        } else {
+            days[j-1] = days[(j-1)];
+        }
+        let dr = 0;
+        let drb = 0;
+
+        for (let i=1; i < 5; i++) {    
+            if (coinObj["level" + i]["name"] != "") {
+                let rew = coinObj["level" + i]["rewardRate"];
+                let cost = coinObj["level" + i]["cost"];
+                let comp = coinObj["level" + i]["compounding"];
+
+                // days[j]["node" + i], days[j]["drb"]
+                if (j > 0) {    
+                    if (comp) {    
+                        if (days[j-1]["drb"] + days[j-1]["dr"] >= cost) {
+                            days[j]["node" + i] = days[j-1]["node" + i] + ~~((days[j-1]["drb"] + days[j-1]["dr"]) / cost);
+                            drb = days[j-1]["drb"] + days[j-1]["dr"] - ((days[j]["node" + i] - days[j-1]["node" + i]) * cost);
+                        } else {
+                            days[j]["node" + i] = days[j-1]["node" + i];
+                            drb = days[j-1]["drb"] + days[j-1]["dr"];
+                        }
+                    }
+                    else {
+                        days[j]["node" + i] = days[j-1]["node" + i];
+                        days[j]["drb"] = days[j-1]["drb"] + days[j-1]["dr"];
+                    }
+                }
+
+                days[j]["dr"] += days[j]["node" + i] * rew;
+            }
+        }
+        days[j]["drb"] = drb; 
+    }
+
 }
 
 function createTable(elem,obj){
@@ -453,12 +539,12 @@ function createTable(elem,obj){
     table.appendChild(tHead);
 
     // Create a row for each day of the year
-    let tableData = obj["tableData"];
+    let tableData = obj["tableData"]["days"];
     for(let i = 0; i < 365; i++){
         let row = document.createElement("tr");
         
         let dateStr = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
-        let dateClassStr = (date.getMonth() + 1).toString() + "-" + date.getDate().toString() + "-" + date.getFullYear().toString();
+        let dateClassStr = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + date.getDate().toString();
         row.className = "_" + dateClassStr + " day-row d" + (i);
 
         let rowStr = "<td class='date-cell'>" + dateStr + "</td>";
@@ -467,10 +553,10 @@ function createTable(elem,obj){
         }
         
         // Daily Rewards Balance cell
-        rowStr += "<td class='drb-cell'>" + tableData[i]["drb"].toFixed(5) + "</td>";
+        rowStr += "<td class='drb-cell'>" + tableData[i]["drb"].toFixed(2) + "</td>";
 
         // Daily Rewards cell
-        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(5) + "</td>";
+        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(2) + "</td>";
         // Cash cell
         rowStr += "<td class='cash-cell'></td>";
 
@@ -555,6 +641,11 @@ for(let l = 1; l < 5; l++) {
             });
             drbs[k].addEventListener('input', (e) => {
                 console.log(e);
+                // Validate input - only allow numbers & decimal
+            
+            
+
+
                 updateRow(e.target.parentNode);
             });
         }
@@ -562,74 +653,32 @@ for(let l = 1; l < 5; l++) {
 }
 
 function updateRow(rowElem){
+    updateTableData(rowElem);
     // Get relative nodeData
     let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
-    let tableData = coinObj["tableData"];
-    // let prevElem, prevDrb, prevDr, prevOk;
-    // if (!typeof rowElem.prevElementSibling === undefined) {
-    //     prevElem = rowElem.prevElementSibling;
-    //     prevDrb = parseInt(prevElem.querySelectorAll(".drb-cell").innerText);
-    //     prevDr = parseInt(prevElem.querySelectorAll(".dr-cell").innerText);
-    //     prevOk = true;
-    // };
-    let nodeCount, cashout;
-    if (rowElem.querySelector(".cashout-cell .cashout") != null) {
-        cashout = rowElem.querySelector(".cashout-cell .cashout").checked;
-    }
-     
-
-    // Set Node Counts
-    // if (prevOk) {    
-    //     if (!cashout){
-    //         if (prevDr + prevDrb > coinObj["level1"]["cost"]){
-    //             rowElem.querySelector(".lev1").innerText = parseInt(prevElem.querySelector(".lev1").innerText) + ~~((prevDrb + prevDr)/coinObj["level1"]["cost"]);
-    //         } else {
-    //             rowElem.querySelector(".lev1").innerText = prevElem.querySelector(".lev1").innerText;
-    //         }
-    //     } else {
-    //         rowElem.querySelector(".lev1").innerText = prevElem.querySelector(".lev1").innerText;
-    //     }
-    //     nodeCount = parseInt(rowElem.querySelector(".lev1").innerText);
-    // }
+    let days = coinObj["tableData"]["days"];
+    // Get row index
+    let rowIndex;
+    if (rowElem.classList[1] == "day-row") {
+        rowIndex = parseInt(rowElem.classList[2].slice(1));
+    }    
 
     // Set Daily Rewards
-    let dr = 0;
-    // for (let i = 1; i < 5; i++) {
-        // if (coinObj["level" + i]["name"] != ""){
-            if (nodeCount > 0) {
-                dr += nodeCount * coinObj["level1"]["rewardRate"];
-            }
-        // }
-    // }
     let drCell = rowElem.querySelector(".dr-cell");
-    drCell.innerText = dr.toFixed(5);
+    drCell.innerText = days[rowIndex]["dr"].toFixed(2);
 
     // Set Daily Rewards Balance
-    let drb = 0;
     let drbCell = rowElem.querySelector(".drb-cell");
-    if (prevOk) {
-        if (cashout) {
-            if (prevDr + prevDrb > coinObj["level1"]["cost"]){
-                drb = 0;
-            } else {
-                drb = prevDr + prevDrb;
-            }
-        } else {
-            if (prevDr + prevDrb > coinObj["level1"]["cost"]){
-                drb = prevDrb + prevDr - coinObj["level1"]["cost"];
-            } else {
-                drb = prevDr + prevDrb;
-            }
-        }
-    } else {
-        drb = 0;
-    }
-    drbCell.innerText = drb;
+    drbCell.innerText = days[rowIndex]["drb"].toFixed(2);
     
 
 
 
-    if (typeof rowElem.nextElementSibling !== undefined) {
-        updateRow(rowElem.nextElementSibling);
+    if (rowElem.classList[0] != "_2022-12-31") {
+        if (rowElem.nextElementSibling.classList[1] == "day-row") {
+            updateRow(rowElem.nextElementSibling);
+        } else {
+            updateRow(rowElem.nextElementSibling.nextElementSibling);
+        }
     };
 }

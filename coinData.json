@@ -1,0 +1,68 @@
+{
+    "strong": {
+        "id":"strong",
+        "localName": "strong",
+        "symbol": "",
+        "network":"",
+        "description":"",
+        "imageLinks":"",
+        "mediumLink":"",
+        "homepage":"",
+        "platforms":"",
+        "prices": {
+            "ath":"",
+            "athDate":"",
+            "atl":"",
+            "atlDate":"",
+            "currentPrice":"",
+            "high_24h":"",
+            "low_24h":"",
+            "totalVolume":"",
+            "marketCap":""
+        }
+    },
+    "thor": {
+        "id":"thor",
+        "localName": "thor",
+        "symbol": "",
+        "network":"",
+        "description":"",
+        "imageLinks":"",
+        "mediumLink":"",
+        "homepage":"",
+        "platforms":"",
+        "prices": {
+            "ath":"",
+            "athDate":"",
+            "atl":"",
+            "atlDate":"",
+            "currentPrice":"",
+            "high_24h":"",
+            "low_24h":"",
+            "totalVolume":"",
+            "marketCap":""
+        }
+    },
+    "pxt2": {
+        "id":"project-x-nodes",
+        "localName": "pxt2",
+        "symbol": "",
+        "network":"",
+        "description":"",
+        "imageLinks":"",
+        "mediumLink":"",
+        "homepage":"",
+        "platforms":"",
+        "prices": {
+            "ath":"",
+            "athDate":"",
+            "atl":"",
+            "atlDate":"",
+            "currentPrice":"",
+            "high_24h":"",
+            "low_24h":"",
+            "totalVolume":"",
+            "marketCap":""
+        }
+    }
+}

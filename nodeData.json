@@ -1,0 +1,149 @@
+{
+    "strong": {
+        "name": "strong",
+        "level1":{
+            "name":"Strong",
+            "cost":10,
+            "rewardRate":0.09226,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":14.95,
+            "compounding": true
+        },
+        "level2":{
+            "name":"",
+            "cost":0,
+            "rewardRate":0,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":0,
+            "compounding": false
+        },
+        "level3":{
+            "name":"",
+            "cost":0,
+            "rewardRate":0,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":0,
+            "compounding": false
+        },
+        "level4":{
+            "name":"",
+            "cost":0,
+            "rewardRate":0,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":0,
+            "compounding": false
+        },
+        "tableData":[],
+        "startingNodes": [4,0,0,0]
+    },
+    "thor": {
+        "name": "thor",
+        "level1":{
+            "name":"Heimdall",
+            "cost":1.25,
+            "rewardRate":0.008,
+            "rewardPercentage":0,
+            "claimTax":1,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":5,
+            "compounding": false
+        },
+        "level2":{
+            "name":"Freya",
+            "cost":6.25,
+            "rewardRate":0.05,
+            "rewardPercentage":0,
+            "claimTax":5,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":10,
+            "compounding": false
+        },
+        "level3":{
+            "name":"Thor",
+            "cost":12.5,
+            "rewardRate":0.14375,
+            "rewardPercentage":0,
+            "claimTax":8,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":20,
+            "compounding": true
+        },
+        "level4":{
+            "name":"Odin",
+            "cost":78.125,
+            "rewardRate":1.015625,
+            "rewardPercentage":0,
+            "claimTax":10,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":80,
+            "compounding": false
+        },
+        "tableData": [],
+        "startingNodes": [7,1,4,1]
+    },
+    "pxt2": {
+        "name": "pxt2",
+        "level1":{
+            "name":"PXT2",
+            "cost":10,
+            "rewardRate":0.17,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":18,
+            "monthlyFee":0,
+            "compounding": true
+        },
+        "level2":{
+            "name":"",
+            "cost":"",
+            "rewardRate":0,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":0,
+            "compounding": false
+        },
+        "level3":{
+            "name":"",
+            "cost":"",
+            "rewardRate":0,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":0,
+            "compounding": false
+        },
+        "level4":{
+            "name":"",
+            "cost":"",
+            "rewardRate":0,
+            "rewardPercentage":0,
+            "claimTax":0,
+            "compoundTax":0,
+            "sellTax":0,
+            "monthlyFee":0,
+            "compounding": false
+        },
+        "tableData": [],
+        "startingNodes": [16,0,0,0]
+    }
+}

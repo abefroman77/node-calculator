@@ -438,7 +438,7 @@ function fillTableData(obj) {
     console.log(obj);
 }
 
-function updateTableData(rowElem) {
+function updateTableData(rowElem, wasEdited) {
     let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
     let days = coinObj["tableData"]["days"];
     let rowIndex, daysRemaining;
@@ -450,6 +450,14 @@ function updateTableData(rowElem) {
         } else{
             days[rowIndex]["cashout"] = false;
         }
+        if (wasEdited) {
+            days[rowIndex]["drb"] = parseFloat(rowElem.querySelector(".drb-cell").textContent);
+            for (let k = 1; k < 5; k++) {
+                if (coinObj["level" + k]["name"] != "") {
+                    days[rowIndex]["node" + k] = parseFloat(rowElem.querySelector(".lev" + k).textContent);
+                }
+            }
+        }
 
         daysRemaining = dayOfYearIndex(new Date("2022-12-31")) - dayOfYearIndex(new Date(rowElem.classList[0].slice(1))) + 1;
 
@@ -457,18 +465,7 @@ function updateTableData(rowElem) {
 
     let months = coinObj["tableData"]["months"];
 
-    for (let j = 364-daysRemaining; j <= daysRemaining; j++) {
-        
-        if (j==0) {
-            for (let k = 0; k < 4; k++) {
-                days[j]["node" + (k + 1)] = startingNodes[k];
-            }
-        } else {
-            days[j-1] = days[(j-1)];
-        }
-        let dr = 0;
-        let drb = 0;
-
+    for (let j = 364-daysRemaining; j <= 364; j++) {
         for (let i=1; i < 5; i++) {    
             if (coinObj["level" + i]["name"] != "") {
                 let rew = coinObj["level" + i]["rewardRate"];
@@ -495,7 +492,18 @@ function updateTableData(rowElem) {
                 days[j]["dr"] += days[j]["node" + i] * rew;
             }
         }
-        days[j]["drb"] = drb; 
+        days[j]["drb"] = drb;
+        
+
+
+
+
+
+
+
+
+
+
     }
 
 }
@@ -632,12 +640,12 @@ for(let l = 1; l < 5; l++) {
             
 
 
-            updateRow(e.target.parentNode);
+            updateRow(e.target.parentNode, true);
         });
         if (l == 1) {
             checks[k].addEventListener('input', (e) => {
                 console.log(e);
-                updateRow(e.target.parentNode.parentNode);
+                updateRow(e.target.parentNode.parentNode, true);
             });
             drbs[k].addEventListener('input', (e) => {
                 console.log(e);
@@ -646,14 +654,14 @@ for(let l = 1; l < 5; l++) {
             
 
 
-                updateRow(e.target.parentNode);
+                updateRow(e.target.parentNode, true);
             });
         }
     };
 }
 
-function updateRow(rowElem){
-    updateTableData(rowElem);
+function updateRow(rowElem, wasEdited){
+    updateTableData(rowElem, wasEdited);
     // Get relative nodeData
     let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
     let days = coinObj["tableData"]["days"];
@@ -676,9 +684,9 @@ function updateRow(rowElem){
 
     if (rowElem.classList[0] != "_2022-12-31") {
         if (rowElem.nextElementSibling.classList[1] == "day-row") {
-            updateRow(rowElem.nextElementSibling);
+            updateRow(rowElem.nextElementSibling, false);
         } else {
-            updateRow(rowElem.nextElementSibling.nextElementSibling);
+            updateRow(rowElem.nextElementSibling.nextElementSibling, false);
         }
     };
 }

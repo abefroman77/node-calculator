@@ -87,7 +87,8 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:4,
-            monthlyFee:14.95
+            monthlyFee:14.95,
+            compounding: true
         },
         level2:{
             name:"",
@@ -98,7 +99,8 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:0,
-            monthlyFee:0
+            monthlyFee:0,
+            compounding: false
         },
         level3:{
             name:"",
@@ -109,7 +111,8 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:0,
-            monthlyFee:0
+            monthlyFee:0,
+            compounding: false
         },
         level4:{
             name:"",
@@ -120,9 +123,11 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:0,
-            monthlyFee:0
+            monthlyFee:0,
+            compounding: false
         },
-        tableData: []
+        tableData:[],
+        startingNodes: [1,0,0,0]
     },
     thor: {
         name: "thor",
@@ -135,7 +140,8 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:7,
-            monthlyFee:5
+            monthlyFee:5,
+            compounding: false
         },
         level2:{
             name:"Freya",
@@ -146,18 +152,20 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:1,
-            monthlyFee:10
+            monthlyFee:10,
+            compounding: false
         },
         level3:{
             name:"Thor",
             cost:12.5,
-            rewardRate:0.014375,
+            rewardRate:0.14375,
             rewardPercentage:0,
             claimTax:8,
             compoundTax:0,
             sellTax:0,
             qty:2,
-            monthlyFee:20
+            monthlyFee:20,
+            compounding: true
         },
         level4:{
             name:"Odin",
@@ -168,9 +176,11 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:1,
-            monthlyFee:80
+            monthlyFee:80,
+            compounding: false
         },
-        tableData: []
+        tableData: [],
+        startingNodes: [1,1,1,1]
     },
     pxt2: {
         name: "pxt2",
@@ -183,7 +193,8 @@ let nodeData = {
             compoundTax:0,
             sellTax:18,
             qty:3,
-            monthlyFee:0
+            monthlyFee:0,
+            compounding: true
         },
         level2:{
             name:"",
@@ -194,7 +205,8 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:0,
-            monthlyFee:0
+            monthlyFee:0,
+            compounding: false
         },
         level3:{
             name:"",
@@ -205,7 +217,8 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:0,
-            monthlyFee:0
+            monthlyFee:0,
+            compounding: false
         },
         level4:{
             name:"",
@@ -216,9 +229,11 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             qty:0,
-            monthlyFee:0
+            monthlyFee:0,
+            compounding: false
         },
-        tableData: []
+        tableData: [],
+        startingNodes: [1,0,0,0]
     }
 }
 function addZero(str){
@@ -321,6 +336,84 @@ function addDay(date){
     return next;
 }
 
+function fillTableData(obj) {
+    let arr = obj["tableData"];
+    let date = new Date('2022-01-01T12:00:00');
+    let startingNodes = obj["startingNodes"];
+    let prevObj = {
+        index: 0,
+        date: "",
+        node1: 0,
+        node2: 0,
+        node3: 0,
+        node4: 0,
+        drb: 0.0,
+        dr: 0.0,
+        cash: 0.0,
+        cumCash: 0,
+        cashout: false
+    };
+
+        for (let j = 0; j < 365; j++) {
+            let objPush = {
+                index: 0,
+                date: "",
+                node1: 0,
+                node2: 0,
+                node3: 0,
+                node4: 0,
+                drb: 0.0,
+                dr: 0.0,
+                cash: 0,
+                cumCash: 0,
+                cashout: false
+            };
+
+            objPush["index"] = j;
+            objPush["date"] = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
+            
+            if (j==0) {
+                for (let k = 0; k < 4; k++) {
+                    objPush["node" + (k + 1)] = startingNodes[k];
+                }
+            } else {
+                prevObj = arr[(j-1)];
+            }
+            let dr = 0;
+            let drb = 0;
+
+            for (let i=1; i < 5; i++) {    
+                if (obj["level" + i]["name"] != "") {
+                    let rew = obj["level" + i]["rewardRate"];
+                    let cost = obj["level" + i]["cost"];
+                    let comp = obj["level" + i]["compounding"];
+
+                    // objPush["node" + i], objPush["drb"]
+                    if (j > 0) {    
+                        if (comp) {    
+                            if (prevObj["drb"] + prevObj["dr"] >= cost) {
+                                objPush["node" + i] = prevObj["node" + i] + ~~((prevObj["drb"] + prevObj["dr"]) / cost);
+                                drb = prevObj["drb"] + prevObj["dr"] - ((objPush["node" + i] - prevObj["node" + i]) * cost);
+                            } else {
+                                objPush["node" + i] = prevObj["node" + i];
+                                drb = prevObj["drb"] + prevObj["dr"];
+                            }
+                        }
+                        else {
+                            objPush["node" + i] = prevObj["node" + i];
+                            objPush["drb"] = prevObj["drb"] + prevObj["dr"];
+                        }
+                    }
+
+                    objPush["dr"] += objPush["node" + i] * rew;
+                }
+            }
+            objPush["drb"] = drb;
+            arr.push(objPush);
+            date = addDay(date);   
+        }
+}
+
 function createTable(elem,obj){
     let div = document.createElement("div");
     div.className = "table-div";
@@ -360,23 +453,24 @@ function createTable(elem,obj){
     table.appendChild(tHead);
 
     // Create a row for each day of the year
+    let tableData = obj["tableData"];
     for(let i = 0; i < 365; i++){
         let row = document.createElement("tr");
         
         let dateStr = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
         let dateClassStr = (date.getMonth() + 1).toString() + "-" + date.getDate().toString() + "-" + date.getFullYear().toString();
-        row.className = "_" + dateClassStr + " day-row _" + (i + 1);
+        row.className = "_" + dateClassStr + " day-row d" + (i);
 
         let rowStr = "<td class='date-cell'>" + dateStr + "</td>";
         for(let j=0; j < num; j++){
-            rowStr += "<td class='" + obj["level" + (j+1)]["name"] + " lev" + (j+1) + "'></td>";
+            rowStr += "<td class='" + obj["level" + (j+1)]["name"].toLowerCase() + " lev" + (j+1) + "'>" + tableData[i]["node" + (j+1)] + "</td>";
         }
         
         // Daily Rewards Balance cell
-        rowStr += "<td class='drb-cell'></td>";
+        rowStr += "<td class='drb-cell'>" + tableData[i]["drb"].toFixed(5) + "</td>";
 
         // Daily Rewards cell
-        rowStr += "<td class='dr-cell'></td>";
+        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(5) + "</td>";
         // Cash cell
         rowStr += "<td class='cash-cell'></td>";
 
@@ -432,9 +526,110 @@ function createTable(elem,obj){
     elem.appendChild(div);
 }
 
+fillTableData(nodeData["strong"]);
+fillTableData(nodeData["thor"]);
+fillTableData(nodeData["pxt2"]);
+
 createTable(document.getElementById("strongCard"), nodeData["strong"]);
 createTable(document.getElementById("thorCard"), nodeData["thor"]);
 createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);
 
+for(let l = 1; l < 5; l++) {
+    let cells = document.querySelectorAll(".lev" + l);
+    let checks = document.querySelectorAll("input[type='checkbox']");
+    let drbs = document.querySelectorAll(".drb-cell");
+    for (let k = 0; k < cells.length; k++) {
+        cells[k].addEventListener('input', (e) => {
+            console.log(e);
+            // Validate input - only allow numbers & decimal
+            
+            
 
-// KNOCKOUT SECTION
+
+            updateRow(e.target.parentNode);
+        });
+        if (l == 1) {
+            checks[k].addEventListener('input', (e) => {
+                console.log(e);
+                updateRow(e.target.parentNode.parentNode);
+            });
+            drbs[k].addEventListener('input', (e) => {
+                console.log(e);
+                updateRow(e.target.parentNode);
+            });
+        }
+    };
+}
+
+function updateRow(rowElem){
+    // Get relative nodeData
+    let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
+    let tableData = coinObj["tableData"];
+    // let prevElem, prevDrb, prevDr, prevOk;
+    // if (!typeof rowElem.prevElementSibling === undefined) {
+    //     prevElem = rowElem.prevElementSibling;
+    //     prevDrb = parseInt(prevElem.querySelectorAll(".drb-cell").innerText);
+    //     prevDr = parseInt(prevElem.querySelectorAll(".dr-cell").innerText);
+    //     prevOk = true;
+    // };
+    let nodeCount, cashout;
+    if (rowElem.querySelector(".cashout-cell .cashout") != null) {
+        cashout = rowElem.querySelector(".cashout-cell .cashout").checked;
+    }
+     
+
+    // Set Node Counts
+    // if (prevOk) {    
+    //     if (!cashout){
+    //         if (prevDr + prevDrb > coinObj["level1"]["cost"]){
+    //             rowElem.querySelector(".lev1").innerText = parseInt(prevElem.querySelector(".lev1").innerText) + ~~((prevDrb + prevDr)/coinObj["level1"]["cost"]);
+    //         } else {
+    //             rowElem.querySelector(".lev1").innerText = prevElem.querySelector(".lev1").innerText;
+    //         }
+    //     } else {
+    //         rowElem.querySelector(".lev1").innerText = prevElem.querySelector(".lev1").innerText;
+    //     }
+    //     nodeCount = parseInt(rowElem.querySelector(".lev1").innerText);
+    // }
+
+    // Set Daily Rewards
+    let dr = 0;
+    // for (let i = 1; i < 5; i++) {
+        // if (coinObj["level" + i]["name"] != ""){
+            if (nodeCount > 0) {
+                dr += nodeCount * coinObj["level1"]["rewardRate"];
+            }
+        // }
+    // }
+    let drCell = rowElem.querySelector(".dr-cell");
+    drCell.innerText = dr.toFixed(5);
+
+    // Set Daily Rewards Balance
+    let drb = 0;
+    let drbCell = rowElem.querySelector(".drb-cell");
+    if (prevOk) {
+        if (cashout) {
+            if (prevDr + prevDrb > coinObj["level1"]["cost"]){
+                drb = 0;
+            } else {
+                drb = prevDr + prevDrb;
+            }
+        } else {
+            if (prevDr + prevDrb > coinObj["level1"]["cost"]){
+                drb = prevDrb + prevDr - coinObj["level1"]["cost"];
+            } else {
+                drb = prevDr + prevDrb;
+            }
+        }
+    } else {
+        drb = 0;
+    }
+    drbCell.innerText = drb;
+    
+
+
+
+    if (typeof rowElem.nextElementSibling !== undefined) {
+        updateRow(rowElem.nextElementSibling);
+    };
+}

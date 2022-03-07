@@ -159,7 +159,7 @@ body {
 	font-size:12px;
 	background-color:#acc8cc;
 	border-width: 1px 1px 3px 1px;
-	padding: 8px;
+	padding: 0px 8px;
 	border-style: solid;
 	border-color: #729ea5;	
 	font-weight: 700;
@@ -172,10 +172,11 @@ body {
 .calc-table td {
 	font-size:12px;
 	border-width: 1px;
-	padding: 8px;
+	padding: 0px 8px;
 	border-style: solid;
 	border-color: #729ea5;
 	width: 200px;
+	height: 20px;
 }
 
 

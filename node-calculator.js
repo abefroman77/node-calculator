@@ -481,16 +481,32 @@ function updateTableDataRow(rowElem, e) {
         let thisRow = days[rowIndex];
         let prevRow;
 
+        if (rowIndex > 0) {
+            prevRow = days[rowIndex - 1];
+        }
+
+        // Capture previous checkbox value
+        if(rowElem.previousElementSibling.classList[1] != "total-row") {
+            if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                prevRow["cashout"] = true;
+            } else{
+                prevRow["cashout"] = false;
+            }
+        } else {
+            if (rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                prevRow["cashout"] = true;
+            } else{
+                prevRow["cashout"] = false;
+            }
+        }
+
         // Capture checkbox value
         if (rowElem.querySelector("input[type='checkbox']").checked) {
             thisRow["cashout"] = true;
         } else{
             thisRow["cashout"] = false;
         }
-
-        if (rowIndex > 0) {
-            prevRow = days[rowIndex - 1];
-        }
+        
         // if row was directly edited, pull values directly from UI
         if (e != false) {
             let dr = 0;
@@ -504,6 +520,20 @@ function updateTableDataRow(rowElem, e) {
             }
             thisRow["dr"] = dr;
 
+            // Cash cell
+            if (thisRow["cashout"]) {
+                // if (prevRow["drb"] + prevRow["dr"] >= cost) {
+                    thisRow["cash"] = (thisRow["drb"] + thisRow["dr"]) * coinData[coinObj["name"]]["prices"]["currentPrice"];
+                // }
+            }
+
+            // Cumulative cash cell
+            if (rowIndex == 0) {
+                thisRow["cumCash"] = thisRow["cash"];
+            } else {
+                thisRow["cumCash"] = prevRow["cumCash"] + thisRow["cash"];
+            }
+
         } else {    
             // if updateTableDataRow was called sequentially, calculate values
             let drb = 0;
@@ -514,24 +544,35 @@ function updateTableDataRow(rowElem, e) {
                     let cost = coinObj["level" + i]["cost"];
                     let comp = coinObj["level" + i]["compounding"];
 
-                    // thisRow["node" + i], thisRow["drb"]
+                    // thisRow["node" + i]
                     if (rowIndex > 0) {
-                        if(!thisRow["cashout"]) {
+                        if(!prevRow["cashout"]) {
                             if (comp) {    
                                 if (prevRow["drb"] + prevRow["dr"] >= cost) {
                                     thisRow["node" + i] = prevRow["node" + i] + ~~((prevRow["drb"] + prevRow["dr"]) / cost);
-                                    drb = prevRow["drb"] + prevRow["dr"] - ((thisRow["node" + i] - prevRow["node" + i]) * cost);
                                 } else {
                                     thisRow["node" + i] = prevRow["node" + i];
-                                    drb = prevRow["drb"] + prevRow["dr"];
                                 }
                             }
                             else {
                                 thisRow["node" + i] = prevRow["node" + i];
-                                // drb = prevRow["drb"] + prevRow["dr"];
                             }
                         } else {
                             thisRow["node" + i] = prevRow["node" + i];
+                        }
+                    }
+
+                    // thisRow["drb"]
+                    if (rowIndex > 0) {
+                        if(!prevRow["cashout"]) {
+                            if (comp) {    
+                                if (prevRow["drb"] + prevRow["dr"] >= cost) {
+                                    drb = prevRow["drb"] + prevRow["dr"] - ((thisRow["node" + i] - prevRow["node" + i]) * cost);
+                                } else {
+                                    drb = prevRow["drb"] + prevRow["dr"];
+                                }
+                            }
+                        } else {
                             if (prevRow["drb"] + prevRow["dr"] >= cost) {
                                 drb = 0;
                             } else {
@@ -545,7 +586,18 @@ function updateTableDataRow(rowElem, e) {
             }
             thisRow["drb"] = drb;
             thisRow["dr"] = dr;
-            console.log({thisRow, prevRow})
+            // thisRow["cash"]
+            if (thisRow["cashout"]) {
+                // if (prevRow["drb"] + prevRow["dr"] >= takeProfit # <- INPUT) {
+                    thisRow["cash"] = (thisRow["drb"] + thisRow["dr"]) * coinData[coinObj["name"]]["prices"]["currentPrice"];
+                // }
+            }
+
+            if (rowIndex == 0) {
+                thisRow["cumCash"] = thisRow["cash"];
+            } else {
+                thisRow["cumCash"] = prevRow["cumCash"] + thisRow["cash"];
+            }
         }
     } else {
         // if the row to be edited is a total-row
@@ -721,6 +773,18 @@ function updateRow(rowElem, e){
             nodeCount.innerText = days[rowIndex]["node" + i];
         }
     }
+
+    // Cash cell
+    let cashCell = rowElem.querySelector(".cash-cell");
+    if (days[rowIndex]["cashout"]) {
+        cashCell.innerText = "$" + days[rowIndex]["cash"].toFixed(2);
+    } else {
+        cashCell.innerText = "";
+    }
+
+    // Cumulative cash cell
+    let cumCash = rowElem.querySelector(".cum-cash-cell");
+    cumCash.innerText = "$" + days[rowIndex]["cumCash"].toFixed(2);
 
     // Set Daily Rewards
     let drCell = rowElem.querySelector(".dr-cell");

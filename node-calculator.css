@@ -127,12 +127,40 @@ body {
 }
 
 .card {
-	background-color: rgb(86, 91, 160);
+	background-color: #1F3864;
 	border: 5px solid rgb(43, 43, 95);
 	flex: 1;
 	margin: 10px;
 	text-align: center;
 	display: none;
+	color: white;
+}
+
+.card .coin-name {
+	height: 50px;
+	line-height: 50px;
+}
+
+.card .coin-name .title {
+	margin: auto 10px;
+	line-height: 50px;
+	height: 50px;
+	display: inline-block;
+}
+
+.homepage {
+	line-height: 50px;
+	height: 50px;
+	display: inline-block;
+	text-align: center;
+}
+
+.card a {
+	color: white;
+}
+
+.card a:visited {
+	color: rgb(75, 129, 247);
 }
 
 .card ul {
@@ -159,7 +187,7 @@ body {
 	font-size:12px;
 	background-color:#acc8cc;
 	border-width: 1px 1px 3px 1px;
-	padding: 8px;
+	padding: 0px 8px;
 	border-style: solid;
 	border-color: #729ea5;	
 	font-weight: 700;
@@ -172,10 +200,11 @@ body {
 .calc-table td {
 	font-size:12px;
 	border-width: 1px;
-	padding: 8px;
+	padding: 0px 8px;
 	border-style: solid;
 	border-color: #729ea5;
 	width: 200px;
+	height: 20px;
 }
 
 

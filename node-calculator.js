@@ -248,14 +248,18 @@ let nodeData = {
         startingNodes: [16,0,0,0]
     }
 }
-function addZero(str){
+
+
+
+function formatMoney(str1, str2){
     let regex = /\.\d\b/;
-    if(regex.test(str)){
-        return str += "0";
-        
-    } else {
-        return str;
+    if(regex.test(str1)){
+        str1 += "0";   
     }
+    if(str2 != "") {
+        str1 += " " + str2;
+    }
+    return "$" + str1;
 }
 
 function addDay(date){
@@ -275,7 +279,7 @@ function doyToDate(doy, year) {
 function populateCardData(elem,obj){
 
     let url = "";
-    elem.querySelector(".coin-price").textContent = addZero("$" + obj["prices"]["currentPrice"]);
+    elem.querySelector(".coin-price").textContent = formatMoney(obj["prices"]["currentPrice"], "usd");
     elem.querySelector(".symbol").textContent = obj["symbol"];
     elem.querySelector(".network").textContent = obj["network"];
     if(Object.keys(obj["platforms"])[0] == "ethereum"){
@@ -284,14 +288,16 @@ function populateCardData(elem,obj){
         url = "http://snowtrace.io/address/";
     }
     elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + Object.values(obj["platforms"])[0] + "</a>";
-    elem.querySelector(".ath").textContent = addZero("$" + obj["prices"]["ath"]);
+    elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
     elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
-    elem.querySelector(".atl").textContent = addZero("$" + obj["prices"]["atl"]);
+    elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
     elem.querySelector(".atl-date").textContent = obj["prices"]["atlDate"];
-    elem.querySelector(".high-24h").textContent = addZero("$" + obj["prices"]["high_24h"]);
-    elem.querySelector(".low-24h").textContent = addZero("$" + obj["prices"]["low_24h"]);
+    elem.querySelector(".high-24h").textContent = formatMoney(obj["prices"]["high_24h"], "usd");
+    elem.querySelector(".low-24h").textContent = formatMoney(obj["prices"]["low_24h"], "usd");
     elem.querySelector(".total-volume").textContent = obj["prices"]["totalVolume"];
     elem.querySelector(".market-cap").textContent = "$" + obj["prices"]["marketCap"];
+    elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
+    elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
 }
 
 function updateCoinData(elem,obj){
@@ -358,6 +364,21 @@ function showHideCard(id){
 
 // Fill Table data the first time
 function fillTableData(obj) {
+    // tableData = 
+        // {
+            // cash: 0
+            // cashout: false
+            // cumCash: 0
+            // date: "3/16/2022"
+            // dr: 0.64582
+            // drb: 4.4168199999999915
+            // index: 74
+            // node1: 7
+            // node2: 0
+            // node3: 0
+            // node4: 0
+        // }
+
     obj["tableData"]["days"] = [];
     let days = obj["tableData"]["days"];
     obj["tableData"]["months"] = [];
@@ -378,67 +399,88 @@ function fillTableData(obj) {
         cashout: false
     };
 
-        for (let j = 0; j < 365; j++) {
-            let daysObjPush = {
-                index: 0,
-                date: "",
-                node1: 0,
-                node2: 0,
-                node3: 0,
-                node4: 0,
-                drb: 0.0,
-                dr: 0.0,
-                cash: 0,
-                cumCash: 0,
-                cashout: false
-            };
+    // Fill daily data
+    for (let j = 0; j < 365; j++) {
+        let daysObjPush = {
+            index: 0,
+            date: "",
+            node1: 0,
+            node2: 0,
+            node3: 0,
+            node4: 0,
+            drb: 0.0,
+            dr: 0.0,
+            cash: 0,
+            cumCash: 0,
+            cashout: false
+        };
 
-            daysObjPush["index"] = j;
-            daysObjPush["date"] = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
-            
-            if (j==0) {
-                for (let k = 0; k < 4; k++) {
-                    daysObjPush["node" + (k + 1)] = startingNodes[k];
-                }
-            } else {
-                prevDaysObj = days[(j-1)];
+        daysObjPush["index"] = j;
+        daysObjPush["date"] = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
+        
+        if (j==0) {
+            for (let k = 0; k < 4; k++) {
+                daysObjPush["node" + (k + 1)] = startingNodes[k];
             }
-            let dr = 0;
-            let drb = 0;
+        } else {
+            prevDaysObj = days[(j-1)];
+        }
+        let dr = 0;
+        let drb = 0;
 
-            for (let i=1; i < 5; i++) {    
-                if (obj["level" + i]["name"] != "") {
-                    let rew = obj["level" + i]["rewardRate"];
-                    let cost = obj["level" + i]["cost"];
-                    let comp = obj["level" + i]["compounding"];
+        for (let i=1; i < 5; i++) {    
+            if (obj["level" + i]["name"] != "") {
+                let rew = obj["level" + i]["rewardRate"];
+                let cost = obj["level" + i]["cost"];
+                let comp = obj["level" + i]["compounding"];
 
-                    // daysObjPush["node" + i], daysObjPush["drb"]
-                    if (j > 0) {    
-                        if (comp) {    
-                            if (prevDaysObj["drb"] + prevDaysObj["dr"] >= cost) {
-                                daysObjPush["node" + i] = prevDaysObj["node" + i] + ~~((prevDaysObj["drb"] + prevDaysObj["dr"]) / cost);
-                                drb = prevDaysObj["drb"] + prevDaysObj["dr"] - ((daysObjPush["node" + i] - prevDaysObj["node" + i]) * cost);
-                            } else {
-                                daysObjPush["node" + i] = prevDaysObj["node" + i];
-                                drb = prevDaysObj["drb"] + prevDaysObj["dr"];
-                            }
-                        }
-                        else {
+                // daysObjPush["node" + i], daysObjPush["drb"]
+                if (j > 0) {    
+                    if (comp) {    
+                        if (prevDaysObj["drb"] + prevDaysObj["dr"] >= cost) {
+                            daysObjPush["node" + i] = prevDaysObj["node" + i] + ~~((prevDaysObj["drb"] + prevDaysObj["dr"]) / cost);
+                            drb = prevDaysObj["drb"] + prevDaysObj["dr"] - ((daysObjPush["node" + i] - prevDaysObj["node" + i]) * cost);
+                        } else {
                             daysObjPush["node" + i] = prevDaysObj["node" + i];
-                            daysObjPush["drb"] = prevDaysObj["drb"] + prevDaysObj["dr"];
+                            drb = prevDaysObj["drb"] + prevDaysObj["dr"];
                         }
                     }
-
-                    daysObjPush["dr"] += daysObjPush["node" + i] * rew;
+                    else {
+                        daysObjPush["node" + i] = prevDaysObj["node" + i];
+                        daysObjPush["drb"] = prevDaysObj["drb"] + prevDaysObj["dr"];
+                    }
                 }
+
+                daysObjPush["dr"] += daysObjPush["node" + i] * rew;
             }
-            daysObjPush["drb"] = drb;
-            days.push(daysObjPush);
-            date = addDay(date);   
         }
+        daysObjPush["drb"] = drb;
+        days.push(daysObjPush);
+        date = addDay(date);   
+    }
+    for (let k = 0; k < 12; k++) {
+        months.push({
+            "index": "m" + k,
+            "total": 0
+        });
+    }
 }
 
-function updateTableDataRow(rowElem, wasEdited) {
+function updateTableDataRow(rowElem, e) {
+    // tableData = 
+        // {
+            // cash: 0
+            // cashout: false
+            // cumCash: 0
+            // date: "3/16/2022"
+            // dr: 0.64582
+            // drb: 4.4168199999999915
+            // index: 74
+            // node1: 7
+            // node2: 0
+            // node3: 0
+            // node4: 0
+        // }
     let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
     let days = coinObj["tableData"]["days"];
     let rowIndex;
@@ -449,18 +491,34 @@ function updateTableDataRow(rowElem, wasEdited) {
         let thisRow = days[rowIndex];
         let prevRow;
 
+        if (rowIndex > 0) {
+            prevRow = days[rowIndex - 1];
+        }
+        
+        // Capture previous checkbox value
+        if(rowElem.previousElementSibling.classList[1] != "total-row") {
+            if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                prevRow["cashout"] = true;
+            } else{
+                prevRow["cashout"] = false;
+            }
+        } else {
+            if (rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                prevRow["cashout"] = true;
+            } else{
+                prevRow["cashout"] = false;
+            }
+        }
+
         // Capture checkbox value
         if (rowElem.querySelector("input[type='checkbox']").checked) {
             thisRow["cashout"] = true;
         } else{
             thisRow["cashout"] = false;
         }
-
-        if (rowIndex > 0) {
-            prevRow = days[rowIndex - 1];
-        }
+        
         // if row was directly edited, pull values directly from UI
-        if (wasEdited) {
+        if (e != false) {
             let dr = 0;
             thisRow["drb"] = parseFloat(rowElem.querySelector(".drb-cell").textContent);
             for (let k = 1; k < 5; k++) {
@@ -471,7 +529,11 @@ function updateTableDataRow(rowElem, wasEdited) {
                 }
             }
             thisRow["dr"] = dr;
-        } else {    // if updateTableDataRow was called sequentially, calculate values
+
+            
+
+        } else {    
+            // if updateTableDataRow was called sequentially, calculate values
             let drb = 0;
             let dr = 0; 
             for (let i=1; i < 5; i++) {   
@@ -480,20 +542,40 @@ function updateTableDataRow(rowElem, wasEdited) {
                     let cost = coinObj["level" + i]["cost"];
                     let comp = coinObj["level" + i]["compounding"];
 
-                    // thisRow["node" + i], thisRow["drb"]
+                    // thisRow["node" + i]
                     if (rowIndex > 0) {
-                        if (comp) {    
-                            if (prevRow["drb"] + prevRow["dr"] >= cost) {
-                                thisRow["node" + i] = prevRow["node" + i] + ~~((prevRow["drb"] + prevRow["dr"]) / cost);
-                                drb = prevRow["drb"] + prevRow["dr"] - ((thisRow["node" + i] - prevRow["node" + i]) * cost);
-                            } else {
-                                thisRow["node" + i] = prevRow["node" + i];
-                                drb = prevRow["drb"] + prevRow["dr"];
+                        if(!prevRow["cashout"]) {
+                            if (comp) {    
+                                if (prevRow["drb"] + prevRow["dr"] >= cost) {
+                                    thisRow["node" + i] = prevRow["node" + i] + ~~((prevRow["drb"] + prevRow["dr"]) / cost);
+                                } else {
+                                    thisRow["node" + i] = prevRow["node" + i];
+                                }
                             }
-                        }
-                        else {
+                            else {
+                                thisRow["node" + i] = prevRow["node" + i];
+                            }
+                        } else {
                             thisRow["node" + i] = prevRow["node" + i];
-                            // drb = prevRow["drb"] + prevRow["dr"];
+                        }
+                    }
+
+                    // thisRow["drb"]
+                    if (rowIndex > 0) {
+                        if(!prevRow["cashout"]) {
+                            if (comp) {    
+                                if (prevRow["drb"] + prevRow["dr"] >= cost) {
+                                    drb = prevRow["drb"] + prevRow["dr"] - ((thisRow["node" + i] - prevRow["node" + i]) * cost);
+                                } else {
+                                    drb = prevRow["drb"] + prevRow["dr"];
+                                }
+                            }
+                        } else {
+                            // if (prevRow["drb"] + prevRow["dr"] >= cost) {
+                                drb = 0;
+                            // } else {
+                            //     drb = prevRow["drb"] + prevRow["dr"];
+                            // }
                         }
                     }
         
@@ -503,9 +585,51 @@ function updateTableDataRow(rowElem, wasEdited) {
             thisRow["drb"] = drb;
             thisRow["dr"] = dr;
         }
-    } else {
+
+        // Cash cell
+        if (thisRow["cashout"]) {
+            // if (prevRow["drb"] + prevRow["dr"] >= cost) {
+                thisRow["cash"] = (thisRow["drb"] + thisRow["dr"]) * coinData[coinObj["name"]]["prices"]["currentPrice"];
+            // }
+        }
+
+        // Cumulative cash cell
+        if (thisRow["cashout"]) {
+            if (rowIndex == 0) {
+                thisRow["cumCash"] = thisRow["cash"];
+            } else {
+                thisRow["cumCash"] = prevRow["cumCash"] + thisRow["cash"];
+            }
+        } else {
+            thisRow["cumCash"] = prevRow["cumCash"];
+        }
+
+    } else if (rowElem.classList[1] == "total-row") {
         // if the row to be edited is a total-row
         let months = coinObj["tableData"]["months"];
+        let monthIndex = rowElem.classList[0];
+        
+        let monthTotal = 0;
+        let thisRow = rowElem.previousElementSibling;
+        // let prevRow = rowElem.previousElementSibling.previousElementSibling;
+        let count = 0;
+
+        do {
+            // count = 0, thisRow = rowElem.prev, prevRow = rowElem - 2
+            if(thisRow.classList[0] != "header-row" && thisRow.classList[0] != "total-row") {
+                if (thisRow.querySelector(".cash-cell").textContent != "") {
+                    
+                    monthTotal += parseFloat(thisRow.querySelector(".cash-cell").textContent.slice(1));
+                }
+                thisRow = thisRow.previousElementSibling;
+            } else {
+                break;
+            }
+            count++;
+        }
+        while (thisRow != null && thisRow.classList[1] == "day-row");
+        
+        months[parseInt(monthIndex.slice(1))]["total"] = monthTotal;
     }
 }
 
@@ -519,6 +643,7 @@ function createTable(elem,obj){
     body.className = obj["name"];
 
     let num = 1;
+    let monthIndex = 0;
     let date = new Date('2022-01-01T12:00:00');
 
     table.classList.add(obj["name"] + "-table");
@@ -562,10 +687,10 @@ function createTable(elem,obj){
         }
         
         // Daily Rewards Balance cell
-        rowStr += "<td class='drb-cell'>" + tableData[i]["drb"].toFixed(2) + "</td>";
+        rowStr += "<td class='drb-cell'>" + tableData[i]["drb"].toFixed(4) + "</td>";
 
         // Daily Rewards cell
-        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(2) + "</td>";
+        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(4) + "</td>";
         // Cash cell
         rowStr += "<td class='cash-cell'></td>";
 
@@ -594,9 +719,9 @@ function createTable(elem,obj){
         body.appendChild(row);
 
         let tomorrow = addDay(date);
-        if(date.getMonth() < tomorrow.getMonth()){
+        if(date.getMonth() < tomorrow.getMonth() || (date.getMonth() == 11 && tomorrow.getMonth() == 0)){
             let totalRow = "";
-            totalRow += "<tr contenteditable='false' class='" + date.toLocaleString('default', { month: 'long' }).toLowerCase() + " total-row'>";
+            totalRow += "<tr contenteditable='false' class='m" + monthIndex + " total-row " + date.toLocaleString('default', { month: 'long' }).toLowerCase() + "'>";
             totalRow += "<td>" + date.toLocaleString('default', { month: 'long' }) + " Total</td>";
             totalRow += "<td></td>";
             if(num >= 2){
@@ -608,8 +733,9 @@ function createTable(elem,obj){
             if(num >= 4){
                 totalRow += "<td></td>";
             };
-            totalRow += "<td></td><td></td><td></td><td class='month-cash-total'>$100</td><td></td>";
+            totalRow += "<td></td><td></td><td class='month-cash-total'></td><td></td><td></td>";
             body.innerHTML += totalRow;
+            monthIndex ++;
         }
 
 
@@ -636,64 +762,84 @@ for(let l = 1; l < 5; l++) {
     let drbs = document.querySelectorAll(".drb-cell");
     for (let k = 0; k < cells.length; k++) {
         cells[k].addEventListener('input', (e) => {
-            console.log(e);
             // Validate input - only allow numbers & decimal
             
             
-
-            updateRow(e.target.parentNode, true);
+            console.log(e);
+            updateRow(e.target.parentNode, e);
         });
         if (l == 1) {
             checks[k].addEventListener('input', (e) => {
                 console.log(e);
-                updateRow(e.target.parentNode.parentNode, true);
+                updateRow(e.target.parentNode.parentNode, e);
             });
             drbs[k].addEventListener('input', (e) => {
-                console.log(e);
                 // Validate input - only allow numbers & decimal
-            
+                console.log(e);
             
 
 
-                updateRow(e.target.parentNode, true);
+                updateRow(e.target.parentNode, e);
             });
         }
     };
 }
 
 // update row UI
-function updateRow(rowElem, wasEdited){
-    updateTableDataRow(rowElem, wasEdited);
+function updateRow(rowElem, e){
+    updateTableDataRow(rowElem, e);
     // Get relative nodeData
     let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
-    let days = coinObj["tableData"]["days"];
-    // Get row index
-    let rowIndex;
+
+    // Update row of daily data
     if (rowElem.classList[1] == "day-row") {
-        rowIndex = parseInt(rowElem.classList[2].slice(1));
-    }
-
-    // Update node counts
-    for (let i=1; i < 5; i++) {   
-        if (coinObj["level" + i]["name"] != "") {
-            let nodeCount = rowElem.querySelector(".lev" + i);
-            nodeCount.innerText = days[rowIndex]["node" + i];
+        let days = coinObj["tableData"]["days"];
+        // Get row index
+        let rowIndex;
+        if (rowElem.classList[1] == "day-row") {
+            rowIndex = parseInt(rowElem.classList[2].slice(1));
         }
-    }
 
-    // Set Daily Rewards
-    let drCell = rowElem.querySelector(".dr-cell");
-    drCell.innerText = days[rowIndex]["dr"].toFixed(2);
+        // Update node counts
+        for (let i=1; i < 5; i++) {   
+            if (coinObj["level" + i]["name"] != "") {
+                let nodeCount = rowElem.querySelector(".lev" + i);
+                nodeCount.innerText = days[rowIndex]["node" + i];
+            }
+        }
 
-    // Set Daily Rewards Balance
-    let drbCell = rowElem.querySelector(".drb-cell");
-    drbCell.innerText = days[rowIndex]["drb"].toFixed(2);
-    
-    if (rowElem.classList[0] != "_2022-12-31") {
-        if (rowElem.nextElementSibling.classList[1] == "day-row") {
-            updateRow(rowElem.nextElementSibling, false);
+        // Cash cell
+        let cashCell = rowElem.querySelector(".cash-cell");
+        if (days[rowIndex]["cashout"]) {
+            cashCell.innerText = "$" + days[rowIndex]["cash"].toFixed(2);
         } else {
-            updateRow(rowElem.nextElementSibling.nextElementSibling, false);
+            cashCell.innerText = "";
         }
+
+        // Cumulative cash cell
+        let cumCash = rowElem.querySelector(".cum-cash-cell");
+        if (days[rowIndex]["cumCash"] > 0) {
+            cumCash.innerText = "$" + days[rowIndex]["cumCash"].toFixed(2);
+        } else {
+            cumCash.innerText = "";
+        }
+
+        // Set Daily Rewards
+        let drCell = rowElem.querySelector(".dr-cell");
+        drCell.innerText = days[rowIndex]["dr"].toFixed(4);
+
+        // Set Daily Rewards Balance
+        let drbCell = rowElem.querySelector(".drb-cell");
+        drbCell.innerText = days[rowIndex]["drb"].toFixed(4);
+
+    // update row of monthly data
+    } else if (rowElem.classList[1] == "total-row") {
+        let months = coinObj["tableData"]["months"];
+        let monthTotal = rowElem.querySelector(".month-cash-total");
+        monthTotal.innerText = formatMoney(months[parseInt(rowElem.classList[0].slice(1))]["total"].toFixed(2), "");
+    }
+    
+    if (rowElem.classList[0] != "m11") {
+        updateRow(rowElem.nextElementSibling, false);
     };
 }

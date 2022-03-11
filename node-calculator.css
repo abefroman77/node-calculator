@@ -127,12 +127,40 @@ body {
 }
 
 .card {
-	background-color: rgb(86, 91, 160);
+	background-color: #1F3864;
 	border: 5px solid rgb(43, 43, 95);
 	flex: 1;
 	margin: 10px;
 	text-align: center;
 	display: none;
+	color: white;
+}
+
+.card .coin-name {
+	height: 50px;
+	line-height: 50px;
+}
+
+.card .coin-name .title {
+	margin: auto 10px;
+	line-height: 50px;
+	height: 50px;
+	display: inline-block;
+}
+
+.homepage {
+	line-height: 50px;
+	height: 50px;
+	display: inline-block;
+	text-align: center;
+}
+
+.card a {
+	color: white;
+}
+
+.card a:visited {
+	color: rgb(75, 129, 247);
 }
 
 .card ul {

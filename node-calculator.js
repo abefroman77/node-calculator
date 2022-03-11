@@ -840,10 +840,6 @@ function updateRow(rowElem, e){
     }
     
     if (rowElem.classList[0] != "m11") {
-        // if (rowElem.nextElementSibling.classList[1] == "day-row") {
-            updateRow(rowElem.nextElementSibling, false);
-        // } else {
-        //     updateRow(rowElem.nextElementSibling.nextElementSibling, false);
-        // }
+        updateRow(rowElem.nextElementSibling, false);
     };
 }

@@ -208,6 +208,10 @@ body {
 	height: 20px;
 }
 
+.calc-table td input {
+	border: none;
+}
+
 
 /*SCROLLBARS-------------------*/
 

@@ -520,11 +520,11 @@ function updateTableDataRow(rowElem, e) {
         // if row was directly edited, pull values directly from UI
         if (e != false) {
             let dr = 0;
-            thisRow["drb"] = parseFloat(rowElem.querySelector(".drb-cell").textContent);
+            thisRow["drb"] = parseFloat(rowElem.querySelector(".drb-cell").children[0].value);
             for (let k = 1; k < 5; k++) {
                 if (coinObj["level" + k]["name"] != "") {
                     let rew = coinObj["level" + k]["rewardRate"];
-                    thisRow["node" + k] = parseInt(rowElem.querySelector(".lev" + k).textContent);
+                    thisRow["node" + k] = parseInt(rowElem.querySelector(".lev" + k).children[0].value);
                     dr += thisRow["node" + k] * rew;
                 }
             }
@@ -683,14 +683,14 @@ function createTable(elem,obj){
 
         let rowStr = "<td class='date-cell'>" + dateStr + "</td>";
         for(let j=0; j < num; j++){
-            rowStr += "<td class='" + obj["level" + (j+1)]["name"].toLowerCase() + " lev" + (j+1) + "'>" + tableData[i]["node" + (j+1)] + "</td>";
+            rowStr += "<td class='" + obj["level" + (j+1)]["name"].toLowerCase() + " lev" + (j+1) + "'><input type='text' name='" + obj["level" + (j+1)]["name"].toLowerCase() + "' value='" + tableData[i]["node" + (j+1)] + "'></td>";
         }
         
         // Daily Rewards Balance cell
-        rowStr += "<td class='drb-cell'>" + tableData[i]["drb"].toFixed(4) + "</td>";
+        rowStr += "<td class='drb-cell'><input type='text' name='drb' value='" + tableData[i]["drb"].toFixed(4) + "'></td>";
 
         // Daily Rewards cell
-        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(4) + "</td>";
+        rowStr += "<td class='dr-cell'><input type='text' name='dr' value='" + tableData[i]["dr"].toFixed(4) + "'></td>";
         // Cash cell
         rowStr += "<td class='cash-cell'></td>";
 
@@ -803,7 +803,7 @@ function updateRow(rowElem, e){
         // Update node counts
         for (let i=1; i < 5; i++) {   
             if (coinObj["level" + i]["name"] != "") {
-                let nodeCount = rowElem.querySelector(".lev" + i);
+                let nodeCount = rowElem.querySelector(".lev" + i).children[0];
                 nodeCount.innerText = days[rowIndex]["node" + i];
             }
         }
@@ -825,11 +825,11 @@ function updateRow(rowElem, e){
         }
 
         // Set Daily Rewards
-        let drCell = rowElem.querySelector(".dr-cell");
+        let drCell = rowElem.querySelector(".dr-cell").children[0];
         drCell.innerText = days[rowIndex]["dr"].toFixed(4);
 
         // Set Daily Rewards Balance
-        let drbCell = rowElem.querySelector(".drb-cell");
+        let drbCell = rowElem.querySelector(".drb-cell").children[0];
         drbCell.innerText = days[rowIndex]["drb"].toFixed(4);
 
     // update row of monthly data

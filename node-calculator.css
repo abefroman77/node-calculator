@@ -228,10 +228,13 @@ body {
 	background-color: #1F3864;
 	border: none;
 	color: white;
+	width: 50px;
+	padding: 0;
 }
 
-.underline {
-	border-bottom: 2px solid white;
+
+.underline { /* WORKING, BUT NEED BETTER HIGHLIGHT */
+	font-weight: bold;
 }
 
 

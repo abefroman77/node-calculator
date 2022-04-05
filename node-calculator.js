@@ -664,7 +664,14 @@ function updateTableDataRow(rowElem, e) {
 }
 
 function createTable(elem,obj){
-    let div = elem.querySelector(".table-div");
+    let div;
+    if (elem.children[3].contains(elem.querySelector(".table-div"))){
+        div = elem.querySelector(".table-div");
+    } else {
+        div = document.createElement("div");
+        div.classList.add("table-div");
+    }
+
     div.innerHTML = "";
     let table = document.createElement("table");
     table.className = "calc-table";
@@ -679,11 +686,11 @@ function createTable(elem,obj){
 
     table.classList.add(obj["name"] + "-table");
 
-    // Create button row for 30/60/90/365
-    let buttonDiv = document.createElement("div");
-    buttonDiv.className = "cal-length-buttons";
-    buttonDiv.innerHTML = "<button class='cal-30 pointer' onclick='calLengthClick(event,30)'>30</button><button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button><button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button><button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>";
-    div.appendChild(buttonDiv);
+    // // Create button row for 30/60/90/365
+    // let buttonDiv = document.createElement("div");
+    // buttonDiv.className = "cal-length-buttons";
+    // buttonDiv.innerHTML = "";
+    // div.appendChild(buttonDiv);
 
     // Create header row
     let tHeadRow = "";
@@ -779,7 +786,7 @@ function createTable(elem,obj){
     
     table.appendChild(body);
     div.appendChild(table);
-    elem.appendChild(div);
+    elem.children[3].appendChild(div);
 }
 
 fillTableData(nodeData["strong"]);
@@ -854,15 +861,16 @@ function calLengthClick(e, num) {
     if (num == 365) {
         num = dayOfYearIndex(new Date(2022,11,31)) - dayOfYearIndex(new Date()) + 1;
     }
-    nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = num;
-    createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
+    nodeData[e.target.parentElement.nextElementSibling.children[0].children[1].classList[0]]["calLength"] = num;
+    createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[0].children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[0].children[1].classList[0]]);
 
     let buttons = document.querySelectorAll(".cal-length-buttons button");
 
     for (i=0; i < buttons.length; i++) {
         buttons[i].classList.remove("underline");
     }
-    e.target.classList.add("underline")
+    e.target.classList.add("underline");
+    console.log(e.target.classList);
 }
 
 // update row UI

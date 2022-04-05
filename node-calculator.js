@@ -88,8 +88,8 @@ let nodeData = {
             sellTax:0,
             monthlyFee:14.95,
             compounding: true,
-            startingDay: 63,
-            startingRewards: 0
+            startingDay: 86,
+            startingRewards: 0.376
         },
         level2:{
             name:"",
@@ -131,7 +131,8 @@ let nodeData = {
             startingRewards: 0
         },
         tableData:[],
-        startingNodes: [4,0,0,0]
+        startingNodes: [6,0,0,0],
+        calLength: 30
     },
     thor: {
         name: "thor",
@@ -188,7 +189,8 @@ let nodeData = {
             startingRewards: 0
         },
         tableData: [],
-        startingNodes: [7,1,4,1]
+        startingNodes: [7,1,4,1],
+        calLength: 30
     },
     pxt2: {
         name: "pxt2",
@@ -245,7 +247,8 @@ let nodeData = {
             startingRewards: 0
         },
         tableData: [],
-        startingNodes: [16,0,0,0]
+        startingNodes: [16,0,0,0],
+        calLength: 30
     }
 }
 
@@ -418,13 +421,24 @@ function fillTableData(obj) {
         daysObjPush["index"] = j;
         daysObjPush["date"] = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
         
-        if (j==0) {
-            for (let k = 0; k < 4; k++) {
-                daysObjPush["node" + (k + 1)] = startingNodes[k];
-            }
-        } else {
+        // if (j==0) {
+        //     for (let k = 0; k < 4; k++) {
+        //         daysObjPush["node" + (k + 1)] = startingNodes[k];
+        //     }
+        // } else {
+        //     prevDaysObj = days[(j-1)];
+        // }
+
+        if(j > 0) {
             prevDaysObj = days[(j-1)];
         }
+
+        for (let k; k < 4; k++) {
+            if (j == obj) {
+
+            }
+        }
+
         let dr = 0;
         let drb = 0;
 
@@ -451,12 +465,17 @@ function fillTableData(obj) {
                     }
                 }
 
+                if (j == obj["level" + i]["startingDay"]) {
+                    daysObjPush["node" + i] = obj["startingNodes"][i-1];
+                    drb = obj["level" + i]["startingRewards"];
+                }
+
                 daysObjPush["dr"] += daysObjPush["node" + i] * rew;
             }
         }
         daysObjPush["drb"] = drb;
         days.push(daysObjPush);
-        date = addDay(date);   
+        date = addDay(date);
     }
     for (let k = 0; k < 12; k++) {
         months.push({
@@ -494,21 +513,25 @@ function updateTableDataRow(rowElem, e) {
         if (rowIndex > 0) {
             prevRow = days[rowIndex - 1];
         }
-        
-        // Capture previous checkbox value
-        if(rowElem.previousElementSibling.classList[1] != "total-row") {
-            if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
-                prevRow["cashout"] = true;
-            } else{
-                prevRow["cashout"] = false;
-            }
-        } else {
-            if (rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked) {
-                prevRow["cashout"] = true;
-            } else{
-                prevRow["cashout"] = false;
+
+            // Capture previous checkbox value
+        if (rowIndex > dayOfYearIndex(new Date())) {
+            if(rowElem.previousElementSibling.classList[1] != "total-row") {
+                if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                    prevRow["cashout"] = true;
+                } else{
+                    prevRow["cashout"] = false;
+                }
+            } else {
+                if (rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                    prevRow["cashout"] = true;
+                } else{
+                    prevRow["cashout"] = false;
+                }
             }
         }
+        
+        
 
         // Capture checkbox value
         if (rowElem.querySelector("input[type='checkbox']").checked) {
@@ -558,6 +581,10 @@ function updateTableDataRow(rowElem, e) {
                         } else {
                             thisRow["node" + i] = prevRow["node" + i];
                         }
+                        
+                    }
+                    if (rowIndex == coinObj["level" + i]["startingDay"]) {
+                        thisRow["node" + i] = coinObj["startingNodes"][i-1];
                     }
 
                     // thisRow["drb"]
@@ -571,16 +598,18 @@ function updateTableDataRow(rowElem, e) {
                                 }
                             }
                         } else {
-                            // if (prevRow["drb"] + prevRow["dr"] >= cost) {
-                                drb = 0;
-                            // } else {
-                            //     drb = prevRow["drb"] + prevRow["dr"];
-                            // }
+                            drb = 0;
                         }
+                    } else {
+                        drb
                     }
         
                     dr += thisRow["node" + i] * rew;
-                } 
+                }
+                if (rowIndex == coinObj["level" + i]["startingDay"]) {
+                    drb = coinObj["level" + i]["startingRewards"];
+                    console.log(drb);
+                }
             }
             thisRow["drb"] = drb;
             thisRow["dr"] = dr;
@@ -594,14 +623,15 @@ function updateTableDataRow(rowElem, e) {
         }
 
         // Cumulative cash cell
-        if (thisRow["cashout"]) {
-            if (rowIndex == 0) {
-                thisRow["cumCash"] = thisRow["cash"];
-            } else {
-                thisRow["cumCash"] = prevRow["cumCash"] + thisRow["cash"];
-            }
+        if (rowIndex == dayOfYearIndex(new Date())) {
+            thisRow["cumCash"] = thisRow["cash"];
+            
         } else {
-            thisRow["cumCash"] = prevRow["cumCash"];
+            if (thisRow["cashout"]) {
+                thisRow["cumCash"] = prevRow["cumCash"] + thisRow["cash"]; 
+            } else {
+                thisRow["cumCash"] = prevRow["cumCash"];
+            }
         }
 
     } else if (rowElem.classList[1] == "total-row") {
@@ -634,8 +664,8 @@ function updateTableDataRow(rowElem, e) {
 }
 
 function createTable(elem,obj){
-    let div = document.createElement("div");
-    div.className = "table-div";
+    let div = elem.querySelector(".table-div");
+    div.innerHTML = "";
     let table = document.createElement("table");
     table.className = "calc-table";
     let tHead = document.createElement("thead");
@@ -644,9 +674,16 @@ function createTable(elem,obj){
 
     let num = 1;
     let monthIndex = 0;
-    let date = new Date('2022-01-01T12:00:00');
+    let date = new Date();
+    let today = date;
 
     table.classList.add(obj["name"] + "-table");
+
+    // Create button row for 30/60/90/365
+    let buttonDiv = document.createElement("div");
+    buttonDiv.className = "cal-length-buttons";
+    buttonDiv.innerHTML = "<button class='cal-30 pointer' onclick='calLengthClick(event,30)'>30</button><button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button><button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button><button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>";
+    div.appendChild(buttonDiv);
 
     // Create header row
     let tHeadRow = "";
@@ -672,9 +709,9 @@ function createTable(elem,obj){
     tHead.innerHTML = tHeadRow;
     table.appendChild(tHead);
 
-    // Create a row for each day of the year
+    // Create a row for each day
     let tableData = obj["tableData"]["days"];
-    for(let i = 0; i < 365; i++){
+    for(let i = dayOfYearIndex(today); i < dayOfYearIndex(today) + obj["calLength"]; i++){
         let row = document.createElement("tr");
         
         let dateStr = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
@@ -683,14 +720,14 @@ function createTable(elem,obj){
 
         let rowStr = "<td class='date-cell'>" + dateStr + "</td>";
         for(let j=0; j < num; j++){
-            rowStr += "<td class='" + obj["level" + (j+1)]["name"].toLowerCase() + " lev" + (j+1) + "'><input type='text' name='" + obj["level" + (j+1)]["name"].toLowerCase() + "' value='" + tableData[i]["node" + (j+1)] + "'></td>";
+            rowStr += "<td class='" + obj["level" + (j+1)]["name"].toLowerCase() + " lev" + (j+1) + "'><input type='text' onclick='this.select();' name='" + obj["level" + (j+1)]["name"].toLowerCase() + "' value='" + tableData[i]["node" + (j+1)] + "'></td>";
         }
         
         // Daily Rewards Balance cell
-        rowStr += "<td class='drb-cell'><input type='text' name='drb' value='" + tableData[i]["drb"].toFixed(4) + "'></td>";
+        rowStr += "<td class='drb-cell'><input type='text' onclick='this.select();' name='drb' value='" + tableData[i]["drb"].toFixed(4) + "'></td>";
 
         // Daily Rewards cell
-        rowStr += "<td class='dr-cell'><input type='text' name='dr' value='" + tableData[i]["dr"].toFixed(4) + "'></td>";
+        rowStr += "<td class='dr-cell'><input type='text' onclick='this.select();' name='dr' value='" + tableData[i]["dr"].toFixed(4) + "'></td>";
         // Cash cell
         rowStr += "<td class='cash-cell'></td>";
 
@@ -733,12 +770,10 @@ function createTable(elem,obj){
             if(num >= 4){
                 totalRow += "<td></td>";
             };
-            totalRow += "<td></td><td></td><td class='month-cash-total'></td><td></td><td></td>";
+            totalRow += "<td></td><td></td><td class='month-cash-total'>$0.00</td><td></td><td></td>";
             body.innerHTML += totalRow;
             monthIndex ++;
         }
-
-
         date = addDay(date);
     };
     
@@ -766,7 +801,7 @@ for(let l = 1; l < 5; l++) {
             
             
             console.log(e);
-            updateRow(e.target.parentNode, e);
+            updateRow(e.target.parentNode.parentNode, e);
         });
         if (l == 1) {
             checks[k].addEventListener('input', (e) => {
@@ -779,10 +814,55 @@ for(let l = 1; l < 5; l++) {
             
 
 
-                updateRow(e.target.parentNode, e);
+                updateRow(e.target.parentNode.parentNode, e);
             });
         }
     };
+}
+
+// Event listeners for .cal-length-buttons buttons
+let calOneMonth = document.querySelectorAll(".cal-30");
+let calTwoMonths = document.querySelectorAll(".cal-60");
+let calThreeMonths = document.querySelectorAll(".cal-90");
+let calYear = document.querySelectorAll(".cal-365");
+
+// for (let i = 0; i < calOneMonth.length; i++) {
+//     calOneMonth[i].addEventListener('click', (e) => {
+//         nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 30;
+//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
+//     });
+//     calTwoMonths[i].addEventListener('click', (e) => {
+//         nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 60;
+//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
+//     });
+//     calThreeMonths[i].addEventListener('click', (e) => {
+//         nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 90;
+//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
+//     });
+//     calYear[i].addEventListener('click', (e) => {
+//         if (parseInt(new Date().getFullYear()) % 4 == 0) {
+//             nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 366;
+//         }
+//         else {
+//             nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 365;
+//         }
+//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
+//     });
+// }
+
+function calLengthClick(e, num) {
+    if (num == 365) {
+        num = dayOfYearIndex(new Date(2022,11,31)) - dayOfYearIndex(new Date()) + 1;
+    }
+    nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = num;
+    createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
+
+    let buttons = document.querySelectorAll(".cal-length-buttons button");
+
+    for (i=0; i < buttons.length; i++) {
+        buttons[i].classList.remove("underline");
+    }
+    e.target.classList.add("underline")
 }
 
 // update row UI
@@ -804,7 +884,7 @@ function updateRow(rowElem, e){
         for (let i=1; i < 5; i++) {   
             if (coinObj["level" + i]["name"] != "") {
                 let nodeCount = rowElem.querySelector(".lev" + i).children[0];
-                nodeCount.innerText = days[rowIndex]["node" + i];
+                nodeCount.value = days[rowIndex]["node" + i];
             }
         }
 
@@ -826,11 +906,11 @@ function updateRow(rowElem, e){
 
         // Set Daily Rewards
         let drCell = rowElem.querySelector(".dr-cell").children[0];
-        drCell.innerText = days[rowIndex]["dr"].toFixed(4);
+        drCell.value = days[rowIndex]["dr"].toFixed(4);
 
         // Set Daily Rewards Balance
         let drbCell = rowElem.querySelector(".drb-cell").children[0];
-        drbCell.innerText = days[rowIndex]["drb"].toFixed(4);
+        drbCell.value = days[rowIndex]["drb"].toFixed(4);
 
     // update row of monthly data
     } else if (rowElem.classList[1] == "total-row") {
@@ -839,7 +919,7 @@ function updateRow(rowElem, e){
         monthTotal.innerText = formatMoney(months[parseInt(rowElem.classList[0].slice(1))]["total"].toFixed(2), "");
     }
     
-    if (rowElem.classList[0] != "m11") {
+    if (rowElem.classList[0] != "m11" && parseInt(rowElem.classList[2].slice(1)) < dayOfYearIndex(new Date()) + coinObj["calLength"]) {
         updateRow(rowElem.nextElementSibling, false);
     };
 }

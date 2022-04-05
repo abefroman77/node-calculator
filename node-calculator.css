@@ -204,12 +204,34 @@ body {
 	padding: 0px 8px;
 	border-style: solid;
 	border-color: #729ea5;
-	width: 200px;
+	min-width: 60px;
 	height: 20px;
 }
 
 .calc-table td input {
 	border: none;
+	text-align: center;
+	width: 100%;
+	background-color: #d4e3e5;
+}
+
+.calc-table td input:focus {
+	outline: none;
+	background-color: white;
+}
+
+.cal-length-buttons {
+	text-align: end;
+}
+
+.cal-length-buttons button {
+	background-color: #1F3864;
+	border: none;
+	color: white;
+}
+
+.underline {
+	border-bottom: 2px solid white;
 }
 
 

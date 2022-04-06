@@ -172,6 +172,37 @@ body {
 	font-weight: 700;
 }
 
+/* SUMMARY CARD---------------------------------------------------------*/
+
+.summaries-container {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+.project-summary {
+	padding: 0 20px;
+	border-collapse: collapse;
+}
+
+.project-summary th {
+	border-bottom: 2px solid white;
+	font-weight: bold;
+	padding: 0;
+}
+
+.project-summary td {
+	min-width: 100px;
+	border-bottom: 1px solid white;
+	padding: 0;
+}
+
+.project-summary tr:last-of-type td {
+	border-bottom: none;
+}
+
+
+
 /*TABLE STYLING---------------------------------------------------------*/
 
 .calc-table {
@@ -226,15 +257,23 @@ body {
 
 .cal-length-buttons button {
 	background-color: #1F3864;
-	border: none;
+	border-bottom: none;
+	border-top: none;
+	border-left: none;
+	border-right: none;
 	color: white;
 	width: 50px;
 	padding: 0;
 }
 
+.cal-length-buttons button:hover {
+	background-color: #446aad;
+}
+
 
 .underline { /* WORKING, BUT NEED BETTER HIGHLIGHT */
 	font-weight: bold;
+	border-bottom: 2px solid white;
 }
 
 

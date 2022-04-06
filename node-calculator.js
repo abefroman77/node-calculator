@@ -332,6 +332,11 @@ function updateCoinData(elem,obj){
             obj["prices"]["totalVolume"] = data["market_data"]["total_volume"]["usd"];
             obj["prices"]["marketCap"] = data["market_data"]["market_cap"]["usd"];
             populateCardData(elem,obj);
+
+            // Update prices on Summary Card
+            for (coin in coinData) {
+                document.querySelector(".summary-coin-price ." + coinData[coin]["localName"] + "-price").innerHTML = formatMoney(coinData[coin]["prices"]["currentPrice"],"");
+            }
             
         }).catch(function(error){
             console.log(error);
@@ -680,8 +685,8 @@ function createTable(elem,obj){
     body.className = obj["name"];
 
     let num = 1;
-    let monthIndex = 0;
     let date = new Date();
+    let monthIndex = date.getMonth();
     let today = date;
 
     table.classList.add(obj["name"] + "-table");
@@ -734,7 +739,7 @@ function createTable(elem,obj){
         rowStr += "<td class='drb-cell'><input type='text' onclick='this.select();' name='drb' value='" + tableData[i]["drb"].toFixed(4) + "'></td>";
 
         // Daily Rewards cell
-        rowStr += "<td class='dr-cell'><input type='text' onclick='this.select();' name='dr' value='" + tableData[i]["dr"].toFixed(4) + "'></td>";
+        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(4) + "</td>";
         // Cash cell
         rowStr += "<td class='cash-cell'></td>";
 
@@ -799,9 +804,9 @@ createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);
 
 // Event listeners for row changes
 for(let l = 1; l < 5; l++) {
-    let cells = document.querySelectorAll(".lev" + l);
+    let cells = document.querySelectorAll(".lev" + l + " input[type='text']");
     let checks = document.querySelectorAll("input[type='checkbox']");
-    let drbs = document.querySelectorAll(".drb-cell");
+    let drbs = document.querySelectorAll(".drb-cell input[type='text']");
     for (let k = 0; k < cells.length; k++) {
         cells[k].addEventListener('input', (e) => {
             // Validate input - only allow numbers & decimal
@@ -833,30 +838,6 @@ let calTwoMonths = document.querySelectorAll(".cal-60");
 let calThreeMonths = document.querySelectorAll(".cal-90");
 let calYear = document.querySelectorAll(".cal-365");
 
-// for (let i = 0; i < calOneMonth.length; i++) {
-//     calOneMonth[i].addEventListener('click', (e) => {
-//         nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 30;
-//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
-//     });
-//     calTwoMonths[i].addEventListener('click', (e) => {
-//         nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 60;
-//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
-//     });
-//     calThreeMonths[i].addEventListener('click', (e) => {
-//         nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 90;
-//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
-//     });
-//     calYear[i].addEventListener('click', (e) => {
-//         if (parseInt(new Date().getFullYear()) % 4 == 0) {
-//             nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 366;
-//         }
-//         else {
-//             nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]["calLength"] = 365;
-//         }
-//         createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[1].classList[0]]);
-//     });
-// }
-
 function calLengthClick(e, num) {
     if (num == 365) {
         num = dayOfYearIndex(new Date(2022,11,31)) - dayOfYearIndex(new Date()) + 1;
@@ -870,7 +851,6 @@ function calLengthClick(e, num) {
         buttons[i].classList.remove("underline");
     }
     e.target.classList.add("underline");
-    console.log(e.target.classList);
 }
 
 // update row UI
@@ -913,7 +893,7 @@ function updateRow(rowElem, e){
         }
 
         // Set Daily Rewards
-        let drCell = rowElem.querySelector(".dr-cell").children[0];
+        let drCell = rowElem.querySelector(".dr-cell");
         drCell.value = days[rowIndex]["dr"].toFixed(4);
 
         // Set Daily Rewards Balance
@@ -924,7 +904,12 @@ function updateRow(rowElem, e){
     } else if (rowElem.classList[1] == "total-row") {
         let months = coinObj["tableData"]["months"];
         let monthTotal = rowElem.querySelector(".month-cash-total");
-        monthTotal.innerText = formatMoney(months[parseInt(rowElem.classList[0].slice(1))]["total"].toFixed(2), "");
+        let val = formatMoney(months[parseInt(rowElem.classList[0].slice(1))]["total"].toFixed(2), "");
+        monthTotal.innerText = val;
+        let monthIndex = monthTotal.parentElement.classList[0];
+        let classNames = "." + rowElem.parentElement.classList[0] + "-summary ." + monthIndex;
+        document.querySelector(classNames).innerText = val;
+        console.log(document.querySelector(classNames));
     }
     
     if (rowElem.classList[0] != "m11" && parseInt(rowElem.classList[2].slice(1)) < dayOfYearIndex(new Date()) + coinObj["calLength"]) {

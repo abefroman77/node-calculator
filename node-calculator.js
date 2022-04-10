@@ -374,13 +374,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCoinData(cards[i],coinData[obj]);
         i++;
     }
-    // let connectMM = document.getElementById("connectMM");
-    // if(!window.ethereum) {
-    //     connectMM.innerText = "MetaMask not installed";
-    //     // style button
-    // } else {
-    //     connectMM.addEventListener("click", mmLogin());
-    // }
 })
 
 let connectMM = document.getElementById("connectMM");
@@ -431,14 +424,20 @@ async function mmLogin() {
 
                             // j loops through transactions for each coin pulled by fetch
                             for (let j = 0; j < userTrxns.length; j++) {
-
+                                let trxnsCounted = [];
+                                console.log(userTrxns[j]["tokenName"],userTrxns[j]["value"]);
+                                console.log(counts);
                                 // k loops through node levels (level1, level2, etc)
-                                for (let k = 0; k < 4; k++) {
-                                    if (userTrxns[j]["to"] == coinData[Object.keys(coinData)[i]]["contractAddress"] &&
+                                for (let k = 4; k > 0; k--) {
+                                    if (
+                                        // userTrxns[j]["to"] == coinData[Object.keys(coinData)[i]]["contractAddress"] &&
                                     userTrxns[j]["from"] == userAddress && 
-                                    userTrxns[j]["value"] == parseInt(nodeData[Object.keys(nodeData)[i]]["level" + (k+1)]["apiCost"])) {
-                                        console.log(userTrxns[j]);
-                                        counts[k] ++;
+                                    userTrxns[j]["value"] % parseInt(nodeData[Object.keys(nodeData)[i]]["level" + (k)]["apiCost"]) == 0 && 
+                                    trxnsCounted.indexOf(userTrxns[j]) == -1) {
+                                        // console.log([nodeData[Object.keys(nodeData)[i]]["level" + (k)],userTrxns[j]["value"]]);
+                                        console.log
+                                        counts[k-1] += userTrxns[j]["value"] / parseInt(nodeData[Object.keys(nodeData)[i]]["level" + (k)]["apiCost"]);
+                                        trxnsCounted.push(userTrxns[j]);
                                     }
                                 }
                             }

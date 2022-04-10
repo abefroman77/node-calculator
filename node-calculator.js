@@ -1,7 +1,8 @@
 let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
 let etherscanAPI = "https://api.etherscan.io/api";
 let etherscanApiKey = "UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9";
-let snowtraceAPI = "";
+let snowtraceAPI = "https://api.snowtrace.io/api";
+let snowtraceApiKey = "9ZDQ11918D4GMKN5VMASWGIF92RHZQ9TPH";
 
 let userAddress = null;
 let userTrxns = [];
@@ -52,8 +53,8 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: "",
-        contractAddress: ""
+        coinAddress: "0x8f47416cae600bccf9530e9f3aeaa06bdd1caa79",
+        contractAddress: "0xbf431b2dfe4b549614f0d5954c0351f89e7e728f"
     },
     pxt2: {
         id:"project-x-nodes",
@@ -76,8 +77,8 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: "",
-        contractAddress: ""
+        coinAddress: "0x9e20Af05AB5FED467dFDd5bb5752F7d5410C832e",
+        contractAddress: "0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c"
     }
 }
 
@@ -93,6 +94,7 @@ let nodeData = {
         level1:{
             name:"Strngr",
             cost:10,
+            apiCost: 10000000000000000000,
             rewardRate:0.09226,
             rewardPercentage:0,
             claimTax:0,
@@ -107,6 +109,7 @@ let nodeData = {
             name:"",
             cost:0,
             rewardRate:0,
+            apiCost: 0,
             rewardPercentage:0,
             claimTax:0,
             compoundTax:0,
@@ -120,6 +123,7 @@ let nodeData = {
             name:"",
             cost:0,
             rewardRate:0,
+            apiCost: 0,
             rewardPercentage:0,
             claimTax:0,
             compoundTax:0,
@@ -133,6 +137,7 @@ let nodeData = {
             name:"",
             cost:0,
             rewardRate:0,
+            apiCost: 0,
             rewardPercentage:0,
             claimTax:0,
             compoundTax:0,
@@ -151,6 +156,7 @@ let nodeData = {
         level1:{
             name:"Heimdall",
             cost:1.25,
+            apiCost: 1250000000000000000,
             rewardRate:0.008,
             rewardPercentage:0,
             claimTax:1,
@@ -164,6 +170,7 @@ let nodeData = {
         level2:{
             name:"Freya",
             cost:6.25,
+            apiCost: 6250000000000000000,
             rewardRate:0.05,
             rewardPercentage:0,
             claimTax:5,
@@ -177,6 +184,7 @@ let nodeData = {
         level3:{
             name:"Thor",
             cost:12.5,
+            apiCost: 12500000000000000000,
             rewardRate:0.14375,
             rewardPercentage:0,
             claimTax:8,
@@ -190,6 +198,7 @@ let nodeData = {
         level4:{
             name:"Odin",
             cost:78.125,
+            apiCost: 78125000000000000000,
             rewardRate:1.015625,
             rewardPercentage:0,
             claimTax:10,
@@ -201,7 +210,7 @@ let nodeData = {
             startingRewards: 0
         },
         tableData: [],
-        startingNodes: [7,1,4,1],
+        startingNodes: [0,0,0,0],
         calLength: 30
     },
     pxt2: {
@@ -209,6 +218,7 @@ let nodeData = {
         level1:{
             name:"PXT2",
             cost:10,
+            apiCost: 10000000000000000000,
             rewardRate:0.17,
             rewardPercentage:0,
             claimTax:0,
@@ -222,6 +232,7 @@ let nodeData = {
         level2:{
             name:"",
             cost:"",
+            apiCost: 0,
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
@@ -235,6 +246,7 @@ let nodeData = {
         level3:{
             name:"",
             cost:"",
+            apiCost: 0,
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
@@ -248,6 +260,7 @@ let nodeData = {
         level4:{
             name:"",
             cost:"",
+            apiCost: 0,
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
@@ -387,37 +400,58 @@ async function mmLogin() {
             userAddress = accounts[0];
             // console.log(userAddress);
             connectMM.innerText = "Logged In";
-            fetch(etherscanAPI +
-                "?module=account&action=tokentx" +
-                "&contractaddress=" +
-                coinData["strngr"]["coinAddress"] +
-                "&address=" +
-                userAddress +
-                "&page=1&offset=100&startblock=0&endblock=999999999&sort=asc&apikey=" +
-                etherscanApiKey).then(
-                    response => response.text()
-                ).then(
-                    data => {
-                        data = JSON.parse(data);
-                        userTrxns = data["result"];
-                        console.log(userTrxns);
-                        let count = 0;
-                        for (let i = 0; i < userTrxns.length; i++) {
-                            if (userTrxns[i]["to"] == coinData["strngr"]["contractAddress"] && userTrxns[i]["from"] == userAddress) {
-                                console.log(userTrxns[i]);
-                                count ++;
-                            }
-                            nodeData["strngr"]["startingNodes"][0] = count;
-                        }
-                        fillTableData(nodeData["strngr"]);
-                        createTable(document.getElementById("strngrCard"), nodeData["strngr"]);
 
-                    }
-                ).catch(
-                    error => {
-                        console.error(error)
+            // i loops through coinData (strngr, thor, pxt2, etc)
+            for (let i = 0; i < Object.keys(coinData).length; i++) {
+                let url = ""
+                let apiKey = "";
+                if (coinData[Object.keys(coinData)[i]]["network"] == "Ethereum") {
+                    url = etherscanAPI;
+                    apiKey = etherscanApiKey;
+                } else if (coinData[Object.keys(coinData)[i]]["network"] == "Avalanche") {
+                    url = snowtraceAPI;
+                    apiKey = snowtraceApiKey;
                 }
-            )
+                // Need to make sure fetch has time to return data and update local data before next fetch call - async, await?
+                fetch(url +
+                    "?module=account&action=tokentx" +
+                    "&contractaddress=" +
+                    coinData[Object.keys(coinData)[i]]["coinAddress"] +
+                    "&address=" +
+                    userAddress +
+                    "&startblock=0&endblock=999999999&sort=asc&apikey=" +
+                    apiKey).then(
+                        response => response.text()
+                    ).then(
+                        data => {
+                            data = JSON.parse(data);
+                            userTrxns = data["result"];
+                            console.log(userTrxns);
+                            let counts = [0,0,0,0];
+
+                            // j loops through transactions for each coin pulled by fetch
+                            for (let j = 0; j < userTrxns.length; j++) {
+
+                                // k loops through node levels (level1, level2, etc)
+                                for (let k = 0; k < 4; k++) {
+                                    if (userTrxns[j]["to"] == coinData[Object.keys(coinData)[i]]["contractAddress"] &&
+                                    userTrxns[j]["from"] == userAddress && 
+                                    userTrxns[j]["value"] == parseInt(nodeData[Object.keys(nodeData)[i]]["level" + (k+1)]["apiCost"])) {
+                                        console.log(userTrxns[j]);
+                                        counts[k] ++;
+                                    }
+                                }
+                            }
+                            nodeData[Object.keys(nodeData)[i]]["startingNodes"] = counts;
+                            fillTableData(nodeData[Object.keys(nodeData)[i]]);
+                            createTable(document.getElementById(Object.keys(nodeData)[i] + "Card"), nodeData[Object.keys(nodeData)[i]]);
+                        }
+                    ).catch(
+                        error => {
+                            console.error(error)
+                    }
+                )
+            }
         })
         .catch((e) => {
             console.error(e.message);

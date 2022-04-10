@@ -1,9 +1,15 @@
 let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
+let etherscanAPI = "https://api.etherscan.io/api";
+let etherscanApiKey = "UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9";
+let snowtraceAPI = "";
+
+let userAddress = null;
+let userTrxns = [];
 
 let coinData = {
-    strong: {
-        id:"strong",
-        localName: "strong",
+    strngr: {
+        id:"stronger",
+        localName: "strngr",
         symbol: "",
         network:"",
         description:"",
@@ -21,7 +27,9 @@ let coinData = {
             low_24h:"",
             totalVolume:"",
             marketCap:""
-        }
+        },
+        coinAddress: "0x990f341946A3fdB507aE7e52d17851B87168017c",
+        contractAddress: "0xfbddadd80fe7bda00b901fbaf73803f2238ae655"
     },
     thor: {
         id:"thor",
@@ -43,7 +51,9 @@ let coinData = {
             low_24h:"",
             totalVolume:"",
             marketCap:""
-        }
+        },
+        coinAddress: "",
+        contractAddress: ""
     },
     pxt2: {
         id:"project-x-nodes",
@@ -65,7 +75,9 @@ let coinData = {
             low_24h:"",
             totalVolume:"",
             marketCap:""
-        }
+        },
+        coinAddress: "",
+        contractAddress: ""
     }
 }
 
@@ -76,10 +88,10 @@ for(let i=0; i<Object.keys(coinData).length; i++){
 }
 
 let nodeData = {
-    strong: {
-        name: "strong",
+    strngr: {
+        name: "strngr",
         level1:{
-            name:"Strong",
+            name:"Strngr",
             cost:10,
             rewardRate:0.09226,
             rewardPercentage:0,
@@ -131,7 +143,7 @@ let nodeData = {
             startingRewards: 0
         },
         tableData:[],
-        startingNodes: [6,0,0,0],
+        startingNodes: [0,0,0,0],
         calLength: 30
     },
     thor: {
@@ -252,8 +264,6 @@ let nodeData = {
     }
 }
 
-
-
 function formatMoney(str1, str2){
     let regex = /\.\d\b/;
     if(regex.test(str1)){
@@ -351,7 +361,69 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCoinData(cards[i],coinData[obj]);
         i++;
     }
+    // let connectMM = document.getElementById("connectMM");
+    // if(!window.ethereum) {
+    //     connectMM.innerText = "MetaMask not installed";
+    //     // style button
+    // } else {
+    //     connectMM.addEventListener("click", mmLogin());
+    // }
 })
+
+let connectMM = document.getElementById("connectMM");
+window.addEventListener('DOMContentLoaded', function() {
+    if(!window.ethereum) {
+        connectMM.innerText = "MetaMask not installed";
+        // style button
+    } else {
+        connectMM.addEventListener("click", mmLogin);
+    }
+})
+
+async function mmLogin() {
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+        .then(accounts => {
+            if (!accounts) {return};
+            userAddress = accounts[0];
+            // console.log(userAddress);
+            connectMM.innerText = "Logged In";
+            fetch(etherscanAPI +
+                "?module=account&action=tokentx" +
+                "&contractaddress=" +
+                coinData["strngr"]["coinAddress"] +
+                "&address=" +
+                userAddress +
+                "&page=1&offset=100&startblock=0&endblock=999999999&sort=asc&apikey=" +
+                etherscanApiKey).then(
+                    response => response.text()
+                ).then(
+                    data => {
+                        data = JSON.parse(data);
+                        userTrxns = data["result"];
+                        console.log(userTrxns);
+                        let count = 0;
+                        for (let i = 0; i < userTrxns.length; i++) {
+                            if (userTrxns[i]["to"] == coinData["strngr"]["contractAddress"] && userTrxns[i]["from"] == userAddress) {
+                                console.log(userTrxns[i]);
+                                count ++;
+                            }
+                            nodeData["strngr"]["startingNodes"][0] = count;
+                        }
+                        fillTableData(nodeData["strngr"]);
+                        createTable(document.getElementById("strngrCard"), nodeData["strngr"]);
+
+                    }
+                ).catch(
+                    error => {
+                        console.error(error)
+                }
+            )
+        })
+        .catch((e) => {
+            console.error(e.message);
+            return
+    });  
+}
 
 function showHideCard(id){
     let thisTab = document.getElementById(id);
@@ -794,11 +866,11 @@ function createTable(elem,obj){
     elem.children[3].appendChild(div);
 }
 
-fillTableData(nodeData["strong"]);
+// fillTableData(nodeData["strngr"]);
 fillTableData(nodeData["thor"]);
 fillTableData(nodeData["pxt2"]);
 
-createTable(document.getElementById("strongCard"), nodeData["strong"]);
+// createTable(document.getElementById("strngrCard"), nodeData["strngr"]);
 createTable(document.getElementById("thorCard"), nodeData["thor"]);
 createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);
 
@@ -916,3 +988,4 @@ function updateRow(rowElem, e){
         updateRow(rowElem.nextElementSibling, false);
     };
 }
+

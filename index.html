@@ -44,10 +44,11 @@
 
   <div class="tab-row">
       <button id="summaryTab" class="tab pointer tab-dark" onclick="showHideCard(this.id)"><i class="fa-solid fa-table"></i></button>
-      <button id="strongTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strong</button>
+      <button id="strngrTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strngr</button>
       <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
       <button id="pxt2Tab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
       <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-plus"></i></button>
+      <button id="connectMM" class="tab pointer">Connect MetaMask Wallet</button>
   </div>
   
   <div class="card-container">
@@ -63,8 +64,8 @@
         </thead>
         <tbody>
           <tr class="summary-coin-price">
-            <td>Strong</td>
-            <td class="strong-price"></td>
+            <td>Strngr</td>
+            <td class="strngr-price"></td>
           </tr>
           <tr class="summary-coin-price">
             <td>Thor</td>
@@ -77,7 +78,7 @@
         </tbody>
       </table>
       <div class="summaries-container">
-        <table class="project-summary strong-summary">
+        <table class="project-summary strngr-summary">
           <thead>
             <tr>
               <th>Month</th>
@@ -267,9 +268,9 @@
       </div>
     </div>
 
-    <div id="strongCard" class="card" style="display:none;">
-      <h1 class="strong-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">STRONG Nodes</span></a></h1>
-      <h2>Coin Price: <span class="coin-price strong-price">Getting price...</span></h2>
+    <div id="strngrCard" class="card" style="display:none;">
+      <h1 class="strngr-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">Strngr Nodes</span></a></h1>
+      <h2>Coin Price: <span class="coin-price strngr-price">Getting price...</span></h2>
       <div class="coin-stats">
         <ul>
           <li class="stat-heading">Coin Stats</li>
@@ -364,7 +365,6 @@
   <footer>
   	
   </footer>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
   <script type="text/javascript" src="node-calculator.js"></script>
 </body>
 

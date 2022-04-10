@@ -97,15 +97,10 @@ body {
 }
 
 .tab {
-	justify-content: flex-start;
 	width: 100px;
 	padding: 10px;
 	text-align: center;
 	border: none;
-}
-
-#addCard {
-	justify-content: flex-end;
 }
 
 .tab-light {
@@ -116,7 +111,9 @@ body {
 	background-color: rgb(137, 132, 163);
 }
 
-
+#connectMM {
+	margin-left: auto;
+}
 
 /*CARD STYLING---------------------------------------------------------*/
 

@@ -7,6 +7,44 @@ let snowtraceApiKey = "9ZDQ11918D4GMKN5VMASWGIF92RHZQ9TPH";
 let userAddress = null;
 let userTrxns = [];
 
+window.userAddress = null;
+// window.onload = async () => {
+//     // Init Web3 connected to ETH network
+//     if (window.ethereum) {
+//     window.web3 = new Web3(window.ethereum);
+//     } else {
+//     alert("No ETH brower extension detected.");
+//     }
+
+//     // Load in Localstore key
+//     window.userAddress = window.localStorage.getItem("userAddress");
+//     userAddress = window.userAddress;
+// };
+
+// async function loginWithEth() {
+//     if (window.web3) {
+//       try {
+//         // We use this since ethereum.enable() is deprecated. This method is not
+//         // available in Web3JS - so we call it directly from metamasks' library
+//         const selectedAccount = await window.ethereum
+//           .request({
+//             method: "eth_requestAccounts",
+//           })
+//           .then((accounts) => accounts[0])
+//           .catch(() => {
+//             throw Error("No account selected!");
+//           });
+//         window.userAddress = selectedAccount;
+//         window.localStorage.setItem("userAddress", selectedAccount);
+//         showAddress();
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     } else {
+//       alert("No ETH brower extension detected.");
+//     }
+//   }
+
 let coinData = {
     strngr: {
         id:"stronger",
@@ -29,8 +67,9 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: "0x990f341946A3fdB507aE7e52d17851B87168017c",
-        contractAddress: "0xfbddadd80fe7bda00b901fbaf73803f2238ae655"
+        coinAddress: ["0x990f341946A3fdB507aE7e52d17851B87168017c","0xDc0327D50E6C73db2F8117760592C8BBf1CDCF38"],
+        contractAddress: "0xfbddadd80fe7bda00b901fbaf73803f2238ae655",
+        abi: ""
     },
     thor: {
         id:"thor",
@@ -53,8 +92,9 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: "0x8f47416cae600bccf9530e9f3aeaa06bdd1caa79",
-        contractAddress: "0xbf431b2dfe4b549614f0d5954c0351f89e7e728f"
+        coinAddress: ["0x8f47416cae600bccf9530e9f3aeaa06bdd1caa79"],
+        contractAddress: "0xbf431b2dfe4b549614f0d5954c0351f89e7e728f",
+        abi: ""
     },
     pxt2: {
         id:"project-x-nodes",
@@ -77,8 +117,9 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: "0x9e20Af05AB5FED467dFDd5bb5752F7d5410C832e",
-        contractAddress: "0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c"
+        coinAddress: ["0x9e20Af05AB5FED467dFDd5bb5752F7d5410C832e"],
+        contractAddress: "0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c",
+        abi: ""
     }
 }
 
@@ -94,7 +135,7 @@ let nodeData = {
         level1:{
             name:"Strngr",
             cost:10,
-            apiCost: 10000000000000000000,
+            apiCost: BigInt(10000000000000000000),
             rewardRate:0.09226,
             rewardPercentage:0,
             claimTax:0,
@@ -109,7 +150,7 @@ let nodeData = {
             name:"",
             cost:0,
             rewardRate:0,
-            apiCost: 0,
+            apiCost: BigInt(0),
             rewardPercentage:0,
             claimTax:0,
             compoundTax:0,
@@ -123,7 +164,7 @@ let nodeData = {
             name:"",
             cost:0,
             rewardRate:0,
-            apiCost: 0,
+            apiCost: BigInt(0),
             rewardPercentage:0,
             claimTax:0,
             compoundTax:0,
@@ -137,7 +178,7 @@ let nodeData = {
             name:"",
             cost:0,
             rewardRate:0,
-            apiCost: 0,
+            apiCost: BigInt(0),
             rewardPercentage:0,
             claimTax:0,
             compoundTax:0,
@@ -149,14 +190,15 @@ let nodeData = {
         },
         tableData:[],
         startingNodes: [0,0,0,0],
-        calLength: 30
+        calLength: 30,
+        walletBalance: 0
     },
     thor: {
         name: "thor",
         level1:{
             name:"Heimdall",
             cost:1.25,
-            apiCost: 1250000000000000000,
+            apiCost: BigInt(1250000000000000000),
             rewardRate:0.008,
             rewardPercentage:0,
             claimTax:1,
@@ -170,7 +212,7 @@ let nodeData = {
         level2:{
             name:"Freya",
             cost:6.25,
-            apiCost: 6250000000000000000,
+            apiCost: BigInt(6250000000000000000),
             rewardRate:0.05,
             rewardPercentage:0,
             claimTax:5,
@@ -184,7 +226,7 @@ let nodeData = {
         level3:{
             name:"Thor",
             cost:12.5,
-            apiCost: 12500000000000000000,
+            apiCost: BigInt(12500000000000000000),
             rewardRate:0.14375,
             rewardPercentage:0,
             claimTax:8,
@@ -198,7 +240,7 @@ let nodeData = {
         level4:{
             name:"Odin",
             cost:78.125,
-            apiCost: 78125000000000000000,
+            apiCost: BigInt(78125000000000000000),
             rewardRate:1.015625,
             rewardPercentage:0,
             claimTax:10,
@@ -211,14 +253,15 @@ let nodeData = {
         },
         tableData: [],
         startingNodes: [0,0,0,0],
-        calLength: 30
+        calLength: 30,
+        walletBalance: 0
     },
     pxt2: {
         name: "pxt2",
         level1:{
             name:"PXT2",
             cost:10,
-            apiCost: 10000000000000000000,
+            apiCost: BigInt(10000000000000000000),
             rewardRate:0.17,
             rewardPercentage:0,
             claimTax:0,
@@ -231,8 +274,8 @@ let nodeData = {
         },
         level2:{
             name:"",
-            cost:"",
-            apiCost: 0,
+            cost:0,
+            apiCost: BigInt(0),
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
@@ -245,8 +288,8 @@ let nodeData = {
         },
         level3:{
             name:"",
-            cost:"",
-            apiCost: 0,
+            cost:0,
+            apiCost: BigInt(0),
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
@@ -259,8 +302,8 @@ let nodeData = {
         },
         level4:{
             name:"",
-            cost:"",
-            apiCost: 0,
+            cost:0,
+            apiCost: BigInt(0),
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
@@ -273,7 +316,8 @@ let nodeData = {
         },
         tableData: [],
         startingNodes: [16,0,0,0],
-        calLength: 30
+        calLength: 30,
+        walletBalance: 0
     }
 }
 
@@ -301,6 +345,16 @@ function dayOfYearIndex(date){
 function doyToDate(doy, year) {
     return new Date(year, 0, doy);
 }
+
+function truncateAddress(address) {
+    if (!address) {
+      return "";
+    }
+    return `${address.substr(0, 5)}...${address.substr(
+      address.length - 5,
+      address.length
+    )}`;
+  }
 
 function populateCardData(elem,obj){
 
@@ -391,6 +445,7 @@ async function mmLogin() {
         .then(accounts => {
             if (!accounts) {return};
             userAddress = accounts[0];
+            window.userAddress = userAddress;
             // console.log(userAddress);
             connectMM.innerText = "Logged In";
 
@@ -409,39 +464,38 @@ async function mmLogin() {
                 fetch(url +
                     "?module=account&action=tokentx" +
                     "&contractaddress=" +
-                    coinData[Object.keys(coinData)[i]]["coinAddress"] +
+                    coinData[Object.keys(coinData)[i]]["coinAddress"][0] +
                     "&address=" +
                     userAddress +
-                    "&startblock=0&endblock=999999999&sort=asc&apikey=" +
+                    "&startblock=0&endblock=9999999999&sort=asc&apikey=" +
                     apiKey).then(
                         response => response.text()
                     ).then(
                         data => {
                             data = JSON.parse(data);
                             userTrxns = data["result"];
-                            console.log(userTrxns);
+                            // console.log(userTrxns);
                             let counts = [0,0,0,0];
 
                             // j loops through transactions for each coin pulled by fetch
                             for (let j = 0; j < userTrxns.length; j++) {
                                 let trxnsCounted = [];
-                                console.log(userTrxns[j]["tokenName"],userTrxns[j]["value"]);
-                                console.log(counts);
-                                // k loops through node levels (level1, level2, etc)
+                                // console.log(userTrxns[j]["tokenName"],userTrxns[j]["value"],userTrxns[j]["blockNumber"]);
+                                // k loops through node levels (level4, level3, etc)
                                 for (let k = 4; k > 0; k--) {
                                     if (
+                                    nodeData[Object.keys(nodeData)[i]]["level" + k]["apiCost"] > 0 &&
                                         // userTrxns[j]["to"] == coinData[Object.keys(coinData)[i]]["contractAddress"] &&
                                     userTrxns[j]["from"] == userAddress && 
-                                    userTrxns[j]["value"] % parseInt(nodeData[Object.keys(nodeData)[i]]["level" + (k)]["apiCost"]) == 0 && 
+                                    BigInt(userTrxns[j]["value"]) % nodeData[Object.keys(nodeData)[i]]["level" + k]["apiCost"] == 0 && 
                                     trxnsCounted.indexOf(userTrxns[j]) == -1) {
-                                        // console.log([nodeData[Object.keys(nodeData)[i]]["level" + (k)],userTrxns[j]["value"]]);
-                                        console.log
-                                        counts[k-1] += userTrxns[j]["value"] / parseInt(nodeData[Object.keys(nodeData)[i]]["level" + (k)]["apiCost"]);
+                                        counts[k-1] += parseInt(BigInt(userTrxns[j]["value"]) / nodeData[Object.keys(nodeData)[i]]["level" + (k)]["apiCost"]);
                                         trxnsCounted.push(userTrxns[j]);
                                     }
                                 }
                             }
                             nodeData[Object.keys(nodeData)[i]]["startingNodes"] = counts;
+                            // console.log(counts);
                             fillTableData(nodeData[Object.keys(nodeData)[i]]);
                             createTable(document.getElementById(Object.keys(nodeData)[i] + "Card"), nodeData[Object.keys(nodeData)[i]]);
                         }
@@ -496,9 +550,10 @@ function fillTableData(obj) {
     let days = obj["tableData"]["days"];
     obj["tableData"]["months"] = [];
     let months = obj["tableData"]["months"];
-    let date = new Date('2022-01-01T12:00:00');
+    let date = new Date();
     let startingNodes = obj["startingNodes"];
-    let prevDaysObj = {
+    let prevDaysObj;
+    let emptyObj = {
         index: 0,
         date: "",
         node1: 0,
@@ -512,8 +567,14 @@ function fillTableData(obj) {
         cashout: false
     };
 
+    let todayIndex = dayOfYearIndex(date);
+
+    for (let d = 0; d < todayIndex; d++) {
+        days.push(emptyObj);
+    }
+
     // Fill daily data
-    for (let j = 0; j < 365; j++) {
+    for (let j = todayIndex; j < 365; j++) {
         let daysObjPush = {
             index: 0,
             date: "",
@@ -531,22 +592,12 @@ function fillTableData(obj) {
         daysObjPush["index"] = j;
         daysObjPush["date"] = (date.getMonth() + 1).toString() + "/" + date.getDate().toString() + "/" + date.getFullYear().toString();
         
-        // if (j==0) {
-        //     for (let k = 0; k < 4; k++) {
-        //         daysObjPush["node" + (k + 1)] = startingNodes[k];
-        //     }
-        // } else {
-        //     prevDaysObj = days[(j-1)];
-        // }
-
-        if(j > 0) {
-            prevDaysObj = days[(j-1)];
-        }
-
-        for (let k; k < 4; k++) {
-            if (j == obj) {
-
+        if (j == todayIndex) {
+            for (let k = 0; k < 4; k++) {
+                daysObjPush["node" + (k + 1)] = startingNodes[k];
             }
+        } else if (j > todayIndex) {
+            prevDaysObj = days[(j-1)];
         }
 
         let dr = 0;
@@ -559,7 +610,7 @@ function fillTableData(obj) {
                 let comp = obj["level" + i]["compounding"];
 
                 // daysObjPush["node" + i], daysObjPush["drb"]
-                if (j > 0) {    
+                if (j > todayIndex) {    
                     if (comp) {    
                         if (prevDaysObj["drb"] + prevDaysObj["dr"] >= cost) {
                             daysObjPush["node" + i] = prevDaysObj["node" + i] + ~~((prevDaysObj["drb"] + prevDaysObj["dr"]) / cost);
@@ -575,8 +626,8 @@ function fillTableData(obj) {
                     }
                 }
 
-                if (j == obj["level" + i]["startingDay"]) {
-                    daysObjPush["node" + i] = obj["startingNodes"][i-1];
+                if (j == todayIndex) {
+                    // daysObjPush["node" + i] = obj["startingNodes"][i-1];
                     drb = obj["level" + i]["startingRewards"];
                 }
 
@@ -610,9 +661,12 @@ function updateTableDataRow(rowElem, e) {
             // node3: 0
             // node4: 0
         // }
-    let coinObj = nodeData[rowElem.closest("tbody").classList[0]];
+    console.log(rowElem);
+    console.log(rowElem.parentNode);
+    let coinObj = nodeData[rowElem.parentNode.classList[0]];
     let days = coinObj["tableData"]["days"];
     let rowIndex;
+    let todayIndex = dayOfYearIndex(new Date());
     
     // If the row to be edited is a .day-row
     if (rowElem.classList[1] == "day-row") {
@@ -625,7 +679,7 @@ function updateTableDataRow(rowElem, e) {
         }
 
             // Capture previous checkbox value
-        if (rowIndex > dayOfYearIndex(new Date())) {
+        if (rowIndex > todayIndex) {
             if(rowElem.previousElementSibling.classList[1] != "total-row") {
                 if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
                     prevRow["cashout"] = true;
@@ -651,6 +705,13 @@ function updateTableDataRow(rowElem, e) {
         }
         
         // if row was directly edited, pull values directly from UI
+
+        // 
+
+        // FIGURE OUT WHICH ELEMENT WAS EDITED; GET VALUE FOR THAT ELEMENT AND CALCULATE THE REST 
+        //                                      |
+        //                                      V
+
         if (e != false) {
             let dr = 0;
             thisRow["drb"] = parseFloat(rowElem.querySelector(".drb-cell").children[0].value);
@@ -718,7 +779,7 @@ function updateTableDataRow(rowElem, e) {
                 }
                 if (rowIndex == coinObj["level" + i]["startingDay"]) {
                     drb = coinObj["level" + i]["startingRewards"];
-                    console.log(drb);
+                    // console.log(drb);
                 }
             }
             thisRow["drb"] = drb;
@@ -733,7 +794,7 @@ function updateTableDataRow(rowElem, e) {
         }
 
         // Cumulative cash cell
-        if (rowIndex == dayOfYearIndex(new Date())) {
+        if (rowIndex == todayIndex) {
             thisRow["cumCash"] = thisRow["cash"];
             
         } else {
@@ -782,7 +843,10 @@ function createTable(elem,obj){
         div.classList.add("table-div");
     }
 
-    div.innerHTML = "";
+    if (div.childNodes.length > 0) {
+        console.log(";webv");
+        div.removeChild(div.childNodes[0]);
+    }
     let table = document.createElement("table");
     table.className = "calc-table";
     let tHead = document.createElement("thead");
@@ -835,26 +899,84 @@ function createTable(elem,obj){
         let dateClassStr = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + date.getDate().toString();
         row.className = "_" + dateClassStr + " day-row d" + (i);
 
-        let rowStr = "<td class='date-cell'>" + dateStr + "</td>";
+        let dateCell = document.createElement("td");
+        dateCell.classList.add("date-cell");
+        dateCell.textContent = dateStr;
+        row.append(dateCell);
+
         for(let j=0; j < num; j++){
-            rowStr += "<td class='" + obj["level" + (j+1)]["name"].toLowerCase() + " lev" + (j+1) + "'><input type='text' onclick='this.select();' name='" + obj["level" + (j+1)]["name"].toLowerCase() + "' value='" + tableData[i]["node" + (j+1)] + "'></td>";
+            let cell = document.createElement("td");
+            cell.classList.add(obj["level" + (j+1)]["name"].toLowerCase(),"lev" + (j+1));
+            let input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.setAttribute("onclick", "this.select()");
+            input.addEventListener('keydown', (e) => {
+                console.log(e.key);
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                // Validate input - only allow numbers & decimal
+                
+                
+                    console.log(e);
+                    updateRow(e.target.parentNode.parentNode, e);
+                }
+            })
+            input.setAttribute("name", obj["level" + (j+1)]["name"].toLowerCase());
+            input.setAttribute("value", tableData[i]["node" + (j+1)]);
+            cell.append(input);
+            row.append(cell);
         }
         
         // Daily Rewards Balance cell
-        rowStr += "<td class='drb-cell'><input type='text' onclick='this.select();' name='drb' value='" + tableData[i]["drb"].toFixed(4) + "'></td>";
+        let drbCell = document.createElement("td");
+        drbCell.classList.add("drb-cell");
+        let input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("onclick", "this.select()");
+        input.addEventListener('keydown', (e) => {
+            console.log(e);
+            if (e.key === "Enter") {
+                e.preventDefault();
+            // Validate input - only allow numbers & decimal
+            
+            
+                console.log(e);
+                updateRow(e.target.parentNode.parentNode, e);
+            }
+        })
+        input.setAttribute("name", "drb");
+        input.setAttribute("value", tableData[i]["drb"].toFixed(4));
+        drbCell.append(input);
+        row.append(drbCell);
 
         // Daily Rewards cell
-        rowStr += "<td class='dr-cell'>" + tableData[i]["dr"].toFixed(4) + "</td>";
+        let drCell = document.createElement("td");
+        drCell.classList.add("dr-cell");
+        drCell.innerText = tableData[i]["dr"].toFixed(4);
+        row.append(drCell);
+
         // Cash cell
-        rowStr += "<td class='cash-cell'></td>";
+        let cashCell = document.createElement("td");
+        cashCell.classList.add("cash-cell");
+        row.append(cashCell);
 
         // Cumulative Gross Cash cell
-        rowStr += "<td class='cum-cash-cell'></td>";
+        let cumCashCell = document.createElement("td");
+        cumCashCell.classList.add("cum-cash-cell");
+        row.append(cumCashCell);
 
         // Cashout? cell (checkbox)
-        rowStr += "<td class='cashout-cell'><input class='cashout' name='cashout' value='cashout' type='checkbox'></td>";
+        let cashoutCell = document.createElement("td");
+        cashoutCell.classList.add("cashout-cell");
+        let check = document.createElement("input");
+        check.setAttribute("type","checkbox");
+        check.setAttribute("name", "cashout");
+        check.setAttribute("value", "cashout");
+        check.classList.add("cashout");
+        cashoutCell.append(check);
+        row.append(cashoutCell);
 
-        row.innerHTML += rowStr;
+        // row.innerHTML += rowStr;
         row.setAttribute("contenteditable", "false");
         row.childNodes[1].setAttribute("contenteditable", "true");
         row.childNodes[2].setAttribute("contenteditable", "true");
@@ -870,7 +992,15 @@ function createTable(elem,obj){
             row.childNodes[4].setAttribute("contenteditable", "true");
             row.childNodes[5].setAttribute("contenteditable", "true");
         };
+
+        row.childNodes[row.childNodes.length - 1].childNodes[0].addEventListener('input', (e) => {
+            console.log(e);
+
+            updateRow(e.target.parentNode.parentNode, e);
+        });
+
         body.appendChild(row);
+        
 
         let tomorrow = addDay(date);
         if(date.getMonth() < tomorrow.getMonth() || (date.getMonth() == 11 && tomorrow.getMonth() == 0)){
@@ -900,42 +1030,46 @@ function createTable(elem,obj){
 }
 
 // fillTableData(nodeData["strngr"]);
-fillTableData(nodeData["thor"]);
-fillTableData(nodeData["pxt2"]);
+// fillTableData(nodeData["thor"]);
+// fillTableData(nodeData["pxt2"]);
 
 // createTable(document.getElementById("strngrCard"), nodeData["strngr"]);
-createTable(document.getElementById("thorCard"), nodeData["thor"]);
-createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);
+// createTable(document.getElementById("thorCard"), nodeData["thor"]);
+// createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);
 
 // Event listeners for row changes
-for(let l = 1; l < 5; l++) {
-    let cells = document.querySelectorAll(".lev" + l + " input[type='text']");
-    let checks = document.querySelectorAll("input[type='checkbox']");
-    let drbs = document.querySelectorAll(".drb-cell input[type='text']");
-    for (let k = 0; k < cells.length; k++) {
-        cells[k].addEventListener('input', (e) => {
-            // Validate input - only allow numbers & decimal
+// for(let l = 1; l < 5; l++) {
+//     let cells = document.querySelectorAll(".lev" + l + " input[type='text']");
+//     let checks = document.querySelectorAll("input[type='checkbox']");
+//     let drbs = document.querySelectorAll(".drb-cell input[type='text']");
+//     for (let k = 0; k < cells.length; k++) {
+//         cells[k].addEventListener('keydown', (e)=> {
+//             // console.log(e);
+//             if (e.keyCode === 13) {
+//                 e.preventDefault();
+//             // Validate input - only allow numbers & decimal
             
             
-            console.log(e);
-            updateRow(e.target.parentNode.parentNode, e);
-        });
-        if (l == 1) {
-            checks[k].addEventListener('input', (e) => {
-                console.log(e);
-                updateRow(e.target.parentNode.parentNode, e);
-            });
-            drbs[k].addEventListener('input', (e) => {
-                // Validate input - only allow numbers & decimal
-                console.log(e);
+//                 console.log(e);
+//                 updateRow(e.target.parentNode.parentNode, e);
+//             }
+//         });
+//         if (l == 1) {
+//             checks[k].addEventListener('input', (e) => {
+//                 console.log(e);
+//                 updateRow(e.target.parentNode.parentNode, e);
+//             });
+//             drbs[k].addEventListener('input', (e) => {
+//                 // Validate input - only allow numbers & decimal
+//                 console.log(e);
             
 
 
-                updateRow(e.target.parentNode.parentNode, e);
-            });
-        }
-    };
-}
+//                 updateRow(e.target.parentNode.parentNode, e);
+//             });
+//         }
+//     };
+// }
 
 // Event listeners for .cal-length-buttons buttons
 let calOneMonth = document.querySelectorAll(".cal-30");

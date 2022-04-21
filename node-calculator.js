@@ -661,8 +661,7 @@ function updateTableDataRow(rowElem, e) {
             // node3: 0
             // node4: 0
         // }
-    console.log(rowElem);
-    console.log(rowElem.parentNode);
+
     let coinObj = nodeData[rowElem.parentNode.classList[0]];
     let days = coinObj["tableData"]["days"];
     let rowIndex;
@@ -681,28 +680,28 @@ function updateTableDataRow(rowElem, e) {
             // Capture previous checkbox value
         if (rowIndex > todayIndex) {
             if(rowElem.previousElementSibling.classList[1] != "total-row") {
-                if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
-                    prevRow["cashout"] = true;
-                } else{
-                    prevRow["cashout"] = false;
-                }
+                // if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                    prevRow["cashout"] = rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked;
+                // } else{
+                //     prevRow["cashout"] = false;
+                // }
             } else {
-                if (rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked) {
-                    prevRow["cashout"] = true;
-                } else{
-                    prevRow["cashout"] = false;
-                }
+                // if (rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked) {
+                    prevRow["cashout"] = rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked;
+                // } else{
+                //     prevRow["cashout"] = false;
+                // }
             }
         }
         
         
 
         // Capture checkbox value
-        if (rowElem.querySelector("input[type='checkbox']").checked) {
-            thisRow["cashout"] = true;
-        } else{
-            thisRow["cashout"] = false;
-        }
+        // if (rowElem.querySelector("input[type='checkbox']").checked) {
+            thisRow["cashout"] = rowElem.querySelector("input[type='checkbox']").checked;
+        // } else{
+        //     thisRow["cashout"] = false;
+        // }
         
         // if row was directly edited, pull values directly from UI
 
@@ -844,7 +843,6 @@ function createTable(elem,obj){
     }
 
     if (div.childNodes.length > 0) {
-        console.log(";webv");
         div.removeChild(div.childNodes[0]);
     }
     let table = document.createElement("table");
@@ -859,12 +857,6 @@ function createTable(elem,obj){
     let today = date;
 
     table.classList.add(obj["name"] + "-table");
-
-    // // Create button row for 30/60/90/365
-    // let buttonDiv = document.createElement("div");
-    // buttonDiv.className = "cal-length-buttons";
-    // buttonDiv.innerHTML = "";
-    // div.appendChild(buttonDiv);
 
     // Create header row
     let tHeadRow = "";
@@ -911,6 +903,17 @@ function createTable(elem,obj){
             input.setAttribute("type", "text");
             input.setAttribute("onclick", "this.select()");
             input.addEventListener('keydown', (e) => {
+
+
+
+
+
+                
+            // One even listener for whole table that outputs target element => different actions based on targeted input?
+
+
+
+
                 console.log(e.key);
                 if (e.key === "Enter") {
                     e.preventDefault();
@@ -920,7 +923,7 @@ function createTable(elem,obj){
                     console.log(e);
                     updateRow(e.target.parentNode.parentNode, e);
                 }
-            })
+            });
             input.setAttribute("name", obj["level" + (j+1)]["name"].toLowerCase());
             input.setAttribute("value", tableData[i]["node" + (j+1)]);
             cell.append(input);

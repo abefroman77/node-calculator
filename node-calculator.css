@@ -271,6 +271,7 @@ body {
 .underline { /* WORKING, BUT NEED BETTER HIGHLIGHT */
 	font-weight: bold;
 	border-bottom: 2px solid white;
+	text-decoration: underline;
 }
 
 

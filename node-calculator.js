@@ -1,4 +1,5 @@
-let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
+// let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
+let dexURL = "https://api.dexscreener.io/latest/dex/pairs/";
 let etherscanAPI = "https://api.etherscan.io/api";
 let etherscanApiKey = "UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9";
 let snowtraceAPI = "https://api.snowtrace.io/api";
@@ -8,49 +9,12 @@ let userAddress = null;
 let userTrxns = [];
 
 window.userAddress = null;
-// window.onload = async () => {
-//     // Init Web3 connected to ETH network
-//     if (window.ethereum) {
-//     window.web3 = new Web3(window.ethereum);
-//     } else {
-//     alert("No ETH brower extension detected.");
-//     }
-
-//     // Load in Localstore key
-//     window.userAddress = window.localStorage.getItem("userAddress");
-//     userAddress = window.userAddress;
-// };
-
-// async function loginWithEth() {
-//     if (window.web3) {
-//       try {
-//         // We use this since ethereum.enable() is deprecated. This method is not
-//         // available in Web3JS - so we call it directly from metamasks' library
-//         const selectedAccount = await window.ethereum
-//           .request({
-//             method: "eth_requestAccounts",
-//           })
-//           .then((accounts) => accounts[0])
-//           .catch(() => {
-//             throw Error("No account selected!");
-//           });
-//         window.userAddress = selectedAccount;
-//         window.localStorage.setItem("userAddress", selectedAccount);
-//         showAddress();
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     } else {
-//       alert("No ETH brower extension detected.");
-//     }
-//   }
 
 let coinData = {
     strngr: {
         id:"stronger",
         localName: "strngr",
         symbol: "",
-        network:"",
         description:"",
         imageLinks:"",
         mediumLink:"",
@@ -69,13 +33,14 @@ let coinData = {
         },
         coinAddress: ["0x990f341946A3fdB507aE7e52d17851B87168017c","0xDc0327D50E6C73db2F8117760592C8BBf1CDCF38"],
         contractAddress: "0xfbddadd80fe7bda00b901fbaf73803f2238ae655",
-        abi: ""
+        abi: "",
+        dexPairAddress: "0x453a43E2Bf3080f7a23c9BB034CcDD869e306102",
+        chainID: "Ethereum"
     },
     thor: {
         id:"thor",
         localName: "thor",
         symbol: "",
-        network:"",
         description:"",
         imageLinks:"",
         mediumLink:"",
@@ -94,13 +59,14 @@ let coinData = {
         },
         coinAddress: ["0x8f47416cae600bccf9530e9f3aeaa06bdd1caa79"],
         contractAddress: "0xbf431b2dfe4b549614f0d5954c0351f89e7e728f",
-        abi: ""
+        abi: "",
+        dexPairAddress: "0x95189f25b4609120F72783E883640216E92732DA",
+        chainID: "Avalanche"
     },
-    pxt2: {
+    pxt: {
         id:"project-x-nodes",
-        localName: "pxt2",
+        localName: "pxt",
         symbol: "",
-        network:"",
         description:"",
         imageLinks:"",
         mediumLink:"",
@@ -119,7 +85,9 @@ let coinData = {
         },
         coinAddress: ["0x9e20Af05AB5FED467dFDd5bb5752F7d5410C832e"],
         contractAddress: "0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c",
-        abi: ""
+        abi: "",
+        dexPairAddress: "0xf17A02640E399E01Ee4A197ba101e0DF14e60A98",
+        chainID: "Avalanche"
     }
 }
 
@@ -191,7 +159,8 @@ let nodeData = {
         tableData:[],
         startingNodes: [0,0,0,0],
         calLength: 30,
-        walletBalance: 0
+        walletBalance: 0,
+        cashToday: 0
     },
     thor: {
         name: "thor",
@@ -254,19 +223,20 @@ let nodeData = {
         tableData: [],
         startingNodes: [0,0,0,0],
         calLength: 30,
-        walletBalance: 0
+        walletBalance: 0,
+        cashToday: 0
     },
-    pxt2: {
-        name: "pxt2",
+    pxt: {
+        name: "pxt",
         level1:{
-            name:"PXT2",
+            name:"PXT",
             cost:10,
             apiCost: BigInt(10000000000000000000),
             rewardRate:0.17,
             rewardPercentage:0,
-            claimTax:0,
+            claimTax:30,
             compoundTax:0,
-            sellTax:18,
+            sellTax:0,
             monthlyFee:0,
             compounding: true,
             startingDay: 60,
@@ -317,7 +287,8 @@ let nodeData = {
         tableData: [],
         startingNodes: [16,0,0,0],
         calLength: 30,
-        walletBalance: 0
+        walletBalance: 0,
+        cashToday: 0
     }
 }
 
@@ -361,29 +332,29 @@ function populateCardData(elem,obj){
     let url = "";
     elem.querySelector(".coin-price").textContent = formatMoney(obj["prices"]["currentPrice"], "usd");
     elem.querySelector(".symbol").textContent = obj["symbol"];
-    elem.querySelector(".network").textContent = obj["network"];
+    elem.querySelector(".network").textContent = obj["chainID"];
     if(Object.keys(obj["platforms"])[0] == "ethereum"){
         url = "http://etherscan.io/address/";
     } else if(Object.keys(obj["platforms"])[0] == "avalanche"){
         url = "http://snowtrace.io/address/";
     }
     elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + Object.values(obj["platforms"])[0] + "</a>";
-    elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
-    elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
-    elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
-    elem.querySelector(".atl-date").textContent = obj["prices"]["atlDate"];
-    elem.querySelector(".high-24h").textContent = formatMoney(obj["prices"]["high_24h"], "usd");
-    elem.querySelector(".low-24h").textContent = formatMoney(obj["prices"]["low_24h"], "usd");
-    elem.querySelector(".total-volume").textContent = obj["prices"]["totalVolume"];
-    elem.querySelector(".market-cap").textContent = "$" + obj["prices"]["marketCap"];
-    elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
-    elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
+    // elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
+    // elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
+    // elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
+    // elem.querySelector(".atl-date").textContent = obj["prices"]["atlDate"];
+    // elem.querySelector(".high-24h").textContent = formatMoney(obj["prices"]["high_24h"], "usd");
+    // elem.querySelector(".low-24h").textContent = formatMoney(obj["prices"]["low_24h"], "usd");
+    // elem.querySelector(".total-volume").textContent = obj["prices"]["totalVolume"];
+    // elem.querySelector(".market-cap").textContent = "$" + obj["prices"]["marketCap"];
+    // elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
+    // elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
 }
 
 function updateCoinData(elem,obj){
     let count = 0;
     setInterval(function(){
-        let url = coinGeckoURL + obj["id"];
+        let url = dexURL + obj["chainID"].toLowerCase() + "/" + obj["dexPairAddress"];
         fetch(url).then(function(response) {
             return response.json();
         }).then(function(data) {
@@ -393,23 +364,23 @@ function updateCoinData(elem,obj){
             }
             document.querySelector("#connectMM").removeAttribute("disabled");
             let dateRegex = /\d{4}-\d\d-\d\d/;
-            obj["network"] = data["asset_platform_id"].charAt(0).toUpperCase() + data["asset_platform_id"].slice(1);
-            obj["symbol"] = data["symbol"].toUpperCase();
-            obj["description"] = data["description"]["en"];
-            obj["imageLinks"] = data["image"];
-            obj["mediumLink"] = data["links"]["announcement_url"];
-            obj["homepage"] = data["links"]["homepage"][0];
-            obj["platforms"] = data["platforms"];
-            obj["prices"]["ath"] = data["market_data"]["ath"]["usd"];
-            obj["prices"]["athDate"] = data["market_data"]["ath_date"]["usd"].match(dateRegex);
-            obj["prices"]["atl"] = data["market_data"]["atl"]["usd"];
-            obj["prices"]["atlDate"] = data["market_data"]["atl_date"]["usd"].match(dateRegex);
-            obj["prices"]["currentPrice"] = data["market_data"]["current_price"]["usd"];
-            obj["prices"]["high_24h"] = data["market_data"]["high_24h"]["usd"];
-            obj["prices"]["low_24h"] = data["market_data"]["low_24h"]["usd"];
-            obj["prices"]["totalVolume"] = data["market_data"]["total_volume"]["usd"];
-            obj["prices"]["marketCap"] = data["market_data"]["market_cap"]["usd"];
+            obj["symbol"] = data["pair"]["baseToken"]["symbol"].toUpperCase();
+            // obj["description"] = data["description"]["en"];
+            // obj["imageLinks"] = data["image"];
+            // obj["mediumLink"] = data["links"]["announcement_url"];
+            // obj["homepage"] = data["links"]["homepage"][0];
+            // obj["platforms"] = data["platforms"];
+            // obj["prices"]["ath"] = data["market_data"]["ath"]["usd"];
+            // obj["prices"]["athDate"] = data["market_data"]["ath_date"]["usd"].match(dateRegex);
+            // obj["prices"]["atl"] = data["market_data"]["atl"]["usd"];
+            // obj["prices"]["atlDate"] = data["market_data"]["atl_date"]["usd"].match(dateRegex);
+            obj["prices"]["currentPrice"] = data["pair"]["priceUsd"];
+            // obj["prices"]["high_24h"] = data["market_data"]["high_24h"]["usd"];
+            // obj["prices"]["low_24h"] = data["market_data"]["low_24h"]["usd"];
+            // obj["prices"]["totalVolume"] = data["market_data"]["total_volume"]["usd"];
+            // obj["prices"]["marketCap"] = data["market_data"]["market_cap"]["usd"];
             populateCardData(elem,obj);
+            comparisonData(obj);
 
             // Update prices on Summary Card
             for (coin in coinData) {
@@ -425,7 +396,7 @@ function updateCoinData(elem,obj){
 // updateCoinData
 document.addEventListener('DOMContentLoaded', function() {
     let cards = document.getElementsByClassName("card");
-    let i=1;
+    let i=2;
     for(obj in coinData){
         updateCoinData(cards[i],coinData[obj]);
         i++;
@@ -449,17 +420,16 @@ async function mmLogin() {
             if (!accounts) {return};
             userAddress = accounts[0];
             window.userAddress = userAddress;
-            // console.log(userAddress);
             connectMM.innerText = "Logged In";
 
-            // i loops through coinData (strngr, thor, pxt2, etc)
+            // i loops through coinData (strngr, thor, pxt, etc)
             for (let i = 0; i < Object.keys(coinData).length; i++) {
                 let url = ""
                 let apiKey = "";
-                if (coinData[Object.keys(coinData)[i]]["network"] == "Ethereum") {
+                if (coinData[Object.keys(coinData)[i]]["chainID"] == "Ethereum") {
                     url = etherscanAPI;
                     apiKey = etherscanApiKey;
-                } else if (coinData[Object.keys(coinData)[i]]["network"] == "Avalanche") {
+                } else if (coinData[Object.keys(coinData)[i]]["chainID"] == "Avalanche") {
                     url = snowtraceAPI;
                     apiKey = snowtraceApiKey;
                 }
@@ -483,7 +453,6 @@ async function mmLogin() {
                             // j loops through transactions for each coin pulled by fetch
                             for (let j = 0; j < userTrxns.length; j++) {
                                 let trxnsCounted = [];
-                                // console.log(userTrxns[j]["tokenName"],userTrxns[j]["value"],userTrxns[j]["blockNumber"]);
                                 // k loops through node levels (level4, level3, etc)
                                 for (let k = 4; k > 0; k--) {
                                     if (
@@ -498,7 +467,6 @@ async function mmLogin() {
                                 }
                             }
                             nodeData[Object.keys(nodeData)[i]]["startingNodes"] = counts;
-                            // console.log(counts);
                             fillTableData(nodeData[Object.keys(nodeData)[i]]);
                             createTable(document.getElementById(Object.keys(nodeData)[i] + "Card"), nodeData[Object.keys(nodeData)[i]]);
                         }
@@ -637,8 +605,12 @@ function fillTableData(obj) {
                 daysObjPush["dr"] += daysObjPush["node" + i] * rew;
             }
         }
+        
         daysObjPush["drb"] = drb;
         days.push(daysObjPush);
+        if (j == todayIndex) {
+            obj["cashToday"] = getTodayCash(obj);
+        }
         date = addDay(date);
     }
     for (let k = 0; k < 12; k++) {
@@ -650,7 +622,7 @@ function fillTableData(obj) {
 }
 
 function updateTableDataRow(rowElem, e) {
-    // tableData = 
+    // tableData[x] = 
         // {
             // cash: 0
             // cashout: false
@@ -665,6 +637,10 @@ function updateTableDataRow(rowElem, e) {
             // node4: 0
         // }
 
+    let classList;
+    if (e != false) {
+        classList = e.target.classList;
+    }
     let coinObj = nodeData[rowElem.parentNode.classList[0]];
     let days = coinObj["tableData"]["days"];
     let rowIndex;
@@ -683,28 +659,13 @@ function updateTableDataRow(rowElem, e) {
             // Capture previous checkbox value
         if (rowIndex > todayIndex) {
             if(rowElem.previousElementSibling.classList[1] != "total-row") {
-                // if (rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked) {
-                    prevRow["cashout"] = rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked;
-                // } else{
-                //     prevRow["cashout"] = false;
-                // }
+                prevRow["cashout"] = rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked;
             } else {
-                // if (rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked) {
-                    prevRow["cashout"] = rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked;
-                // } else{
-                //     prevRow["cashout"] = false;
-                // }
+                prevRow["cashout"] = rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked;
             }
         }
         
-        
-
-        // Capture checkbox value
-        // if (rowElem.querySelector("input[type='checkbox']").checked) {
-            thisRow["cashout"] = rowElem.querySelector("input[type='checkbox']").checked;
-        // } else{
-        //     thisRow["cashout"] = false;
-        // }
+        thisRow["cashout"] = rowElem.querySelector("input[type='checkbox']").checked;
         
         // if row was directly edited, pull values directly from UI
 
@@ -781,7 +742,6 @@ function updateTableDataRow(rowElem, e) {
                 }
                 if (rowIndex == coinObj["level" + i]["startingDay"]) {
                     drb = coinObj["level" + i]["startingRewards"];
-                    // console.log(drb);
                 }
             }
             thisRow["drb"] = drb;
@@ -790,9 +750,7 @@ function updateTableDataRow(rowElem, e) {
 
         // Cash cell
         if (thisRow["cashout"]) {
-            // if (prevRow["drb"] + prevRow["dr"] >= cost) {
-                thisRow["cash"] = (thisRow["drb"] + thisRow["dr"]) * coinData[coinObj["name"]]["prices"]["currentPrice"];
-            // }
+            thisRow["cash"] = (thisRow["drb"] + thisRow["dr"]) * coinData[coinObj["name"]]["prices"]["currentPrice"];
         }
 
         // Cumulative cash cell
@@ -905,28 +863,6 @@ function createTable(elem,obj){
             let input = document.createElement("input");
             input.setAttribute("type", "text");
             input.setAttribute("onclick", "this.select()");
-            input.addEventListener('keydown', (e) => {
-
-
-
-
-
-                
-            // One even listener for whole table that outputs target element => different actions based on targeted input?
-
-
-
-
-                console.log(e.key);
-                if (e.key === "Enter") {
-                    e.preventDefault();
-                // Validate input - only allow numbers & decimal
-                
-                
-                    console.log(e);
-                    updateRow(e.target.parentNode.parentNode, e);
-                }
-            });
             input.setAttribute("name", obj["level" + (j+1)]["name"].toLowerCase());
             input.setAttribute("value", tableData[i]["node" + (j+1)]);
             cell.append(input);
@@ -939,17 +875,6 @@ function createTable(elem,obj){
         let input = document.createElement("input");
         input.setAttribute("type", "text");
         input.setAttribute("onclick", "this.select()");
-        input.addEventListener('keydown', (e) => {
-            console.log(e);
-            if (e.key === "Enter") {
-                e.preventDefault();
-            // Validate input - only allow numbers & decimal
-            
-            
-                console.log(e);
-                updateRow(e.target.parentNode.parentNode, e);
-            }
-        })
         input.setAttribute("name", "drb");
         input.setAttribute("value", tableData[i]["drb"].toFixed(4));
         drbCell.append(input);
@@ -999,12 +924,6 @@ function createTable(elem,obj){
             row.childNodes[5].setAttribute("contenteditable", "true");
         };
 
-        row.childNodes[row.childNodes.length - 1].childNodes[0].addEventListener('input', (e) => {
-            console.log(e);
-
-            updateRow(e.target.parentNode.parentNode, e);
-        });
-
         body.appendChild(row);
         
 
@@ -1031,51 +950,25 @@ function createTable(elem,obj){
     };
     
     table.appendChild(body);
+    table.addEventListener('keydown', (e) => {
+        if (e.key === "Enter" && e.target.classList[0] != "cashout") {
+            e.preventDefault();
+        // Validate input - only allow numbers & decimal
+        
+        
+            console.log(e);
+            updateRow(e.target.parentNode.parentNode, e);
+        }
+    });
+    table.addEventListener("input", (e) => {
+        if(e.target.classList[0] == "cashout") {
+            console.log(e.target);
+            updateRow(e.target.parentNode.parentNode, e);
+        }
+    })
     div.appendChild(table);
     elem.children[3].appendChild(div);
 }
-
-// fillTableData(nodeData["strngr"]);
-// fillTableData(nodeData["thor"]);
-// fillTableData(nodeData["pxt2"]);
-
-// createTable(document.getElementById("strngrCard"), nodeData["strngr"]);
-// createTable(document.getElementById("thorCard"), nodeData["thor"]);
-// createTable(document.getElementById("pxt2Card"), nodeData["pxt2"]);
-
-// Event listeners for row changes
-// for(let l = 1; l < 5; l++) {
-//     let cells = document.querySelectorAll(".lev" + l + " input[type='text']");
-//     let checks = document.querySelectorAll("input[type='checkbox']");
-//     let drbs = document.querySelectorAll(".drb-cell input[type='text']");
-//     for (let k = 0; k < cells.length; k++) {
-//         cells[k].addEventListener('keydown', (e)=> {
-//             // console.log(e);
-//             if (e.keyCode === 13) {
-//                 e.preventDefault();
-//             // Validate input - only allow numbers & decimal
-            
-            
-//                 console.log(e);
-//                 updateRow(e.target.parentNode.parentNode, e);
-//             }
-//         });
-//         if (l == 1) {
-//             checks[k].addEventListener('input', (e) => {
-//                 console.log(e);
-//                 updateRow(e.target.parentNode.parentNode, e);
-//             });
-//             drbs[k].addEventListener('input', (e) => {
-//                 // Validate input - only allow numbers & decimal
-//                 console.log(e);
-            
-
-
-//                 updateRow(e.target.parentNode.parentNode, e);
-//             });
-//         }
-//     };
-// }
 
 // Event listeners for .cal-length-buttons buttons
 let calOneMonth = document.querySelectorAll(".cal-30");
@@ -1154,11 +1047,22 @@ function updateRow(rowElem, e){
         let monthIndex = monthTotal.parentElement.classList[0];
         let classNames = "." + rowElem.parentElement.classList[0] + "-summary ." + monthIndex;
         document.querySelector(classNames).innerText = val;
-        console.log(document.querySelector(classNames));
     }
     
-    if (rowElem.classList[0] != "m11" && parseInt(rowElem.classList[2].slice(1)) < dayOfYearIndex(new Date()) + coinObj["calLength"]) {
-        updateRow(rowElem.nextElementSibling, false);
+    if (rowElem.classList[0] != "m11") {
+        if (parseInt(rowElem.classList[2].slice(1)) < dayOfYearIndex(new Date()) + coinObj["calLength"]) {
+            updateRow(rowElem.nextElementSibling, false);
+        } else if(rowElem.classList[1] == "total-row" && parseInt(rowElem.nextElementSibling.classList[2].slice(1)) < dayOfYearIndex(new Date()) + coinObj["calLength"]) {
+            updateRow(rowElem.nextElementSibling, false);
+        }
     };
 }
 
+function getTodayCash(obj) {
+    let todayIndex = dayOfYearIndex(new Date());
+    let total = 0;
+    for (let i = 1; i < 5; i++) {
+        total += obj["tableData"]["days"][todayIndex]["node" + i] * obj["level" + i]["rewardRate"] * ((100 - obj["level" + i]["claimTax"])/100);
+    }
+    return total * coinData[obj["name"]]["prices"]["currentPrice"];
+}

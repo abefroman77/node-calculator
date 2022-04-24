@@ -44,10 +44,11 @@
   </header>
 
   <div class="tab-row">
-      <button id="summaryTab" class="tab pointer tab-dark" onclick="showHideCard(this.id)"><i class="fa-solid fa-table"></i></button>
+      <button id="summaryTab" class="tab pointer tab-dark" onclick="showHideCard(this.id)"><i class="fa-solid fa-calculator"></i></button>
+      <button id="comparisonTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-table"></i></button>
       <button id="strngrTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strngr</button>
       <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
-      <button id="pxt2Tab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
+      <button id="pxtTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
       <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-plus"></i></button>
       <button id="connectMM" disabled class="tab pointer">Connect MetaMask Wallet</button>
   </div>
@@ -73,8 +74,8 @@
             <td class="thor-price"></td>
           </tr>
           <tr class="summary-coin-price">
-            <td>PXT2</td>
-            <td class="pxt2-price"></td>
+            <td>PXT</td>
+            <td class="pxt-price"></td>
           </tr>
         </tbody>
       </table>
@@ -204,7 +205,7 @@
             </tr>
           </tbody>
         </table>
-        <table class="project-summary pxt2-summary">
+        <table class="project-summary pxt-summary">
           <thead>
             <tr>
               <th>Month</th>
@@ -269,6 +270,35 @@
       </div>
     </div>
 
+    <div id="comparisonCard" class="card" style="display:none;">
+      <p>Initial Investment: $<input type="text" id="initial" name="initial" value="1000"></input></p>
+      <p>Minimum to compare all: $<span id="minimumCompare"></span></p>
+      <table>
+        <thead>
+          <th>Node</th>
+          <th>Token Price</th>
+          <th>Node Cost</th>
+          <th>Node Cost ($)</th>
+          <th>Rewards/Node</th>
+          <th>Rewards/Node (%)</th>
+          <th>Added Node Count</th>
+          <th>Existing Nodes</th>
+          <th>$ Spent</th>
+          <th>Current Daily Rewards</th>
+          <th>Current Daily Rewards ($)</th>
+          <th>New Daily Rewards</th>
+          <th>New Daily Rewards ($)</th>
+          <th>Difference</th>
+          <th>Difference (%)</th>
+          <th>ROT (Days)</th>
+        </thead>
+        <tbody>
+
+
+        </tbody>
+      </table>
+    </div>
+
     <div id="strngrCard" class="card" style="display:none;">
       <h1 class="strngr-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">Strngr Nodes</span></a></h1>
       <h2>Coin Price: <span class="coin-price strngr-price">Getting price...</span></h2>
@@ -329,9 +359,9 @@
       </div>
     </div>
 
-    <div id="pxt2Card" class="card" style="display:none;">
-      <h1 class="pxt2-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">PXT2 Nodes</span></a></h1>
-      <h2>Coin Price: <span class="coin-price pxt2-price">Getting price...</span></h2>
+    <div id="pxtCard" class="card" style="display:none;">
+      <h1 class="pxt-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">PXT Nodes</span></a></h1>
+      <h2>Coin Price: <span class="coin-price pxt-price">Getting price...</span></h2>
       <div class="coin-stats">
         <ul>
           <li class="stat-heading">Coin Stats</li>
@@ -367,6 +397,7 @@
   	
   </footer>
   <script type="text/javascript" src="node-calculator.js"></script>
+  <script type="text/javascript" src="comparison.js"></script>
 </body>
 
 </html>

@@ -391,6 +391,7 @@ function updateCoinData(elem,obj){
                 console.log(data);
                 count++;
             }
+            document.querySelector("#connectMM").removeAttribute("disabled");
             let dateRegex = /\d{4}-\d\d-\d\d/;
             obj["network"] = data["asset_platform_id"].charAt(0).toUpperCase() + data["asset_platform_id"].slice(1);
             obj["symbol"] = data["symbol"].toUpperCase();
@@ -421,6 +422,7 @@ function updateCoinData(elem,obj){
     }, 5000)
 }
 
+// updateCoinData
 document.addEventListener('DOMContentLoaded', function() {
     let cards = document.getElementsByClassName("card");
     let i=1;
@@ -430,6 +432,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
+// mmLogin
 let connectMM = document.getElementById("connectMM");
 window.addEventListener('DOMContentLoaded', function() {
     if(!window.ethereum) {

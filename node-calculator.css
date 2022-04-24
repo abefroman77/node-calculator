@@ -167,6 +167,11 @@ body {
 
 .stat-heading {
 	font-weight: 700;
+	list-style-type: none;
+}
+
+.coin-stats li {
+	list-style-position: inside;
 }
 
 /* SUMMARY CARD---------------------------------------------------------*/

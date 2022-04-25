@@ -1,4 +1,4 @@
-// let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
+let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
 let dexURL = "https://api.dexscreener.io/latest/dex/pairs/";
 let etherscanAPI = "https://api.etherscan.io/api";
 let etherscanApiKey = "UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9";
@@ -16,10 +16,12 @@ let coinData = {
         localName: "strngr",
         symbol: "",
         description:"",
+        network:"",
         imageLinks:"",
         mediumLink:"",
         homepage:"",
         platforms:"",
+        coinGeckoID:"stronger",
         prices: {
             ath:"",
             athDate:"",
@@ -42,10 +44,12 @@ let coinData = {
         localName: "thor",
         symbol: "",
         description:"",
+        network:"",
         imageLinks:"",
         mediumLink:"",
         homepage:"",
         platforms:"",
+        coinGeckoID:"thor",
         prices: {
             ath:"",
             athDate:"",
@@ -68,10 +72,12 @@ let coinData = {
         localName: "pxt",
         symbol: "",
         description:"",
+        network:"",
         imageLinks:"",
         mediumLink:"",
         homepage:"",
         platforms:"",
+        coinGeckoID:"",
         prices: {
             ath:"",
             athDate:"",
@@ -89,12 +95,6 @@ let coinData = {
         dexPairAddress: "0xf17A02640E399E01Ee4A197ba101e0DF14e60A98",
         chainID: "Avalanche"
     }
-}
-
-let coinIDs = [];
-
-for(let i=0; i<Object.keys(coinData).length; i++){
-    coinIDs.push(coinData[Object.keys(coinData)[i]]);
 }
 
 let nodeData = {
@@ -339,22 +339,32 @@ function populateCardData(elem,obj){
         url = "http://snowtrace.io/address/";
     }
     elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + Object.values(obj["platforms"])[0] + "</a>";
-    // elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
-    // elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
-    // elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
-    // elem.querySelector(".atl-date").textContent = obj["prices"]["atlDate"];
-    // elem.querySelector(".high-24h").textContent = formatMoney(obj["prices"]["high_24h"], "usd");
-    // elem.querySelector(".low-24h").textContent = formatMoney(obj["prices"]["low_24h"], "usd");
-    // elem.querySelector(".total-volume").textContent = obj["prices"]["totalVolume"];
-    // elem.querySelector(".market-cap").textContent = "$" + obj["prices"]["marketCap"];
-    // elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
-    // elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
+    elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
+    elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
+    elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
+    elem.querySelector(".atl-date").textContent = obj["prices"]["atlDate"];
+    elem.querySelector(".high-24h").textContent = formatMoney(obj["prices"]["high_24h"], "usd");
+    elem.querySelector(".low-24h").textContent = formatMoney(obj["prices"]["low_24h"], "usd");
+    elem.querySelector(".total-volume").textContent = obj["prices"]["totalVolume"];
+    elem.querySelector(".market-cap").textContent = "$" + obj["prices"]["marketCap"];
+    elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
+    elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
 }
 
 function updateCoinData(elem,obj){
     let count = 0;
+    let api = "";
+    let url = "";
+    if (obj["coinGeckoURL"] != "") {
+        url = coinGeckoURL + obj["coinGeckoID"];
+        api = "coinGecko";
+    } else {
+        url = dexURL + obj["chainID"].toLowerCase() + "/" + obj["dexPairAddress"];
+        api = "dex";
+    }
     setInterval(function(){
-        let url = dexURL + obj["chainID"].toLowerCase() + "/" + obj["dexPairAddress"];
+        // let url = dexURL + obj["chainID"].toLowerCase() + "/" + obj["dexPairAddress"];
+        // url = coinGeckoURL + obj["coinGeckoID"];
         fetch(url).then(function(response) {
             return response.json();
         }).then(function(data) {
@@ -363,24 +373,31 @@ function updateCoinData(elem,obj){
                 count++;
             }
             document.querySelector("#connectMM").removeAttribute("disabled");
-            let dateRegex = /\d{4}-\d\d-\d\d/;
-            obj["symbol"] = data["pair"]["baseToken"]["symbol"].toUpperCase();
-            // obj["description"] = data["description"]["en"];
-            // obj["imageLinks"] = data["image"];
-            // obj["mediumLink"] = data["links"]["announcement_url"];
-            // obj["homepage"] = data["links"]["homepage"][0];
-            // obj["platforms"] = data["platforms"];
-            // obj["prices"]["ath"] = data["market_data"]["ath"]["usd"];
-            // obj["prices"]["athDate"] = data["market_data"]["ath_date"]["usd"].match(dateRegex);
-            // obj["prices"]["atl"] = data["market_data"]["atl"]["usd"];
-            // obj["prices"]["atlDate"] = data["market_data"]["atl_date"]["usd"].match(dateRegex);
-            obj["prices"]["currentPrice"] = data["pair"]["priceUsd"];
-            // obj["prices"]["high_24h"] = data["market_data"]["high_24h"]["usd"];
-            // obj["prices"]["low_24h"] = data["market_data"]["low_24h"]["usd"];
-            // obj["prices"]["totalVolume"] = data["market_data"]["total_volume"]["usd"];
-            // obj["prices"]["marketCap"] = data["market_data"]["market_cap"]["usd"];
+            if (api == "coinGecko") {
+                let dateRegex = /\d{4}-\d\d-\d\d/;
+                obj["symbol"] = data["symbol"].toUpperCase();
+                obj["description"] = data["description"]["en"];
+                obj["imageLinks"] = data["image"];
+                obj["network"] = data["asset_platform_id"];
+                obj["mediumLink"] = data["links"]["announcement_url"];
+                obj["homepage"] = data["links"]["homepage"][0];
+                obj["platforms"] = data["platforms"];
+                obj["prices"]["ath"] = data["market_data"]["ath"]["usd"];
+                obj["prices"]["athDate"] = data["market_data"]["ath_date"]["usd"].match(dateRegex);
+                obj["prices"]["atl"] = data["market_data"]["atl"]["usd"];
+                obj["prices"]["atlDate"] = data["market_data"]["atl_date"]["usd"].match(dateRegex);
+                obj["prices"]["currentPrice"] = data["pair"]["priceUsd"];
+                obj["prices"]["high_24h"] = data["market_data"]["high_24h"]["usd"];
+                obj["prices"]["low_24h"] = data["market_data"]["low_24h"]["usd"];
+                obj["prices"]["totalVolume"] = data["market_data"]["total_volume"]["usd"];
+                obj["prices"]["marketCap"] = data["market_data"]["market_cap"]["usd"];
+            } else {
+                // using DEXScreener
+                obj["symbol"] = data["pair"]["baseToken"]["symbol"].toUpperCase();
+                obj["network"] = obj["chainID"]; 
+            }
             populateCardData(elem,obj);
-            comparisonData(obj);
+            // comparisonData(obj);
 
             // Update prices on Summary Card
             for (coin in coinData) {
@@ -1065,4 +1082,94 @@ function getTodayCash(obj) {
         total += obj["tableData"]["days"][todayIndex]["node" + i] * obj["level" + i]["rewardRate"] * ((100 - obj["level" + i]["claimTax"])/100);
     }
     return total * coinData[obj["name"]]["prices"]["currentPrice"];
+}
+
+// COMPARISON TABLE----------------------------------------------------------------
+
+let compTable = document.querySelector("#comparisonCard>table>tbody");
+let initial = parseFloat(document.getElementById("initial").value)
+
+function comparisonData() {
+    // obj is coinData[node]
+    setInterval(function(){
+        // for (t = 0; t < Object.keys(compNodeData).length; t++) {
+        for (node in nodeData) {
+            for (level in compNodeData[node]) {
+                compNodeData[node][level]["costUSD"] = compNodeData[node]["cost"] * obj["prices"]["currentPrice"];
+                compNodeData[node][level]["rewPercent"] = compNodeData[node]["rew"] / compNodeData[node]["cost"] * 100;
+                compNodeData[node][level]["addedNodes"] = Math.floor(initial/compNodeData[node][level]["cost"]/compNodeData[node]["price"]);
+                compNodeData[node][level]["currentCount"] = nodeData[node]["tableData"]["days"][dayOfYearIndex(new Date())]["node1"];
+                compNodeData[node][level]["moneySpent"] = compNodeData[node][level]["addedNodes"] * compNodeData[node]["price"]
+
+                updateCompRow(compNodeData[node][level]);
+            }
+        }
+    }, 5000)
+}
+
+function updateCompRow(obj) {
+    let row;
+    if (!document.body.contains(compTable.querySelector("." + obj["localName"]))) {
+        let row = document.createElement("tr");
+        row.classList = obj["name"];
+        let cell = document.createElement("td");
+        cell.classList = "name";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "price";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "cost";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "cost-usd";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "rewards";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "rewards-percent";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "added-nodes";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "current-nodes";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "money-spent";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "current-rewards";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "current-rewards-usd";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "new-rewards";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "new-rewards-usd";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "difference";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "difference-percent";
+        row.append(cell);
+        cell = document.createElement("td");
+        cell.classList = "rot";
+        row.append(cell);
+        compTable.append(row);
+    } else {
+        row = document.querySelector("." + obj["name"]);
+    }
+    
+    // compTable.lastChild.lastChild.querySelector(".name").textContent = "wvkwbr";
+
+
+
+    
+
+
 }

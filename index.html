@@ -50,6 +50,7 @@
       <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
       <button id="pxtTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
       <button id="polarTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Polar</button>
+      <button id="fireTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Phoenix Capital</button>
       <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-plus"></i></button>
       <button id="connectMM" disabled class="tab pointer">Connect MetaMask Wallet</button>
   </div>
@@ -67,6 +68,22 @@
         </thead>
         <tbody>
           <tr class="summary-coin-price">
+            <td>Ethereum</td>
+            <td class="ethereum-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Avax</td>
+            <td class="avax-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>BUSD</td>
+            <td class="busd-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Fantom</td>
+            <td class="fantom-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
             <td>Strngr</td>
             <td class="strngr-price"></td>
           </tr>
@@ -81,6 +98,10 @@
           <tr class="summary-coin-price">
             <td>Polar</td>
             <td class="polar-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Fire</td>
+            <td class="fire-price"></td>
           </tr>
         </tbody>
       </table>
@@ -272,13 +293,76 @@
             </tr>
           </tbody>
         </table>
+        <table class="project-summary polar-summary">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <br>
+          <tbody>
+            <tr>
+              <td>January</td>
+              <td class="project-total-jan m0"></td>
+            </tr>
+            <tr>
+              <td>February</td>
+              <td class="project-total-feb m1"></td>
+            </tr>
+            <tr>
+              <td>March</td>
+              <td class="project-total-mar m2"></td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td class="project-total-apr m3"></td>
+            </tr>
+            <tr>
+              <td>May</td>
+              <td class="project-total-may m4"></td>
+            </tr>
+            <tr>
+              <td>June</td>
+              <td class="project-total-jun m5"></td>
+            </tr>
+            <tr>
+              <td>July</td>
+              <td class="project-total-jul m6"></td>
+            </tr>
+            <tr>
+              <td>August</td>
+              <td class="project-total-aug m7"></td>
+            </tr>
+            <tr>
+              <td>September</td>
+              <td class="project-total-sep m8"></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td class="project-total-oct m9"></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td class="project-total-nov m10"></td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td class="project-total-dec m11"></td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td class="project-year-total"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <div id="comparisonCard" class="card" style="display:none;">
       <p>Initial Investment: $<input type="text" id="initial" name="initial" value="1000"></input></p>
       <p>Minimum to compare all: $<span id="minimumCompare"></span></p>
-      <table>
+      <table class="comp-table">
         <thead>
           <th>Node</th>
           <th>Token Price</th>
@@ -356,7 +440,7 @@
       </div>
       <div class="table-container">
         <div class="cal-length-buttons">
-          <button class='cal-30 pointer' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
           <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
           <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
           <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
@@ -386,7 +470,7 @@
       </div>
       <div class="table-container">
         <div class="cal-length-buttons">
-          <button class='cal-30 pointer' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
           <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
           <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
           <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
@@ -416,12 +500,42 @@
       </div>
       <div class="table-container">
         <div class="cal-length-buttons">
-          <button class='cal-30 pointer' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
           <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
           <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
           <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
         </div>
       </div> 
+    </div>
+
+    <div id="fireCard" class="card" style="display:none;">
+      <h1 class="fire-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">Phoenix Capital</span></a></h1>
+      <h2>Coin Price: <span class="coin-price fire-price">Getting price...</span></h2>
+      <div class="coin-stats">
+        <ul>
+          <li class="stat-heading">Coin Stats</li>
+          <li>Symbol: <span class="symbol"></span></li>
+          <li>Network: <span class="network"></span></li>
+          <li>Contract: <span class="platforms"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Price Stats:</li>
+          <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+          <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+          <li>24-Hour High: <span class="high-24h"></span></li>
+          <li>24-Hour Low: <span class="low-24h"></span></li>
+          <li>Total Volume: <span class="total-volume"></span></li>
+          <li>Market Cap: <span class="market-cap"></span></li>
+        </ul>
+      </div>  
+      <div class="table-container">
+        <div class="cal-length-buttons">
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
+          <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
+          <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
+        </div>
+      </div>
     </div>
 
   </div>

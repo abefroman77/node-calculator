@@ -1,9 +1,13 @@
 let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
+// test coinGecko - https://api.coingecko.com/api/v3/coins/stronger
 let dexURL = "https://api.dexscreener.io/latest/dex/pairs/";
+//  test dexScreener - https://api.dexscreener.io/latest/dex/pairs/ethereum/0x453a43E2Bf3080f7a23c9BB034CcDD869e306102
 let etherscanAPI = "https://api.etherscan.io/api";
 let etherscanApiKey = "UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9";
+// test etherscan - https://api.etherscan.io/api?module=account&action=tokentx&address=0xa52f82f04416645d632589c18EE195F3d51dBFD1&startblock=0&endblock=9999999999&sort=asc&apikey=UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9
 let snowtraceAPI = "https://api.snowtrace.io/api";
 let snowtraceApiKey = "9ZDQ11918D4GMKN5VMASWGIF92RHZQ9TPH";
+// test snowtrace - https://api.snowtrace.io/api?module=account&action=tokentx&address=0xa52f82f04416645d632589c18EE195F3d51dBFD1&startblock=0&endblock=9999999999&sort=asc&apikey=9ZDQ11918D4GMKN5VMASWGIF92RHZQ9TPH
 
 let userAddress = null;
 let userTrxns = [];
@@ -33,7 +37,7 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: ["0x990f341946A3fdB507aE7e52d17851B87168017c","0xDc0327D50E6C73db2F8117760592C8BBf1CDCF38"],
+        coinAddress: ["0x990f341946A3fdB507aE7e52d17851B87168017c","0xDc0327D50E6C73db2F8117760592C8BBf1CDCF38"], // older -> newer
         contractAddress: "0xfbddadd80fe7bda00b901fbaf73803f2238ae655",
         abi: "",
         dexPairAddress: "0x453a43E2Bf3080f7a23c9BB034CcDD869e306102",
@@ -89,14 +93,43 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: ["0x9e20Af05AB5FED467dFDd5bb5752F7d5410C832e"],
+        coinAddress: ["0x9e20Af05AB5FED467dFDd5bb5752F7d5410C832e","0x9adcbba4b79ee5285e891512b44706f41f14cafd"], // older -> newer
         contractAddress: "0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c",
         abi: "",
         dexPairAddress: "0xf17A02640E399E01Ee4A197ba101e0DF14e60A98",
         chainID: "Avalanche"
+    },
+    polar: {
+        id:"polar",
+        localName: "polar",
+        symbol: "",
+        description:"",
+        network:"",
+        imageLinks:"",
+        mediumLink:"",
+        homepage:"",
+        platforms:"",
+        coinGeckoID:"polar",
+        prices: {
+            ath:"",
+            athDate:"",
+            atl:"",
+            atlDate:"",
+            currentPrice:"",
+            high_24h:"",
+            low_24h:"",
+            totalVolume:"",
+            marketCap:""
+        },
+        coinAddress: ["0x6c1c0319d8ddcb0ffe1a68c5b3829fd361587db4"], // older -> newer
+        contractAddress: "0x2ec1849e12e1264db7379f5d17eccf5a94cf5fe8",
+        abi: "",
+        dexPairAddress: "0xD81Cb1F7BCe1d539f3de6E7431a637cB5c66669d",
+        chainID: "Avalanche"
     }
 }
 
+let maxLevels = 5;
 let nodeData = {
     strngr: {
         name: "strngr",
@@ -147,6 +180,20 @@ let nodeData = {
             cost:0,
             rewardRate:0,
             apiCost: BigInt(0),
+            rewardPercentage:0,
+            claimTax:0,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
+        },
+        level5:{
+            name:"",
+            cost:0,
+            apiCost: BigInt(0),
+            rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
             compoundTax:0,
@@ -220,6 +267,20 @@ let nodeData = {
             startingDay: 43,
             startingRewards: 0
         },
+        level5:{
+            name:"",
+            cost:0,
+            apiCost: BigInt(0),
+            rewardRate:0,
+            rewardPercentage:0,
+            claimTax:0,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
+        },
         tableData: [],
         startingNodes: [0,0,0,0],
         calLength: 30,
@@ -284,8 +345,100 @@ let nodeData = {
             startingDay: 0,
             startingRewards: 0
         },
+        level5:{
+            name:"",
+            cost:0,
+            apiCost: BigInt(0),
+            rewardRate:0,
+            rewardPercentage:0,
+            claimTax:0,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
+        },
         tableData: [],
         startingNodes: [16,0,0,0],
+        calLength: 30,
+        walletBalance: 0,
+        cashToday: 0
+    },
+    polar: {
+        name: "polar",
+        level1:{
+            name:"Fuji",
+            cost:35,
+            apiCost: BigInt(35000000000000000000),
+            rewardRate:0.45,
+            rewardPercentage:0,
+            claimTax:10,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
+        },
+        level2:{
+            name:"MontBlanc",
+            cost:65,
+            apiCost: BigInt(65000000000000000000),
+            rewardRate:0.99,
+            rewardPercentage:0,
+            claimTax:15,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
+        },
+        level3:{
+            name:"Kilimanjaro",
+            cost:265,
+            apiCost: BigInt(265000000000000000000),
+            rewardRate:5,
+            rewardPercentage:0,
+            claimTax:17,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
+        },
+        level4:{
+            name:"Ushuaia",
+            cost:430,
+            apiCost: BigInt(430000000000000000000),
+            rewardRate:9.2,
+            rewardPercentage:0,
+            claimTax:20,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: false,
+            startingDay: 0,
+            startingRewards: 0
+        },
+        level5:{
+            name:"Everest",
+            cost:1050,
+            apiCost: BigInt(1050000000000000000000),
+            rewardRate:35,
+            rewardPercentage:0,
+            claimTax:22,
+            compoundTax:0,
+            sellTax:0,
+            monthlyFee:0,
+            compounding: true,
+            startingDay: 0,
+            startingRewards: 0
+        },
+        tableData: [],
+        startingNodes: [0,0,0,0,0],
         calLength: 30,
         walletBalance: 0,
         cashToday: 0
@@ -325,7 +478,17 @@ function truncateAddress(address) {
       address.length - 5,
       address.length
     )}`;
-  }
+}
+
+function truncateNum(num, int) {
+    num = num * 10 ** int;
+    num = Math.round(num);
+    return num / (10 ** int);
+}
+
+function capitalizeFirst(str) {
+    return str.slice(0,1).toUpperCase() + str.slice(1);
+}
 
 function populateCardData(elem,obj){
 
@@ -333,29 +496,33 @@ function populateCardData(elem,obj){
     elem.querySelector(".coin-price").textContent = formatMoney(obj["prices"]["currentPrice"], "usd");
     elem.querySelector(".symbol").textContent = obj["symbol"];
     elem.querySelector(".network").textContent = obj["chainID"];
-    if(Object.keys(obj["platforms"])[0] == "ethereum"){
+    if(obj["chainID"].toLowerCase() == "ethereum"){
         url = "http://etherscan.io/address/";
-    } else if(Object.keys(obj["platforms"])[0] == "avalanche"){
+    } else if(obj["chainID"].toLowerCase() == "avalanche"){
         url = "http://snowtrace.io/address/";
     }
-    elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + Object.values(obj["platforms"])[0] + "</a>";
-    elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
-    elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
-    elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
-    elem.querySelector(".atl-date").textContent = obj["prices"]["atlDate"];
-    elem.querySelector(".high-24h").textContent = formatMoney(obj["prices"]["high_24h"], "usd");
-    elem.querySelector(".low-24h").textContent = formatMoney(obj["prices"]["low_24h"], "usd");
-    elem.querySelector(".total-volume").textContent = obj["prices"]["totalVolume"];
-    elem.querySelector(".market-cap").textContent = "$" + obj["prices"]["marketCap"];
-    elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
-    elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
+    if (obj["coinGeckoID"] != "") {
+        elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + Object.values(obj["platforms"])[0] + "</a>";
+        elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
+        elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
+        elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
+        elem.querySelector(".atl-date").textContent = obj["prices"]["atlDate"];
+        elem.querySelector(".high-24h").textContent = formatMoney(obj["prices"]["high_24h"], "usd");
+        elem.querySelector(".low-24h").textContent = formatMoney(obj["prices"]["low_24h"], "usd");
+        elem.querySelector(".total-volume").textContent = obj["prices"]["totalVolume"];
+        elem.querySelector(".market-cap").textContent = "$" + obj["prices"]["marketCap"];
+        elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
+        elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
+    } else {
+        elem.querySelector(".platforms").innerHTML = "<a href='" + url + obj["coinAddress"][0] + "'>" + obj["coinAddress"][0] + "</a>";
+    }
 }
 
 function updateCoinData(elem,obj){
     let count = 0;
     let api = "";
     let url = "";
-    if (obj["coinGeckoURL"] != "") {
+    if (obj["coinGeckoID"] != "") {
         url = coinGeckoURL + obj["coinGeckoID"];
         api = "coinGecko";
     } else {
@@ -386,18 +553,21 @@ function updateCoinData(elem,obj){
                 obj["prices"]["athDate"] = data["market_data"]["ath_date"]["usd"].match(dateRegex);
                 obj["prices"]["atl"] = data["market_data"]["atl"]["usd"];
                 obj["prices"]["atlDate"] = data["market_data"]["atl_date"]["usd"].match(dateRegex);
-                obj["prices"]["currentPrice"] = data["pair"]["priceUsd"];
+                obj["prices"]["currentPrice"] = data["market_data"]["current_price"]["usd"];
                 obj["prices"]["high_24h"] = data["market_data"]["high_24h"]["usd"];
                 obj["prices"]["low_24h"] = data["market_data"]["low_24h"]["usd"];
                 obj["prices"]["totalVolume"] = data["market_data"]["total_volume"]["usd"];
                 obj["prices"]["marketCap"] = data["market_data"]["market_cap"]["usd"];
             } else {
                 // using DEXScreener
-                obj["symbol"] = data["pair"]["baseToken"]["symbol"].toUpperCase();
+                obj["symbol"] = data["pair"]["baseToken"]["symbol"];
                 obj["network"] = obj["chainID"]; 
+                obj["prices"]["currentPrice"] = data["pair"]["priceUsd"];
             }
             populateCardData(elem,obj);
-            // comparisonData(obj);
+            if (userAddress != null) {
+                comparisonData(nodeData[obj["localName"]]);
+            }
 
             // Update prices on Summary Card
             for (coin in coinData) {
@@ -471,7 +641,7 @@ async function mmLogin() {
                             for (let j = 0; j < userTrxns.length; j++) {
                                 let trxnsCounted = [];
                                 // k loops through node levels (level4, level3, etc)
-                                for (let k = 4; k > 0; k--) {
+                                for (let k = maxLevels; k > 0; k--) {
                                     if (
                                     nodeData[Object.keys(nodeData)[i]]["level" + k]["apiCost"] > 0 &&
                                         // userTrxns[j]["to"] == coinData[Object.keys(coinData)[i]]["contractAddress"] &&
@@ -591,7 +761,7 @@ function fillTableData(obj) {
         let dr = 0;
         let drb = 0;
 
-        for (let i=1; i < 5; i++) {    
+        for (let i=1; i <= maxLevels; i++) {    
             if (obj["level" + i]["name"] != "") {
                 let rew = obj["level" + i]["rewardRate"];
                 let cost = obj["level" + i]["cost"];
@@ -695,7 +865,7 @@ function updateTableDataRow(rowElem, e) {
         if (e != false) {
             let dr = 0;
             thisRow["drb"] = parseFloat(rowElem.querySelector(".drb-cell").children[0].value);
-            for (let k = 1; k < 5; k++) {
+            for (let k = 1; k <= maxLevels; k++) {
                 if (coinObj["level" + k]["name"] != "") {
                     let rew = coinObj["level" + k]["rewardRate"];
                     thisRow["node" + k] = parseInt(rowElem.querySelector(".lev" + k).children[0].value);
@@ -710,7 +880,7 @@ function updateTableDataRow(rowElem, e) {
             // if updateTableDataRow was called sequentially, calculate values
             let drb = 0;
             let dr = 0; 
-            for (let i=1; i < 5; i++) {   
+            for (let i=1; i <= maxLevels; i++) {   
                 if (coinObj["level" + i]["name"] != "") {
                     let rew = coinObj["level" + i]["rewardRate"];
                     let cost = coinObj["level" + i]["cost"];
@@ -854,6 +1024,11 @@ function createTable(elem,obj){
     if(obj["level4"]["name"] != ""){
         num += 1;
         tHeadRow += "<th>" + obj["level4"]["name"] + " Nodes</th>";
+
+    };
+    if(obj["level5"]["name"] != ""){
+        num += 1;
+        tHeadRow += "<th>" + obj["level5"]["name"] + " Nodes</th>";
 
     };
     tHeadRow += "<th>Daily Rewards Balance</th><th>Daily Rewards</th><th>Cash</th><th>Cumulative Gross Cash</th><th>Cashout?</th></tr>";
@@ -1024,7 +1199,7 @@ function updateRow(rowElem, e){
         }
 
         // Update node counts
-        for (let i=1; i < 5; i++) {   
+        for (let i=1; i <= maxLevels; i++) {   
             if (coinObj["level" + i]["name"] != "") {
                 let nodeCount = rowElem.querySelector(".lev" + i).children[0];
                 nodeCount.value = days[rowIndex]["node" + i];
@@ -1078,7 +1253,7 @@ function updateRow(rowElem, e){
 function getTodayCash(obj) {
     let todayIndex = dayOfYearIndex(new Date());
     let total = 0;
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i <= maxLevels; i++) {
         total += obj["tableData"]["days"][todayIndex]["node" + i] * obj["level" + i]["rewardRate"] * ((100 - obj["level" + i]["claimTax"])/100);
     }
     return total * coinData[obj["name"]]["prices"]["currentPrice"];
@@ -1087,89 +1262,163 @@ function getTodayCash(obj) {
 // COMPARISON TABLE----------------------------------------------------------------
 
 let compTable = document.querySelector("#comparisonCard>table>tbody");
-let initial = parseFloat(document.getElementById("initial").value)
-
-function comparisonData() {
-    // obj is coinData[node]
-    setInterval(function(){
-        // for (t = 0; t < Object.keys(compNodeData).length; t++) {
+let initialInput = document.getElementById("initial");
+let minumum = document.querySelector("#minimumCompare");
+let initial = parseFloat(initialInput.value)
+initialInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+    // Validate input - only allow numbers & decimal
+        initial = parseFloat(initialInput.value);
         for (node in nodeData) {
-            for (level in compNodeData[node]) {
-                compNodeData[node][level]["costUSD"] = compNodeData[node]["cost"] * obj["prices"]["currentPrice"];
-                compNodeData[node][level]["rewPercent"] = compNodeData[node]["rew"] / compNodeData[node]["cost"] * 100;
-                compNodeData[node][level]["addedNodes"] = Math.floor(initial/compNodeData[node][level]["cost"]/compNodeData[node]["price"]);
-                compNodeData[node][level]["currentCount"] = nodeData[node]["tableData"]["days"][dayOfYearIndex(new Date())]["node1"];
-                compNodeData[node][level]["moneySpent"] = compNodeData[node][level]["addedNodes"] * compNodeData[node]["price"]
-
-                updateCompRow(compNodeData[node][level]);
-            }
+            comparisonData(node);
         }
-    }, 5000)
+    
+        console.log(e);
+    }
+})
+let compNodeData = {};
+
+function comparisonData(obj) {
+    // obj is nodeData[obj]
+    compNodeData[obj["name"]] = {};
+    for (let i = 1; i <= maxLevels; i++) {
+
+        if (obj["level" + i]["name"] != "") {
+
+            compNodeData[obj["name"]]["level" + i] = {};
+            let level = compNodeData[obj["name"]]["level" + i];
+            let nodeLevel = obj["level" + i];
+
+            if (obj["name"].toLowerCase() == obj["level" + i]["name"].toLowerCase()) {
+                level["name"] = obj["level" + i]["name"];
+                level["className"] = level["name"].toLowerCase();
+            } else {
+                level["name"] = capitalizeFirst(obj["name"]) + " - " + capitalizeFirst(obj["level" + i]["name"]);
+                level["className"] = obj["level" + i]["name"].toLowerCase();
+            }
+
+            level["coinPrice"] = truncateNum(coinData[obj["name"]]["prices"]["currentPrice"],2);
+            level["cost"] = truncateNum(nodeLevel["cost"],3);
+            level["costUsd"] = truncateNum(level["cost"] * level["coinPrice"],2);
+            level["rewardRate"] = truncateNum(nodeLevel["rewardRate"],3);
+            level["rewPercent"] = truncateNum((level["rewardRate"] / level["cost"] * 100),2);
+            level["addedNodes"] = Math.floor(initial/level["cost"]/level["coinPrice"]);
+            level["currentNodes"] = nodeData[obj["name"]]["tableData"]["days"][dayOfYearIndex(new Date())]["node" + i];
+            level["moneySpent"] = truncateNum((level["addedNodes"] * level["coinPrice"]),2);
+            level["currentRewards"] = truncateNum(nodeData[obj["name"]]["tableData"]["days"][dayOfYearIndex(new Date())]["dr"],3);
+            level["currentRewardsUsd"] = truncateNum((level["currentRewards"] * level["coinPrice"]),2);
+            level["newRewards"] = truncateNum((level["currentRewards"] + (level["addedNodes"] * level["rewardRate"])),3);
+            level["newRewardsUsd"] = truncateNum((level["newRewards"] * level["coinPrice"]),2);
+            level["difference"] = truncateNum((level["newRewardsUsd"] - level["currentRewardsUsd"]),2);
+
+            if (level["currentRewardsUsd"] > 0) {
+                level["differencePercent"] = truncateNum((level["newRewardsUsd"] / level["currentRewardsUsd"]),2);
+            } else {
+                level["differencePercent"] = "---";
+            }
+
+            if (level["newRewards"] > 0) {
+                level["rot"] = truncateNum(((level["cost"] * level["addedNodes"]) / level["newRewards"]),0);
+            } else {
+                level["rot"] = "---";
+            }
+
+            compNodeData[obj["name"]]["level" + i] = level;
+            updateCompRow(level);
+        }
+    }
 }
 
 function updateCompRow(obj) {
+    // obj = compNodeData[node["name"]]["level" + i]
     let row;
-    if (!document.body.contains(compTable.querySelector("." + obj["localName"]))) {
+    if (!document.body.contains(compTable.querySelector("." + obj["className"]))) {
         let row = document.createElement("tr");
-        row.classList = obj["name"];
+        row.classList = obj["className"];
         let cell = document.createElement("td");
         cell.classList = "name";
+        cell.textContent = obj["name"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "price";
+        cell.textContent = "$" + obj["coinPrice"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "cost";
+        cell.textContent = obj["cost"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "cost-usd";
+        cell.textContent = "$" + obj["costUsd"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "rewards";
+        cell.textContent = obj["rewardRate"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "rewards-percent";
+        cell.textContent = obj["rewPercent"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "added-nodes";
+        cell.textContent = obj["addedNodes"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "current-nodes";
+        cell.textContent = obj["currentNodes"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "money-spent";
+        cell.textContent = "$" + obj["moneySpent"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "current-rewards";
+        cell.textContent = obj["currentRewards"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "current-rewards-usd";
+        cell.textContent = "$" + obj["currentRewardsUsd"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "new-rewards";
+        cell.textContent = obj["newRewards"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "new-rewards-usd";
+        cell.textContent = "$" + obj["newRewardsUsd"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "difference";
+        cell.textContent = obj["difference"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "difference-percent";
+        cell.textContent = obj["differencePercent"];
         row.append(cell);
         cell = document.createElement("td");
         cell.classList = "rot";
+        cell.textContent = obj["rot"];
         row.append(cell);
         compTable.append(row);
     } else {
-        row = document.querySelector("." + obj["name"]);
+        row = document.querySelector("." + obj["className"]);
+        row.childNodes[0].textContent = obj["name"];
+        row.childNodes[1].textContent = "$" + obj["coinPrice"];
+        row.childNodes[2].textContent = obj["cost"];
+        row.childNodes[3].textContent = "$" + obj["costUsd"];
+        row.childNodes[4].textContent = obj["rewardRate"];
+        row.childNodes[5].textContent = obj["rewPercent"];
+        row.childNodes[6].textContent = obj["addedNodes"];
+        row.childNodes[7].textContent = obj["currentNodes"];
+        row.childNodes[8].textContent = "$" + obj["moneySpent"];
+        row.childNodes[9].textContent = obj["currentRewards"];
+        row.childNodes[10].textContent = "$" + obj["currentRewardsUsd"];
+        row.childNodes[11].textContent = obj["newRewards"];
+        row.childNodes[12].textContent = "$" + obj["newRewardsUsd"];
+        row.childNodes[13].textContent = obj["difference"];
+        row.childNodes[14].textContent = obj["differencePercent"];
+        row.childNodes[15].textContent = obj["rot"];
     }
-    
-    // compTable.lastChild.lastChild.querySelector(".name").textContent = "wvkwbr";
-
-
-
-    
-
-
 }
+

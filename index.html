@@ -49,6 +49,7 @@
       <button id="strngrTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strngr</button>
       <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
       <button id="pxtTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
+      <button id="polarTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Polar</button>
       <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-plus"></i></button>
       <button id="connectMM" disabled class="tab pointer">Connect MetaMask Wallet</button>
   </div>
@@ -76,6 +77,10 @@
           <tr class="summary-coin-price">
             <td>PXT</td>
             <td class="pxt-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Polar</td>
+            <td class="polar-price"></td>
           </tr>
         </tbody>
       </table>
@@ -278,16 +283,16 @@
           <th>Node</th>
           <th>Token Price</th>
           <th>Node Cost</th>
-          <th>Node Cost ($)</th>
+          <th>Node Cost (USD)</th>
           <th>Rewards/Node</th>
           <th>Rewards/Node (%)</th>
           <th>Added Node Count</th>
           <th>Existing Nodes</th>
           <th>$ Spent</th>
           <th>Current Daily Rewards</th>
-          <th>Current Daily Rewards ($)</th>
+          <th>Current Daily Rewards (USD)</th>
           <th>New Daily Rewards</th>
-          <th>New Daily Rewards ($)</th>
+          <th>New Daily Rewards (USD)</th>
           <th>Difference</th>
           <th>Difference (%)</th>
           <th>ROT (Days)</th>
@@ -362,6 +367,36 @@
     <div id="pxtCard" class="card" style="display:none;">
       <h1 class="pxt-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">PXT Nodes</span></a></h1>
       <h2>Coin Price: <span class="coin-price pxt-price">Getting price...</span></h2>
+      <div class="coin-stats">
+        <ul>
+          <li class="stat-heading">Coin Stats</li>
+          <li>Symbol: <span class="symbol"></span></li>
+          <li>Network: <span class="network"></span></li>
+          <li>Contract: <span class="platforms"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Price Stats:</li>
+          <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+          <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+          <li>24-Hour High: <span class="high-24h"></span></li>
+          <li>24-Hour Low: <span class="low-24h"></span></li>
+          <li>Total Volume: <span class="total-volume"></span></li>
+          <li>Market Cap: <span class="market-cap"></span></li>
+        </ul>
+      </div>
+      <div class="table-container">
+        <div class="cal-length-buttons">
+          <button class='cal-30 pointer' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
+          <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
+          <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
+        </div>
+      </div> 
+    </div>
+
+    <div id="polarCard" class="card" style="display:none;">
+      <h1 class="polar-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">Polar Nodes</span></a></h1>
+      <h2>Coin Price: <span class="coin-price polar-price">Getting price...</span></h2>
       <div class="coin-stats">
         <ul>
           <li class="stat-heading">Coin Stats</li>

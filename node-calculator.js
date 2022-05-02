@@ -656,14 +656,26 @@ let nodeData = {
 }
 
 function formatMoney(str1, str2){
-    let regex = /\.\d\b/;
-    if(regex.test(str1)){
-        str1 += "0";   
+    if (typeof(str1) == "number") {
+        if (str1%Math.floor(str1) == 0) {
+            str1 = String(str1 + ".00");
+        } else {
+            str1 = String(Math.floor(str1 * 100) / 100);
+        }
+    }
+    if (typeof(str1) == "string") {
+        let regex = /\.\d\b/;
+        if(regex.test(str1)){
+            str1 += "0";   
+        } else if (!(/\./).test(str1)) {
+            str1 += ".00"
+        }
     }
     if(str2 != "") {
         str1 += " " + str2;
     }
     return "$" + str1;
+    
 }
 
 function addDay(date){
@@ -1082,10 +1094,10 @@ function updateTableDataRow(rowElem, e) {
             // node5: 0
         // }
 
-    let classList;
-    if (e != false) {
-        classList = e.target.classList;
-    }
+    // let classList;
+    // if (e != false) {
+    //     classList = e.target.classList;
+    // }
     let coinObj = nodeData[rowElem.parentNode.classList[0]];
     let days = coinObj["tableData"]["days"];
     let rowIndex;
@@ -1104,19 +1116,25 @@ function updateTableDataRow(rowElem, e) {
         // Capture previous checkbox value
         if (rowIndex > todayIndex) {
             if(rowElem.previousElementSibling.classList[1] != "total-row") {
-                prevRow["cashout"] = rowElem.previousElementSibling.querySelector("input[type='checkbox']").checked;
+                prevRow["cashout"] = rowElem.previousElementSibling.querySelector(".cashout").checked;
             } else {
-                prevRow["cashout"] = rowElem.previousElementSibling.previousElementSibling.querySelector("input[type='checkbox']").checked;
+                prevRow["cashout"] = rowElem.previousElementSibling.previousElementSibling.querySelector(".cashout").checked;
             }
-        } else {
-            prevRow["cashout"] = false;
         }
-        
-        thisRow["cashout"] = rowElem.querySelector("input[type='checkbox']").checked;
+        // else if (rowIndex == todayIndex) {
+        //     prevRow["cashout"] = false;
+        // }
+
+
+
+// ADDING NODES IS OVERWRITING CASHOUT & CASH VALUES
+
 
         // If row was edited, get new values and calculate the rest
         if (e != false) {
-            if (e.target.parentElement.classList[0] != "cashout-cell") {
+            if (e.target.parentElement.classList[0] == "cashout-cell") {
+                thisRow["cashout"] = rowElem.querySelector(".cashout").checked;
+            } else if (e.target.parentElement.classList[0] != "cashout-cell") {
                 let dr = 0;
                 let edited = e.target;
                 let parent = edited.parentElement;
@@ -1128,9 +1146,7 @@ function updateTableDataRow(rowElem, e) {
 
                     for (let k = 1; k <= maxLevels; k++) {
                         if (coinObj["level" + k]["name"] != "") {
-                            let rew = coinObj["level" + k]["rewardRate"];
-                            // thisRow["node" + k] = parseInt(rowElem.querySelector(".lev" + k).children[0].value);
-                            dr += thisRow["node" + k] * rew;
+                            dr += thisRow["node" + k] * coinObj["level" + k]["rewardRate"];
                         }
                     }
                     thisRow["dr"] = dr;
@@ -1183,7 +1199,7 @@ function updateTableDataRow(rowElem, e) {
                             drb = 0;
                         }
                     } else {
-                        drb
+                        drb = 0;
                     }
         
                     dr += thisRow["node" + i] * rew;
@@ -1246,7 +1262,16 @@ function updateTableDataRow(rowElem, e) {
     }
 }
 
+function createCard(obj) {
+
+
+
+
+}
+
 function createTable(elem,obj){
+    // elem is card element
+    // obj is nodeData[x]
     let div;
     if (elem.children[3].contains(elem.querySelector(".table-div"))){
         div = elem.querySelector(".table-div");
@@ -1301,7 +1326,8 @@ function createTable(elem,obj){
     table.appendChild(tHead);
 
     // Create a row for each day
-    let tableData = obj["tableData"]["days"];
+    let tableData = obj["tableData"];
+    let days = obj["tableData"]["days"];
     for(let i = dayOfYearIndex(today); i < dayOfYearIndex(today) + obj["calLength"]; i++){
         let row = document.createElement("tr");
         
@@ -1314,14 +1340,14 @@ function createTable(elem,obj){
         dateCell.textContent = dateStr;
         row.append(dateCell);
 
-        for(let j=0; j < num; j++){
+        for(let j = 1; j <= num; j++){
             let cell = document.createElement("td");
-            cell.classList.add(obj["level" + (j+1)]["name"].toLowerCase(),"lev" + (j+1));
+            cell.classList.add(obj["level" + j]["name"].toLowerCase(),"lev" + j);
             let input = document.createElement("input");
             input.setAttribute("type", "text");
             input.setAttribute("onclick", "this.select()");
-            input.setAttribute("name", obj["level" + (j+1)]["name"].toLowerCase());
-            input.setAttribute("value", tableData[i]["node" + (j+1)]);
+            input.setAttribute("name", obj["level" + j]["name"].toLowerCase());
+            input.setAttribute("value", days[i]["node" + j]);
             cell.append(input);
             row.append(cell);
         }
@@ -1333,24 +1359,34 @@ function createTable(elem,obj){
         input.setAttribute("type", "text");
         input.setAttribute("onclick", "this.select()");
         input.setAttribute("name", "drb");
-        input.setAttribute("value", tableData[i]["drb"].toFixed(4));
+        input.setAttribute("value", days[i]["drb"].toFixed(4));
         drbCell.append(input);
         row.append(drbCell);
 
         // Daily Rewards cell
         let drCell = document.createElement("td");
         drCell.classList.add("dr-cell");
-        drCell.innerText = tableData[i]["dr"].toFixed(4);
+        drCell.innerText = days[i]["dr"].toFixed(4);
         row.append(drCell);
 
         // Cash cell
         let cashCell = document.createElement("td");
         cashCell.classList.add("cash-cell");
+        if (days[i]["cash"] > 0) {
+            cashCell.textContent = formatMoney(days[i]["cash"],"");
+        } else {
+            cashCell.textContent = "";
+        }
         row.append(cashCell);
 
         // Cumulative Gross Cash cell
         let cumCashCell = document.createElement("td");
         cumCashCell.classList.add("cum-cash-cell");
+        if (days[i]["cumCash"]) {
+            cumCashCell.textContent = formatMoney(days[i]["cumCash"],"");
+        } else {
+            cumCashCell.textContent = "";
+        }
         row.append(cumCashCell);
 
         // Cashout? cell (checkbox)
@@ -1361,6 +1397,7 @@ function createTable(elem,obj){
         check.setAttribute("name", "cashout");
         check.setAttribute("value", "cashout");
         check.classList.add("cashout");
+        check.checked = days[i]["cashout"];
         cashoutCell.append(check);
         row.append(cashoutCell);
 
@@ -1402,7 +1439,7 @@ function createTable(elem,obj){
             if(num >= 5){
                 totalRow += "<td></td>";
             };
-            totalRow += "<td></td><td></td><td class='month-cash-total'>$0.00</td><td></td><td></td>";
+            totalRow += "<td></td><td></td><td class='month-cash-total'>" + tableData["months"][monthIndex]["total"] + "</td><td></td><td></td>";
             body.innerHTML += totalRow;
             monthIndex ++;
         }
@@ -1443,7 +1480,7 @@ function calLengthClick(e, num) {
     nodeData[e.target.parentElement.nextElementSibling.children[0].children[1].classList[0]]["calLength"] = num;
     createTable(document.getElementById(e.target.parentElement.nextElementSibling.children[0].children[1].classList[0] + "Card"), nodeData[e.target.parentElement.nextElementSibling.children[0].children[1].classList[0]]);
 
-    let buttons = document.querySelectorAll(".cal-length-buttons button");
+    let buttons = e.target.parentElement.querySelectorAll("button");
 
     for (i=0; i < buttons.length; i++) {
         buttons[i].classList.remove("underline");
@@ -1474,10 +1511,14 @@ function updateRow(rowElem, e){
             }
         }
 
+        // Cashout cell
+        let cashoutInput = rowElem.querySelector(".cashout");
+        cashoutInput.checked = days[rowIndex]["cashout"];
+
         // Cash cell
         let cashCell = rowElem.querySelector(".cash-cell");
         if (days[rowIndex]["cashout"]) {
-            cashCell.innerText = "$" + days[rowIndex]["cash"].toFixed(2);
+            cashCell.innerText = formatMoney(days[rowIndex]["cash"],"");
         } else {
             cashCell.innerText = "";
         }
@@ -1485,7 +1526,7 @@ function updateRow(rowElem, e){
         // Cumulative cash cell
         let cumCash = rowElem.querySelector(".cum-cash-cell");
         if (days[rowIndex]["cumCash"] > 0) {
-            cumCash.innerText = "$" + days[rowIndex]["cumCash"].toFixed(2);
+            cumCash.innerText = formatMoney(days[rowIndex]["cumCash"],"");
         } else {
             cumCash.innerText = "";
         }

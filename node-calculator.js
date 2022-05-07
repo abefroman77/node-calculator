@@ -380,7 +380,7 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             monthlyFee:20,
-            compounding: true,
+            compounding: false,
             startingDay: 43,
             startingRewards: 0
         },
@@ -394,7 +394,7 @@ let nodeData = {
             compoundTax:0,
             sellTax:0,
             monthlyFee:80,
-            compounding: false,
+            compounding: true,
             startingDay: 43,
             startingRewards: 0
         },
@@ -724,7 +724,7 @@ function populateCardData(elem,obj){
         url = "http://snowtrace.io/address/";
     }
     if (obj["coinGeckoID"] != "") {
-        elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + Object.values(obj["platforms"])[0] + "</a>";
+        elem.querySelector(".platforms").innerHTML = "<a href='" + url + Object.values(obj["platforms"])[0] + "'>" + truncateAddress(Object.values(obj["platforms"])[0]) + "</a>";
         elem.querySelector(".ath").textContent = formatMoney(obj["prices"]["ath"], "usd");
         elem.querySelector(".ath-date").textContent = obj["prices"]["athDate"];
         elem.querySelector(".atl").textContent = formatMoney(obj["prices"]["atl"], "usd");
@@ -736,7 +736,7 @@ function populateCardData(elem,obj){
         elem.querySelector(".homepage").setAttribute("href", obj["homepage"]);
         elem.querySelector(".logo").setAttribute("src", obj["imageLinks"]["thumb"]);
     } else {
-        elem.querySelector(".platforms").innerHTML = "<a href='" + url + obj["coinAddress"][0] + "'>" + obj["coinAddress"][0] + "</a>";
+        elem.querySelector(".platforms").innerHTML = "<a href='" + url + obj["coinAddress"][0] + "'>" + truncateAddress(obj["coinAddress"][0]) + "</a>";
     }
 }
 
@@ -907,7 +907,7 @@ async function mmLogin() {
                             // j loops through transactions for each coin pulled by fetch
                             for (let j = 0; j < userTrxns.length; j++) {
                                 let trxnsCounted = [];
-                                // k loops through node levels (level4, level3, etc)
+                                // k loops through node levels (level5, level4, etc)
                                 for (let k = maxLevels; k > 0; k--) {
                                     if (
                                     nodeData[Object.keys(nodeData)[i]]["level" + k]["apiCost"] > 0 &&
@@ -942,7 +942,7 @@ function showHideCard(id){
     let otherTabs = document.getElementsByClassName("tab");
     var thisCard = document.getElementById(id.replace("Tab","Card"));
     var otherCards = document.getElementsByClassName("card");
-    thisCard.style.display = "block";
+    thisCard.style.display = "flex";
     thisTab.classList.add("tab-dark");
     thisTab.classList.remove("tab-light");
     for(let i=0; i<otherCards.length; i++){

@@ -128,15 +128,20 @@ body {
 	border: 5px solid rgb(43, 43, 95);
 	flex: 1;
 	flex-wrap: wrap;
+	display: flex;	
 	margin: 10px;
 	text-align: center;
-	display: flex;
 	color: white;
 }
 
 .card .coin-name {
 	height: 50px;
 	line-height: 50px;
+	width: 100%;
+}
+
+.card h2 {
+	width: 100%;
 }
 
 .card .coin-name .title {
@@ -161,8 +166,9 @@ body {
 	color: rgb(75, 129, 247);
 }
 
-.card ul {
+.coin-stats ul {
 	text-align: left;
+	padding: 0px 20px;
 }
 
 .stat-heading {
@@ -176,6 +182,16 @@ body {
 
 .coin-stats {
 	font-size: 10px;
+}
+
+/* COMPARISON CARD---------------------------------------------------------*/
+
+.initial {
+	flex-basis: 100%;
+}
+
+.minimum-compare {
+	flex-basis: 100%;
 }
 
 /* SUMMARY CARD---------------------------------------------------------*/

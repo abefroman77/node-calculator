@@ -2,17 +2,24 @@ let coinGeckoURL = "https://api.coingecko.com/api/v3/coins/";
 // test coinGecko - https://api.coingecko.com/api/v3/coins/stronger
 let dexURL = "https://api.dexscreener.io/latest/dex/pairs/";
 //  test dexScreener - https://api.dexscreener.io/latest/dex/pairs/ethereum/0x453a43E2Bf3080f7a23c9BB034CcDD869e306102
-let etherscanAPI = "https://api.etherscan.io/api";
+let etherscanAPI = "https://api.etherscan.io/api?module=account&action=tokentx&address=";
 let etherscanApiKey = "UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9";
 // test etherscan - https://api.etherscan.io/api?module=account&action=tokentx&address=0xa52f82f04416645d632589c18EE195F3d51dBFD1&startblock=0&endblock=9999999999&sort=asc&apikey=UCUT7TJ8PAV1SQ92GQV631GHR3RK4BD5V9
-let snowtraceAPI = "https://api.snowtrace.io/api";
+let snowtraceAPI = "https://api.snowtrace.io/api?module=account&action=tokentx&address=";
 let snowtraceApiKey = "9ZDQ11918D4GMKN5VMASWGIF92RHZQ9TPH";
-// test snowtrace - https://api.snowtrace.io/api?module=account&action=tokentx&contractAddress=0x6c1c0319d8ddcb0ffe1a68c5b3829fd361587db4&address=0xa52f82f04416645d632589c18EE195F3d51dBFD1&startblock=0&endblock=9999999999&sort=asc&apikey=9ZDQ11918D4GMKN5VMASWGIF92RHZQ9TPH
+// test snowtrace - https://api.snowtrace.io/api?module=account&action=tokentx&address=0xa52f82f04416645d632589c18EE195F3d51dBFD1&startblock=0&endblock=9999999999&sort=asc&apikey=9ZDQ11918D4GMKN5VMASWGIF92RHZQ9TPH
+let bscScanAPI = "https://api.bscscan.com/api?module=account&action=tokentx&address="
+let bscScanApiKey = "D31IC3T175RRICK5QYYZ1DB4RRMTU2Z2UJ"
+// test bscScan - https://api.bscscan.com/api?module=account&action=tokentx&address=0xa52f82f04416645d632589c18EE195F3d51dBFD1&startblock=0&endblock=99999999&sort=asc&apikey=D31IC3T175RRICK5QYYZ1DB4RRMTU2Z2UJ
 
 let userAddress = null;
-let userTrxns = [];
+let allUserTrxns = {};
+let trxnsFromUser = {};
+let trxnsToUser = {};
 
 window.userAddress = null;
+
+let userNetworks = ["ethereum", "avalanche", "bsc"]
 
 let mainCoinData = {
     avax: {
@@ -271,6 +278,8 @@ let nodeData = {
             rewardRate:0.075,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:14.95,
@@ -285,6 +294,8 @@ let nodeData = {
             rewardRate:0.09266,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:14.95,
@@ -299,6 +310,8 @@ let nodeData = {
             apiCost: BigInt(0),
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -313,6 +326,8 @@ let nodeData = {
             apiCost: BigInt(0),
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -327,6 +342,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -338,7 +355,9 @@ let nodeData = {
         startingNodes: [0,8,0,0,0],
         calLength: 30,
         walletBalance: 0,
-        cashToday: 0
+        cashToday: 0,
+        tokensToMatchTarget: 0,
+        dateTargetReached: ""
     },
     thor: {
         name: "thor",
@@ -349,6 +368,8 @@ let nodeData = {
             rewardRate:0.008,
             rewardPercentage:0,
             claimTax:1,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:5,
@@ -363,6 +384,8 @@ let nodeData = {
             rewardRate:0.05,
             rewardPercentage:0,
             claimTax:5,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:10,
@@ -377,6 +400,8 @@ let nodeData = {
             rewardRate:0.14375,
             rewardPercentage:0,
             claimTax:8,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:20,
@@ -391,6 +416,8 @@ let nodeData = {
             rewardRate:1.015625,
             rewardPercentage:0,
             claimTax:10,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:80,
@@ -405,6 +432,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -416,7 +445,9 @@ let nodeData = {
         startingNodes: [7,1,10,2,0],
         calLength: 30,
         walletBalance: 0,
-        cashToday: 0
+        cashToday: 0,
+        tokensToMatchTarget: 0,
+        dateTargetReached: ""
     },
     pxt: {
         name: "pxt",
@@ -427,6 +458,8 @@ let nodeData = {
             rewardRate:0.17,
             rewardPercentage:0,
             claimTax:30,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -441,6 +474,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -455,6 +490,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -469,6 +506,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -483,6 +522,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -494,7 +535,9 @@ let nodeData = {
         startingNodes: [24,0,0,0,0],
         calLength: 30,
         walletBalance: 0,
-        cashToday: 0
+        cashToday: 0,
+        tokensToMatchTarget: 0,
+        dateTargetReached: ""
     },
     polar: {
         name: "polar",
@@ -505,6 +548,8 @@ let nodeData = {
             rewardRate:0.45,
             rewardPercentage:0,
             claimTax:10,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -519,6 +564,8 @@ let nodeData = {
             rewardRate:0.99,
             rewardPercentage:0,
             claimTax:15,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -533,6 +580,8 @@ let nodeData = {
             rewardRate:5,
             rewardPercentage:0,
             claimTax:17,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -547,6 +596,8 @@ let nodeData = {
             rewardRate:9.2,
             rewardPercentage:0,
             claimTax:20,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -561,6 +612,8 @@ let nodeData = {
             rewardRate:35,
             rewardPercentage:0,
             claimTax:22,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -572,7 +625,9 @@ let nodeData = {
         startingNodes: [0,0,2,0,2],
         calLength: 30,
         walletBalance: 0,
-        cashToday: 0
+        cashToday: 0,
+        tokensToMatchTarget: 0,
+        dateTargetReached: ""
     },
     fire: {
         name: "fire",
@@ -583,6 +638,8 @@ let nodeData = {
             rewardRate:0.225,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0.5,
+            claimFeeCoin: "avax",
             // FIRE HAS A 0.05 AVAX CLAIM FEE PER NODE
             compoundTax:0,
             sellTax:0,
@@ -598,6 +655,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -612,6 +671,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -626,6 +687,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -640,6 +703,8 @@ let nodeData = {
             rewardRate:0,
             rewardPercentage:0,
             claimTax:0,
+            claimFee: 0,
+            claimFeeCoin: "",
             compoundTax:0,
             sellTax:0,
             monthlyFee:0,
@@ -651,9 +716,13 @@ let nodeData = {
         startingNodes: [23,0,0,0,0],
         calLength: 30,
         walletBalance: 0,
-        cashToday: 0
+        cashToday: 0,
+        tokensToMatchTarget: 0,
+        dateTargetReached: ""
     }
 }
+
+let userNodeData = {}
 
 function formatMoney(str1, str2){
     if (typeof(str1) == "number") {
@@ -751,9 +820,9 @@ function updateCoinData(elem,obj){
         url = dexURL + obj["chainID"].toLowerCase() + "/" + obj["dexPairAddress"];
         api = "dex";
     }
-    setInterval(function(){
         // let url = dexURL + obj["chainID"].toLowerCase() + "/" + obj["dexPairAddress"];
         // url = coinGeckoURL + obj["coinGeckoID"];
+    (function getCoinData() {
         fetch(url).then(function(response) {
             return response.json();
         }).then(function(data) {
@@ -799,13 +868,14 @@ function updateCoinData(elem,obj){
         }).catch(function(error){
             console.log(error);
         });
-    }, 5000)
+        setTimeout(getCoinData, 10000);
+    })();
 }
 
 function updateMainCoinData(obj) {
     let count = 0;
     let url = coinGeckoURL + obj["coinGeckoID"];
-    setInterval(function(){
+    (function getMainCoinData(){
         fetch(url).then(function(response) {
             return response.json();
         }).then(function(data) {
@@ -841,7 +911,8 @@ function updateMainCoinData(obj) {
         }).catch(function(error){
             console.log(error);
         });
-    }, 10000)
+        setTimeout(getMainCoinData, 10000);
+    })();
 }
 
 // updateCoinData
@@ -877,22 +948,24 @@ async function mmLogin() {
             connectMM.innerText = "Logged In";
 
             // i loops through coinData (strngr, thor, pxt, etc)
-            for (let i = 0; i < Object.keys(coinData).length; i++) {
+            for (let i = 0; i < userNetworks.length; i++) {
                 let url = ""
                 let apiKey = "";
-                if (coinData[Object.keys(coinData)[i]]["chainID"] == "Ethereum") {
+                let network = userNetworks[i];
+                if (network == "ethereum") {
                     url = etherscanAPI;
                     apiKey = etherscanApiKey;
-                } else if (coinData[Object.keys(coinData)[i]]["chainID"] == "Avalanche") {
+                } else if (network == "avalanche") {
                     url = snowtraceAPI;
                     apiKey = snowtraceApiKey;
+                } else if (network == "bsc") {
+                    url = bscScanAPI;
+                    apiKey = bscScanApiKey;
                 }
                 // Need to make sure fetch has time to return data and update local data before next fetch call - async, await?
                 fetch(url +
-                    "?module=account&action=tokentx" +
-                    "&contractaddress=" +
-                    coinData[Object.keys(coinData)[i]]["coinAddress"][0] +
-                    "&address=" +
+                    // "&contractaddress=" +
+                    // coinData[Object.keys(coinData)[i]]["coinAddress"][0] +
                     userAddress +
                     "&startblock=0&endblock=9999999999&sort=asc&apikey=" +
                     apiKey).then(
@@ -900,29 +973,15 @@ async function mmLogin() {
                     ).then(
                         data => {
                             data = JSON.parse(data);
-                            userTrxns = data["result"];
-                            // console.log(userTrxns);
-                            let counts = [0,0,0,0,0];
-
-                            // j loops through transactions for each coin pulled by fetch
-                            for (let j = 0; j < userTrxns.length; j++) {
-                                let trxnsCounted = [];
-                                // k loops through node levels (level5, level4, etc)
-                                for (let k = maxLevels; k > 0; k--) {
-                                    if (
-                                    nodeData[Object.keys(nodeData)[i]]["level" + k]["apiCost"] > 0 &&
-                                        // userTrxns[j]["to"] == coinData[Object.keys(coinData)[i]]["contractAddress"] &&
-                                    userTrxns[j]["from"] == userAddress && 
-                                    BigInt(userTrxns[j]["value"]) % nodeData[Object.keys(nodeData)[i]]["level" + k]["apiCost"] == 0 && 
-                                    trxnsCounted.indexOf(userTrxns[j]) == -1) {
-                                        counts[k-1] += parseInt(BigInt(userTrxns[j]["value"]) / nodeData[Object.keys(nodeData)[i]]["level" + (k)]["apiCost"]);
-                                        trxnsCounted.push(userTrxns[j]);
-                                    }
+                            allUserTrxns[network] = data["result"];
+                            fromUserTrxns();
+                            toUserTrxns();
+                            // console.log(allUserTrxns);
+                            for (node in nodeData) {
+                                if (coinData[nodeData[node]["name"]]["network"] == network) {
+                                    getNodeCounts(nodeData[node]);
                                 }
                             }
-                            nodeData[Object.keys(nodeData)[i]]["startingNodes"] = counts;
-                            fillTableData(nodeData[Object.keys(nodeData)[i]]);
-                            createTable(document.getElementById(Object.keys(nodeData)[i] + "Card"), nodeData[Object.keys(nodeData)[i]]);
                         }
                     ).catch(
                         error => {
@@ -935,6 +994,66 @@ async function mmLogin() {
             console.error(e.message);
             return
     });  
+}
+
+function fromUserTrxns() {
+    for (network in allUserTrxns) {
+        trxnsFromUser[network] = [];
+        for (i = 0; i < allUserTrxns[network].length; i++) {
+            if (allUserTrxns[network][i]["from"] == userAddress) {
+                trxnsFromUser[network].push(allUserTrxns[network][i]);
+            }
+        }
+    }
+}
+
+function toUserTrxns() {
+    for (network in allUserTrxns) {
+        trxnsToUser[network] = [];
+        for (i = 0; i < allUserTrxns[network].length; i++) {
+            if (allUserTrxns[network][i]["from"] == userAddress) {
+                trxnsToUser[network].push(allUserTrxns[network][i]);
+            }
+        }
+    }
+}
+
+function getNodeCounts(obj) {
+    console.log(obj);
+    // obj = nodeData[x]
+    let counts = [];
+    for (let i = 0; i < maxLevels; i++) {
+        counts.push(0);
+    }
+
+    let trxns = fromUserTrxns[coinData[obj["name"]]["network"]];
+    console.log(trxns);
+    // j loops through transactions for each coin pulled by fetch
+    for (let k = 0; k < trxns.length; k++) {
+        let trxnsCounted = [];
+        // k loops through node levels (level5, level4, etc)
+        for (let l = maxLevels; l > 0; l--) {
+            if (
+                (obj["level" + l]["apiCost"] > 0 &&
+                trxns[k]["to"] == coinData[obj["name"]]["contractAddress"][0] &&
+                trxns[k]["from"] == userAddress && 
+                BigInt(trxns[k]["value"]) % obj["level" + l]["apiCost"] == 0 && 
+                trxnsCounted.indexOf(trxns[k]) == -1)
+                ||
+                (obj["level" + l]["apiCost"] > 0 &&
+                trxns[k]["to"] == coinData[obj["name"]]["contractAddress"][1] &&
+                trxns[k]["from"] == userAddress && 
+                BigInt(trxns[k]["value"]) % obj["level" + l]["apiCost"] == 0 && 
+                trxnsCounted.indexOf(trxns[k]) == -1)
+            ) {
+                counts[l-1] += parseInt(BigInt(trxns[k]["value"]) / obj["level" + (l)]["apiCost"]);
+                trxnsCounted.push(trxns[k]);
+            }
+        }
+    }
+    obj["startingNodes"] = counts;
+    fillTableData(obj);
+    createTable(document.getElementById(obj["name"] + "Card"), obj);
 }
 
 function showHideCard(id){
@@ -1075,6 +1194,7 @@ function fillTableData(obj) {
             "total": 0
         });
     }
+    obj["cashToday"] = cashToday(obj, todayIndex);
 }
 
 function updateTableDataRow(rowElem, e) {
@@ -1467,6 +1587,55 @@ function createTable(elem,obj){
     elem.children[3].appendChild(div);
 }
 
+function fillCoinStatsData(obj) {
+    // obj = nodeData[x]
+    // loop through levels
+        // Rewards/day
+        // Node cost
+    // EOY total cash
+    // Daily cash today
+    // Total all projects
+    // Monthly totals?
+
+    let div = document.querySelector("#" + obj["name"] + "Card .coin-stats");
+
+    if (!!div.querySelector(".cash-today")) {
+        div.querySelector(".cash-today").textContent = formatMoney(obj["cashToday"],"");
+    } else {
+        let cashToday = document.createElement("li");
+        cashToday.classList = "cash-today";
+        cashToday.textContent = formatMoney(obj["cashToday"],"");
+        div.append(cashToday);
+    }
+
+    for (i = 1; i <= maxLevels; i++) {
+        let ul;
+        if (!!div.querySelector(".node-level, .level" + i)) {
+            ul = div.querySelector(".level" + i);
+        } else {
+            let ul = document.createElement("ul");
+            ul.classList = "node-level level" + i;
+            div.append(ul);
+        }
+        if (!!ul.querySelector(".rewards-per-day")) {
+            ul.querySelector(".rewards-per-day").textContent = obj["level" + i]["rewardRate"];
+        } else {
+            let rewPerDay = document.createElement("li");
+            rewPerDay.classList = "rewards-per-day";
+            rewPerDay.textContent = obj["level" + i]["rewardRate"];
+            ul.append(rewPerDay);
+        }
+        if (!!ul.querySelector(".node-cost")) {
+            ul.querySelector(".node-cost").textContent = obj["level" + i]["cost"];
+        } else {
+            let nodeCost = document.createElement("li");
+            nodeCost.classList = "node-cost";
+            nodeCost.textContent = obj["level" + i]["rewardRate"];
+            ul.append(nodeCost);
+        }
+    }
+}
+
 // Event listeners for .cal-length-buttons buttons
 let calOneMonth = document.querySelectorAll(".cal-30");
 let calTwoMonths = document.querySelectorAll(".cal-60");
@@ -1559,8 +1728,8 @@ function updateRow(rowElem, e){
     };
 }
 
-function getTodayCash(obj) {
-    let todayIndex = dayOfYearIndex(new Date());
+function getTodayCash(obj, todayIndex) {
+    // let todayIndex = dayOfYearIndex(new Date());
     let total = 0;
     for (let i = 1; i <= maxLevels; i++) {
         total += obj["tableData"]["days"][todayIndex]["node" + i] * obj["level" + i]["rewardRate"] * ((100 - obj["level" + i]["claimTax"])/100);

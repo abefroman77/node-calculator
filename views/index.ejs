@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>NodeCalculator</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="wot-verification" content="830fe423aacc65499296"/>
+  <script src="https://kit.fontawesome.com/fe4cbe535a.js" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js" integrity="sha512-Ws+qbaGHSFw2Zc1e7XRpvW+kySrhmPLFYTyQ95mxAkss0sshj6ObdNP3HDWcwTs8zBJ60KpynKZywk0R8tG1GA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat:200,400,600" rel="stylesheet">
+  <!-- <link rel="stylesheet" type="text/css" href="/node-calculator.css"> -->
+  <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
+  
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><b>Node</b>Calculator</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Summary</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Comparison</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">StrongBlock</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Thor</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Project X</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Polar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Golden Society</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Add New Project
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="#">Phoenix</a></li>
+              <li><a class="dropdown-item" href="#">Etherstones</a></li>
+              <li><a class="dropdown-item" href="#">Power</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tab-row">
+      <button id="summaryTab" class="tab pointer tab-dark" onclick="showHideCard(this.id)"><i class="fa-solid fa-calculator"></i></button>
+      <button id="comparisonTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-table"></i></button>
+      <button id="strngrTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Strngr</button>
+      <button id="thorTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Thor</button>
+      <button id="pxtTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Project X</button>
+      <button id="polarTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Polar</button>
+      <button id="fireTab" class="tab pointer tab-light" onclick="showHideCard(this.id)">Phoenix Capital</button>
+      <button id="addCardTab" class="tab pointer tab-light" onclick="showHideCard(this.id)"><i class="fa-solid fa-plus"></i></button>
+      <button id="connectMM" disabled class="tab pointer">Connect MetaMask Wallet</button>
+  </div>
+  
+  <div class="card-container">
+
+    <div id="summaryCard" class="card" style="display:block;">
+      <h1 class="summary-name coin-name">Summary</h1>
+      <table class="summary-coin-price-table">
+        <thead>
+          <tr>
+            <th>Coin</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="summary-coin-price">
+            <td>Ethereum</td>
+            <td class="ethereum-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Avax</td>
+            <td class="avax-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>BUSD</td>
+            <td class="busd-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Fantom</td>
+            <td class="fantom-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Strngr</td>
+            <td class="strngr-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Thor</td>
+            <td class="thor-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>PXT</td>
+            <td class="pxt-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Polar</td>
+            <td class="polar-price"></td>
+          </tr>
+          <tr class="summary-coin-price">
+            <td>Fire</td>
+            <td class="fire-price"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="summaries-container">
+        <table class="project-summary strngr-summary">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <br>
+          <tbody>
+            <tr>
+              <td>January</td>
+              <td class="project-total-jan m0"></td>
+            </tr>
+            <tr>
+              <td>February</td>
+              <td class="project-total-feb m1"></td>
+            </tr>
+            <tr>
+              <td>March</td>
+              <td class="project-total-mar m2"></td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td class="project-total-apr m3"></td>
+            </tr>
+            <tr>
+              <td>May</td>
+              <td class="project-total-may m4"></td>
+            </tr>
+            <tr>
+              <td>June</td>
+              <td class="project-total-jun m5"></td>
+            </tr>
+            <tr>
+              <td>July</td>
+              <td class="project-total-jul m6"></td>
+            </tr>
+            <tr>
+              <td>August</td>
+              <td class="project-total-aug m7"></td>
+            </tr>
+            <tr>
+              <td>September</td>
+              <td class="project-total-sep m8"></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td class="project-total-oct m9"></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td class="project-total-nov m10"></td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td class="project-total-dec m11"></td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td class="project-year-total"></td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="project-summary thor-summary">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>January</td>
+              <td class="project-total-jan m0"></td>
+            </tr>
+            <tr>
+              <td>February</td>
+              <td class="project-total-feb m1"></td>
+            </tr>
+            <tr>
+              <td>March</td>
+              <td class="project-total-mar m2"></td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td class="project-total-apr m3"></td>
+            </tr>
+            <tr>
+              <td>May</td>
+              <td class="project-total-may m4"></td>
+            </tr>
+            <tr>
+              <td>June</td>
+              <td class="project-total-jun m5"></td>
+            </tr>
+            <tr>
+              <td>July</td>
+              <td class="project-total-jul m6"></td>
+            </tr>
+            <tr>
+              <td>August</td>
+              <td class="project-total-aug m7"></td>
+            </tr>
+            <tr>
+              <td>September</td>
+              <td class="project-total-sep m8"></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td class="project-total-oct m9"></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td class="project-total-nov m10"></td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td class="project-total-dec m11"></td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td class="project-year-total"></td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="project-summary pxt-summary">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>January</td>
+              <td class="project-total-jan m0"></td>
+            </tr>
+            <tr>
+              <td>February</td>
+              <td class="project-total-feb m1"></td>
+            </tr>
+            <tr>
+              <td>March</td>
+              <td class="project-total-mar m2"></td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td class="project-total-apr m3"></td>
+            </tr>
+            <tr>
+              <td>May</td>
+              <td class="project-total-may m4"></td>
+            </tr>
+            <tr>
+              <td>June</td>
+              <td class="project-total-jun m5"></td>
+            </tr>
+            <tr>
+              <td>July</td>
+              <td class="project-total-jul m6"></td>
+            </tr>
+            <tr>
+              <td>August</td>
+              <td class="project-total-aug m7"></td>
+            </tr>
+            <tr>
+              <td>September</td>
+              <td class="project-total-sep m8"></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td class="project-total-oct m9"></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td class="project-total-nov m10"></td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td class="project-total-dec m11"></td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td class="project-year-total"></td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="project-summary polar-summary">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <br>
+          <tbody>
+            <tr>
+              <td>January</td>
+              <td class="project-total-jan m0"></td>
+            </tr>
+            <tr>
+              <td>February</td>
+              <td class="project-total-feb m1"></td>
+            </tr>
+            <tr>
+              <td>March</td>
+              <td class="project-total-mar m2"></td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td class="project-total-apr m3"></td>
+            </tr>
+            <tr>
+              <td>May</td>
+              <td class="project-total-may m4"></td>
+            </tr>
+            <tr>
+              <td>June</td>
+              <td class="project-total-jun m5"></td>
+            </tr>
+            <tr>
+              <td>July</td>
+              <td class="project-total-jul m6"></td>
+            </tr>
+            <tr>
+              <td>August</td>
+              <td class="project-total-aug m7"></td>
+            </tr>
+            <tr>
+              <td>September</td>
+              <td class="project-total-sep m8"></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td class="project-total-oct m9"></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td class="project-total-nov m10"></td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td class="project-total-dec m11"></td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td class="project-year-total"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="comparisonCard" class="card" style="display:none;">
+      <p class="initial">Initial Investment: $<input type="text" id="initial" name="initial" value="1000"></input></p>
+      <p class="minimum-compare">Minimum to compare all: $<span id="minimumCompare"></span></p>
+      <table class="comp-table">
+        <thead>
+          <th>Node</th>
+          <th>Token Price</th>
+          <th>Node Cost</th>
+          <th>Node Cost (USD)</th>
+          <th>Rewards/Node</th>
+          <th>Rewards/Node (%)</th>
+          <th>Added Node Count</th>
+          <th>Existing Nodes</th>
+          <th>$ Spent</th>
+          <th>Current Daily Rewards</th>
+          <th>Current Daily Rewards (USD)</th>
+          <th>New Daily Rewards</th>
+          <th>New Daily Rewards (USD)</th>
+          <th>Difference</th>
+          <th>Difference (%)</th>
+          <th>ROT (Days)</th>
+        </thead>
+        <tbody>
+
+
+        </tbody>
+      </table>
+    </div>
+
+    <div id="strngrCard" class="card" style="display:none;">
+      <h1 class="strngr-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">Strngr Nodes</span></a></h1>
+      <h2>Coin Price: <span class="coin-price strngr-price">Getting price...</span></h2>
+      <div class="coin-stats">
+        <ul>
+          <li class="stat-heading">Coin Stats</li>
+          <li>Symbol: <span class="symbol"></span></li>
+          <li>Network: <span class="network"></span></li>
+          <li>Contract: <span class="platforms"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Price Stats:</li>
+          <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+          <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+          <li>24-Hour High: <span class="high-24h"></span></li>
+          <li>24-Hour Low: <span class="low-24h"></span></li>
+          <li>Total Volume: <span class="total-volume"></span></li>
+          <li>Market Cap: <span class="market-cap"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Node Stats:</li>
+          <li class="cash-today"></li>
+          <li class="target-rewards"></li>
+          <li class="percent-to-goal"></li>
+          <ul class="level1">
+            <li class="rewards-per-day"></li>
+            <li class="node-cost"></li>
+          </ul>
+        </ul>
+      </div>  
+      <div class="table-container">
+        <div class="cal-length-buttons">
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
+          <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
+          <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="thorCard" class="card" style="display:none;">
+      <h1 class="thor-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">THOR Nodes</span></a></h1>
+      <h2>Coin Price: <span class="coin-price thor-price">Getting price...</span></h2>
+      <div class="coin-stats">
+        <ul>
+          <li class="stat-heading">Coin Stats</li>
+          <li>Symbol: <span class="symbol"></span></li>
+          <li>Network: <span class="network"></span></li>
+          <li>Contract: <span class="platforms"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Price Stats:</li>
+          <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+          <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+          <li>24-Hour High: <span class="high-24h"></span></li>
+          <li>24-Hour Low: <span class="low-24h"></span></li>
+          <li>Total Volume: <span class="total-volume"></span></li>
+          <li>Market Cap: <span class="market-cap"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Node Stats:</li>
+          <li class="cash-today"></li>
+          <li class="target-rewards"></li>
+          <li class="percent-to-goal"></li>
+        </ul>
+      </div>
+      <div class="table-container">
+        <div class="cal-length-buttons">
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
+          <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
+          <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pxtCard" class="card" style="display:none;">
+      <h1 class="pxt-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">PXT Nodes</span></a></h1>
+      <h2>Coin Price: <span class="coin-price pxt-price">Getting price...</span></h2>
+      <div class="coin-stats">
+        <ul>
+          <li class="stat-heading">Coin Stats</li>
+          <li>Symbol: <span class="symbol"></span></li>
+          <li>Network: <span class="network"></span></li>
+          <li>Contract: <span class="platforms"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Price Stats:</li>
+          <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+          <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+          <li>24-Hour High: <span class="high-24h"></span></li>
+          <li>24-Hour Low: <span class="low-24h"></span></li>
+          <li>Total Volume: <span class="total-volume"></span></li>
+          <li>Market Cap: <span class="market-cap"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Node Stats:</li>
+          <li class="cash-today"></li>
+          <li class="target-rewards"></li>
+          <li class="percent-to-goal"></li>
+        </ul>
+      </div>
+      <div class="table-container">
+        <div class="cal-length-buttons">
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
+          <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
+          <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
+        </div>
+      </div> 
+    </div>
+
+    <div id="polarCard" class="card" style="display:none;">
+      <h1 class="polar-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">Polar Nodes</span></a></h1>
+      <h2>Coin Price: <span class="coin-price polar-price">Getting price...</span></h2>
+      <div class="coin-stats">
+        <ul>
+          <li class="stat-heading">Coin Stats</li>
+          <li>Symbol: <span class="symbol"></span></li>
+          <li>Network: <span class="network"></span></li>
+          <li>Contract: <span class="platforms"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Price Stats:</li>
+          <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+          <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+          <li>24-Hour High: <span class="high-24h"></span></li>
+          <li>24-Hour Low: <span class="low-24h"></span></li>
+          <li>Total Volume: <span class="total-volume"></span></li>
+          <li>Market Cap: <span class="market-cap"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Node Stats:</li>
+          <li class="cash-today"></li>
+          <li class="target-rewards"></li>
+          <li class="percent-to-goal"></li>
+        </ul>
+      </div>
+      <div class="table-container">
+        <div class="cal-length-buttons">
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
+          <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
+          <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
+        </div>
+      </div> 
+    </div>
+
+    <div id="fireCard" class="card" style="display:none;">
+      <h1 class="fire-name coin-name"><a href="" class="homepage"><img class="logo" src=""><span class="title">Phoenix Capital</span></a></h1>
+      <h2>Coin Price: <span class="coin-price fire-price">Getting price...</span></h2>
+      <div class="coin-stats">
+        <ul>
+          <li class="stat-heading">Coin Stats</li>
+          <li>Symbol: <span class="symbol"></span></li>
+          <li>Network: <span class="network"></span></li>
+          <li>Contract: <span class="platforms"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Price Stats:</li>
+          <li>All-time High: <span class="ath"></span> on <span class="ath-date"></span></li>
+          <li>All-time Low: <span class="atl"></span> on <span class="atl-date"></span></li>
+          <li>24-Hour High: <span class="high-24h"></span></li>
+          <li>24-Hour Low: <span class="low-24h"></span></li>
+          <li>Total Volume: <span class="total-volume"></span></li>
+          <li>Market Cap: <span class="market-cap"></span></li>
+        </ul>
+        <ul>
+          <li class="stat-heading">Node Stats:</li>
+          <li class="cash-today"></li>
+          <li class="target-rewards"></li>
+          <li class="percent-to-goal"></li>
+        </ul>
+      </div>  
+      <div class="table-container">
+        <div class="cal-length-buttons">
+          <button class='cal-30 pointer underline' onclick='calLengthClick(event,30)'>30</button>
+          <button class='cal-60 pointer' onclick='calLengthClick(event,60)'>60</button>
+          <button class='cal-90 pointer' onclick='calLengthClick(event,90)'>90</button>
+          <button class='cal-365 pointer' onclick='calLengthClick(event,365)'>Year</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  </div>
+
+  <footer>
+  	
+  </footer>
+  <script type="text/javascript" src="/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="/node-calculator.js"></script>
+</body>
+
+</html>

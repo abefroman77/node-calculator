@@ -126,7 +126,7 @@ let mainCoinData = {
 
 let coinData = {
     strngr: {
-        id:"stronger",
+        _id:"stronger",
         localName: "strngr",
         symbol: "",
         description:"",
@@ -154,7 +154,7 @@ let coinData = {
         chainID: "Ethereum"
     },
     thor: {
-        id:"thor",
+        _id:"thor",
         localName: "thor",
         symbol: "",
         description:"",
@@ -182,7 +182,7 @@ let coinData = {
         chainID: "Avalanche"
     },
     pxt: {
-        id:"project-x-nodes",
+        _id:"project-x-nodes",
         localName: "pxt",
         symbol: "",
         description:"",
@@ -210,7 +210,7 @@ let coinData = {
         chainID: "Avalanche"
     },
     polar: {
-        id:"polar",
+        _id:"polar",
         localName: "polar",
         symbol: "",
         description:"",
@@ -238,7 +238,7 @@ let coinData = {
         chainID: "Avalanche"
     },
     fire: {
-        id:"fire",
+        _id:"fire",
         localName: "fire",
         symbol: "",
         description:"",
@@ -1066,7 +1066,6 @@ function showHideCard(id){
 
 // Fill Table data the first time
 function fillTableData(obj) {
-    console.log(obj);
     // tableData = 
         // {
             // cash: 0
@@ -1396,7 +1395,7 @@ function createTable(elem,obj){
         div.removeChild(div.childNodes[0]);
     }
     let table = document.createElement("table");
-    table.className = "calc-table";
+    table.classList.add("calc-table","table");
     let tHead = document.createElement("thead");
     let body = document.createElement("tbody");
     body.className = obj["name"];
@@ -1411,29 +1410,29 @@ function createTable(elem,obj){
     // Create header row
     let tHeadRow = "";
     tHeadRow += "<tr class='header-row calc-table'>";
-    tHeadRow += "<th>Date</th>";
-    tHeadRow += "<th>" + obj["level1"]["name"] + " Nodes</th>";
+    tHeadRow += "<th scope='col'>Date</th>";
+    tHeadRow += "<th scope='col'>" + obj["level1"]["name"] + " Nodes</th>";
     if(obj["level2"]["name"] != ""){
         num += 1;
-        tHeadRow += "<th>" + obj["level2"]["name"] + " Nodes</th>";
+        tHeadRow += "<th scope='col'>" + obj["level2"]["name"] + " Nodes</th>";
 
     };
     if(obj["level3"]["name"] != ""){
         num += 1;
-        tHeadRow += "<th>" + obj["level3"]["name"] + " Nodes</th>";
+        tHeadRow += "<th scope='col'>" + obj["level3"]["name"] + " Nodes</th>";
 
     };
     if(obj["level4"]["name"] != ""){
         num += 1;
-        tHeadRow += "<th>" + obj["level4"]["name"] + " Nodes</th>";
+        tHeadRow += "<th scope='col'>" + obj["level4"]["name"] + " Nodes</th>";
 
     };
     if(obj["level5"]["name"] != ""){
         num += 1;
-        tHeadRow += "<th>" + obj["level5"]["name"] + " Nodes</th>";
+        tHeadRow += "<th scope='col'>" + obj["level5"]["name"] + " Nodes</th>";
 
     };
-    tHeadRow += "<th>Daily Rewards Balance</th><th>Daily Rewards</th><th>Cash</th><th>Cumulative Gross Cash</th><th>Cashout?</th></tr>";
+    tHeadRow += "<th scope='col'>Daily Rewards Balance</th><th scope='col'>Daily Rewards</th><th scope='col'>Cash</th><th scope='col'>Cumulative Gross Cash</th><th scope='col'>Cashout?</th></tr>";
     tHead.innerHTML = tHeadRow;
     table.appendChild(tHead);
 
@@ -1536,7 +1535,7 @@ function createTable(elem,obj){
         let tomorrow = addDay(date);
         if(date.getMonth() < tomorrow.getMonth() || (date.getMonth() == 11 && tomorrow.getMonth() == 0)){
             let totalRow = "";
-            totalRow += "<tr contenteditable='false' class='m" + monthIndex + " total-row " + date.toLocaleString('default', { month: 'long' }).toLowerCase() + "'>";
+            totalRow += "<tr contenteditable='false' class='table-active m" + monthIndex + " total-row " + date.toLocaleString('default', { month: 'long' }).toLowerCase() + "'>";
             totalRow += "<td>" + date.toLocaleString('default', { month: 'long' }) + " Total</td>";
             totalRow += "<td></td>";
             if(num >= 2){

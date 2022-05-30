@@ -148,7 +148,7 @@ let coinData = {
             marketCap:""
         },
         coinAddress: ["0x990f341946A3fdB507aE7e52d17851B87168017c","0xDc0327D50E6C73db2F8117760592C8BBf1CDCF38"], // older -> newer
-        contractAddress: "0xfbddadd80fe7bda00b901fbaf73803f2238ae655",
+        contractAddress: ["0xfbddadd80fe7bda00b901fbaf73803f2238ae655"],
         abi: "",
         dexPairAddress: "0x453a43E2Bf3080f7a23c9BB034CcDD869e306102",
         chainID: "Ethereum"
@@ -176,7 +176,7 @@ let coinData = {
             marketCap:""
         },
         coinAddress: ["0x8f47416cae600bccf9530e9f3aeaa06bdd1caa79"],
-        contractAddress: "0xbf431b2dfe4b549614f0d5954c0351f89e7e728f",
+        contractAddress: ["0xbf431b2dfe4b549614f0d5954c0351f89e7e728f","0xf2e2e5baeffe24d7b6feb0f1f3837fc89fc7d674","0x2be139283d73cd3a335a94c50ba2b28fde1e06e1"],
         abi: "",
         dexPairAddress: "0x95189f25b4609120F72783E883640216E92732DA",
         chainID: "Avalanche"
@@ -203,8 +203,8 @@ let coinData = {
             totalVolume:"",
             marketCap:""
         },
-        coinAddress: ["0x9e20Af05AB5FED467dFDd5bb5752F7d5410C832e","0x9adcbba4b79ee5285e891512b44706f41f14cafd"], // older -> newer
-        contractAddress: "0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c",
+        coinAddress: ["0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c","0x9e20af05ab5fed467dfdd5bb5752f7d5410c832e","0x9adcbba4b79ee5285e891512b44706f41f14cafd"], // older -> newer
+        contractAddress: ["0x05c88F67fa0711b3a76ada2B6f0A2D3a54Fc775c","0x9e20af05ab5fed467dfdd5bb5752f7d5410c832e","0x9adcbba4b79ee5285e891512b44706f41f14cafd"],
         abi: "",
         dexPairAddress: "0xf17A02640E399E01Ee4A197ba101e0DF14e60A98",
         chainID: "Avalanche"
@@ -232,7 +232,7 @@ let coinData = {
             marketCap:""
         },
         coinAddress: ["0x6c1c0319d8ddcb0ffe1a68c5b3829fd361587db4"], // older -> newer
-        contractAddress: "0x2ec1849e12e1264db7379f5d17eccf5a94cf5fe8",
+        contractAddress: ["0x2ec1849e12e1264db7379f5d17eccf5a94cf5fe8"],
         abi: "",
         dexPairAddress: "0xD81Cb1F7BCe1d539f3de6E7431a637cB5c66669d",
         chainID: "Avalanche"
@@ -260,7 +260,7 @@ let coinData = {
             marketCap:""
         },
         coinAddress: ["0xfcc6CE74f4cd7eDEF0C5429bB99d38A3608043a5"], // older -> newer
-        contractAddress: "0xbAd32DeaD95Eb55Ae849c6309ecA1b3d1b03bf69",
+        contractAddress: ["0xbAd32DeaD95Eb55Ae849c6309ecA1b3d1b03bf69"],
         abi: "",
         dexPairAddress: "0xc71fA9D143ad905eE73B6EDB4cd44df427df1Fe7",
         chainID: "Avalanche"
@@ -575,8 +575,8 @@ let nodeData = {
         },
         level3:{
             name:"Kilimanjaro",
-            cost:265,
-            apiCost: BigInt(265000000000000000000),
+            cost:250,
+            apiCost: BigInt(250000000000000000000),
             rewardRate:5,
             rewardPercentage:0,
             claimTax:17,
@@ -607,8 +607,8 @@ let nodeData = {
         },
         level5:{
             name:"Everest",
-            cost:1050,
-            apiCost: BigInt(1050000000000000000000),
+            cost:1000,
+            apiCost: BigInt(1000000000000000000000),
             rewardRate:35,
             rewardPercentage:0,
             claimTax:22,
@@ -713,7 +713,7 @@ let nodeData = {
             startingRewards: 0
         },
         tableData: [],
-        startingNodes: [23,0,0,0,0],
+        startingNodes: [0,0,0,0,0],
         calLength: 30,
         walletBalance: 0,
         cashToday: 0,
@@ -830,7 +830,7 @@ function updateCoinData(elem,obj){
                 console.log(data);
                 count++;
             }
-            document.querySelector("#connectMM").removeAttribute("disabled");
+            document.querySelector("#connectMM").classList.remove("disabled");
             if (api == "coinGecko") {
                 let dateRegex = /\d{4}-\d\d-\d\d/;
                 obj["symbol"] = data["symbol"].toUpperCase();
@@ -852,7 +852,7 @@ function updateCoinData(elem,obj){
             } else {
                 // using DEXScreener
                 obj["symbol"] = data["pair"]["baseToken"]["symbol"];
-                obj["network"] = obj["chainID"]; 
+                obj["network"] = obj["chainID"].toLowerCase(); 
                 obj["prices"]["currentPrice"] = data["pair"]["priceUsd"];
             }
             populateCardData(elem,obj);
@@ -962,7 +962,6 @@ async function mmLogin() {
                     url = bscScanAPI;
                     apiKey = bscScanApiKey;
                 }
-                // Need to make sure fetch has time to return data and update local data before next fetch call - async, await?
                 fetch(url +
                     // "&contractaddress=" +
                     // coinData[Object.keys(coinData)[i]]["coinAddress"][0] +
@@ -1011,7 +1010,7 @@ function toUserTrxns() {
     for (network in allUserTrxns) {
         trxnsToUser[network] = [];
         for (i = 0; i < allUserTrxns[network].length; i++) {
-            if (allUserTrxns[network][i]["from"] == userAddress) {
+            if (allUserTrxns[network][i]["to"] == userAddress) {
                 trxnsToUser[network].push(allUserTrxns[network][i]);
             }
         }
@@ -1019,35 +1018,26 @@ function toUserTrxns() {
 }
 
 function getNodeCounts(obj) {
-    console.log(obj);
     // obj = nodeData[x]
     let counts = [];
     for (let i = 0; i < maxLevels; i++) {
         counts.push(0);
     }
-
-    let trxns = fromUserTrxns[coinData[obj["name"]]["network"]];
-    console.log(trxns);
+    let trxns = trxnsFromUser[coinData[obj["name"]]["network"]];
+    let trxnsCounted = [];
     // j loops through transactions for each coin pulled by fetch
     for (let k = 0; k < trxns.length; k++) {
-        let trxnsCounted = [];
         // k loops through node levels (level5, level4, etc)
         for (let l = maxLevels; l > 0; l--) {
-            if (
-                (obj["level" + l]["apiCost"] > 0 &&
-                trxns[k]["to"] == coinData[obj["name"]]["contractAddress"][0] &&
-                trxns[k]["from"] == userAddress && 
-                BigInt(trxns[k]["value"]) % obj["level" + l]["apiCost"] == 0 && 
-                trxnsCounted.indexOf(trxns[k]) == -1)
-                ||
-                (obj["level" + l]["apiCost"] > 0 &&
-                trxns[k]["to"] == coinData[obj["name"]]["contractAddress"][1] &&
-                trxns[k]["from"] == userAddress && 
-                BigInt(trxns[k]["value"]) % obj["level" + l]["apiCost"] == 0 && 
-                trxnsCounted.indexOf(trxns[k]) == -1)
-            ) {
-                counts[l-1] += parseInt(BigInt(trxns[k]["value"]) / obj["level" + (l)]["apiCost"]);
-                trxnsCounted.push(trxns[k]);
+            if (obj["level" + l]["apiCost"] > 0) {
+                if (BigInt(trxns[k]["value"]) % obj["level" + l]["apiCost"] == 0 && trxnsCounted.indexOf(trxns[k]) == -1) {
+                    for (let m = 0; m < coinData[obj["name"]]["contractAddress"].length; m ++) {
+                        if(trxns[k]["to"] == coinData[obj["name"]]["contractAddress"][m].toLowerCase()) {
+                            counts[l-1] += parseInt(BigInt(trxns[k]["value"]) / obj["level" + (l)]["apiCost"]);
+                            trxnsCounted.push(trxns[k]);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1057,8 +1047,9 @@ function getNodeCounts(obj) {
 }
 
 function showHideCard(id){
+    console.log(id);
     let thisTab = document.getElementById(id);
-    let otherTabs = document.getElementsByClassName("tab");
+    let otherTabs = document.getElementsByClassName("nav-link");
     var thisCard = document.getElementById(id.replace("Tab","Card"));
     var otherCards = document.getElementsByClassName("card");
     thisCard.style.display = "flex";
@@ -1075,6 +1066,7 @@ function showHideCard(id){
 
 // Fill Table data the first time
 function fillTableData(obj) {
+    console.log(obj);
     // tableData = 
         // {
             // cash: 0
@@ -1184,7 +1176,7 @@ function fillTableData(obj) {
         daysObjPush["drb"] = drb;
         days.push(daysObjPush);
         if (j == todayIndex) {
-            obj["cashToday"] = getTodayCash(obj);
+            obj["cashToday"] = getTodayCash(obj, todayIndex);
         }
         date = addDay(date);
     }
@@ -1194,7 +1186,7 @@ function fillTableData(obj) {
             "total": 0
         });
     }
-    obj["cashToday"] = cashToday(obj, todayIndex);
+    obj["cashToday"] = getTodayCash(obj, todayIndex);
 }
 
 function updateTableDataRow(rowElem, e) {

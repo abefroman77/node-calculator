@@ -1047,7 +1047,6 @@ function getNodeCounts(obj) {
 }
 
 function showHideCard(id){
-    console.log(id);
     let thisTab = document.getElementById(id);
     let otherTabs = document.getElementsByClassName("nav-link");
     var thisCard = document.getElementById(id.replace("Tab","Card"));
